@@ -10,11 +10,14 @@ const Banner = ({}: Props): JSX.Element => {
 
   return (
     <section
-      className="relative w-full px-8 text-gray-800 bg-[#00a7d3]"
-      aria-label="Temporary information banner"
+      className="relative w-full bg-brand-denim text-white"
+      aria-label="Tijdelijke melding"
     >
-      <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto max-w-7xl">
-        {banner.fields.message}
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-3 px-6 py-3 text-center sm:flex-row sm:gap-6 sm:text-left">
+        <span className="rounded-full bg-white/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/80">
+          Update
+        </span>
+        <p className="text-sm font-medium leading-relaxed text-white/90">{banner.fields.message}</p>
       </div>
     </section>
   );

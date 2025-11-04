@@ -27,6 +27,11 @@ const MenuItem = ({
 
   const hasSubpages = subPages.length >= 1;
 
+  const isSidebar = type === 'sidebar';
+  const linkClassName = isSidebar
+    ? 'group flex w-full items-center justify-between rounded-2xl px-4 py-3 text-base font-semibold transition-colors duration-200'
+    : 'group relative inline-flex items-center gap-1 rounded-full px-2 py-1 text-sm font-semibold transition-colors duration-200';
+
   return (
     <Popover
       className="relative"
@@ -37,29 +42,34 @@ const MenuItem = ({
         key={path}
         href={path}
         className={cx(
-          `group inline-flex items-center relative transition duration-150 ease-out`,
+          linkClassName,
           className,
-          { 'text-gray-500': isOpen },
-          { '-mr-1': hasSubpages && type !== 'sidebar' },
+          {
+            'text-brand-denim': isActive,
+          },
+          { '-mr-1': hasSubpages && !isSidebar },
         )}
       >
-        <span className="pb-0.5">{title}</span>
-        {hasSubpages && type !== 'sidebar' && (
-          <HiChevronDown
-            className={cx('text-gray-400 group-hover:text-gray-500', {
-              'text-gray-600': isOpen,
-            })}
-            aria-hidden="true"
-          />
-        )}
-        <span className="absolute bottom-0 left-0 inline-block w-full h-0.5 overflow-hidden">
+        <span className="relative flex items-center gap-2">
+          {title}
+          {hasSubpages && !isSidebar && (
+            <HiChevronDown
+              className={cx('h-4 w-4 transition-colors duration-200', {
+                'text-brand-denim': isOpen,
+                'text-current/60 group-hover:text-current': !isOpen,
+              })}
+              aria-hidden="true"
+            />
+          )}
+        </span>
+        {!isSidebar && (
           <span
             className={cx(
-              'absolute inset-0 inline-block w-full h-1/2 transform group-hover:bg-gray-600',
-              { 'bg-gray-500': isActive || isOpen },
+              'pointer-events-none absolute inset-x-0 -bottom-1 h-0.5 origin-center scale-x-0 rounded-full bg-brand-denim transition-all duration-200 ease-out group-hover:scale-x-100',
+              { 'scale-x-100': isActive || isOpen },
             )}
           />
-        </span>
+        )}
       </Link>
 
       {hasSubpages && type === 'main' && (

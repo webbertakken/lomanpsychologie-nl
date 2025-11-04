@@ -4,6 +4,8 @@ import TherapyTypesSection from './TherapyTypesSection/TherapyTypesSection';
 import BasicSection from './BasicSection/BasicSection';
 import TherapyTypeDetailsSection from './TherapyTypeDetailsSection/TherapyTypeDetailsSection';
 import OfficeHoursSection from './OfficeHoursSection/OfficeHoursSection';
+import TestimonialSection from './TestimonialSection/TestimonialSection';
+import ProcessTimelineSection from './ProcessTimelineSection/ProcessTimelineSection';
 
 interface Props {
   section: Entry<any>;
@@ -28,6 +30,10 @@ const Section = ({ section, index }: Props): JSX.Element => {
       return <TherapyTypeDetailsSection section={section} />;
     case 'officeHoursSection':
       return <OfficeHoursSection section={section} index={index} />;
+    case 'testimonialSection':
+      return <TestimonialSection section={section} index={index} />;
+    case 'processTimelineSection':
+      return <ProcessTimelineSection section={section} index={index} />;
     default:
       return null;
   }

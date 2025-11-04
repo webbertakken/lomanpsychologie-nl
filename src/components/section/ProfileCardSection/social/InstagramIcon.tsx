@@ -15,7 +15,7 @@ const InstagramIcon = ({ handle: dirtyHandle }: Props): JSX.Element => {
         href={`https://www.instagram.com/${handle}`}
       >
         <svg
-          className="h-6 fill-current text-gray-600 hover:text-emerald-800"
+          className="h-6 w-6 fill-current text-brand-denim/70 transition hover:text-brand-denim"
           role="img"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"

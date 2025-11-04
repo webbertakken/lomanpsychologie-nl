@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,15 +13,44 @@
 }
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+
   body {
     /* prevent layout breaks */
     word-break: break-word;
 
     /* fix layout shift when navigating */
     overflow-y: scroll;
+
+    @apply font-sans text-neutral-900 bg-neutral-25 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display text-brand-ink tracking-tight;
   }
 
   a {
-    @apply outline-offset-4;
+    @apply outline-offset-4 transition-colors duration-200;
+  }
+
+  ::selection {
+    @apply bg-brand-denim/20 text-brand-midnight;
+  }
+}
+
+@layer components {
+  .button-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-brand-denim px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-midnight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-denim;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-brand-denim bg-transparent px-6 py-3 text-sm font-semibold text-brand-denim transition hover:border-brand-midnight hover:text-brand-midnight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-denim;
   }
 }

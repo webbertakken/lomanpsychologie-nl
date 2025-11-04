@@ -14,16 +14,16 @@ function MenuSubItems({ subPages }: Props): JSX.Element {
           <Link
             key={path}
             href={path}
-            className="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"
+            className="group -m-3 flex items-start gap-3 rounded-2xl p-3 transition hover:bg-brand-sky/40"
           >
             <DynamicIcon
               icon={icon}
-              className="shrink-0 h-6 w-6 text-indigo-600"
+              className="h-6 w-6 shrink-0 text-brand-denim"
               aria-hidden="true"
             />
             <div className="ml-4">
-              <p className="text-base font-medium text-gray-900">{title}</p>
-              <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+              <p className="text-sm font-semibold text-neutral-800 group-hover:text-brand-midnight">{title}</p>
+              <p className="mt-1 text-sm text-neutral-500">{subtitle}</p>
             </div>
           </Link>
         );

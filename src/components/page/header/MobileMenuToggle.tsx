@@ -19,7 +19,7 @@ function MobileMenuToggle({ className }: Props): JSX.Element {
       onClick={() => setShow(!show)}
       dark={hasDarkBackground}
     >
-      <Image src={MenuIcon} alt="menu icon" className={cx('icon', { invert: hasDarkBackground })} />
+      <Image src={MenuIcon} alt="menu icon" className={cx('icon h-6 w-6', { invert: hasDarkBackground })} />
     </IconButton>
   );
 }

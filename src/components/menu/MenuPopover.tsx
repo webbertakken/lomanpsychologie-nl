@@ -31,13 +31,17 @@ function MenuPopover({
       {/* these values assume that the menu is on the right-hand side */}
       <Popover.Panel
         unmount={false}
-        className="absolute z-10 right-0 -mr-4 pt-3 transform px-2 w-screen max-w-md sm:px-0 2xl:ml-0 2xl:left-1/2 2xl:-translate-x-1/2"
+        className="absolute right-0 z-20 mt-3 w-screen max-w-lg -translate-x-3 px-2 sm:px-0 2xl:left-1/2 2xl:-translate-x-1/2"
         aria-labelledby={`${parentTitle} submenu`}
       >
-        <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-          <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-            <Link key={headerLink} href={headerLink} className="text-gray-600 hover:text-gray-800">
-              <strong>{headerTitle}</strong>
+        <div className="overflow-hidden rounded-3xl bg-white/90 shadow-soft ring-1 ring-brand-denim/10 backdrop-blur">
+          <div className="relative grid gap-5 px-6 py-6 sm:gap-6 sm:p-8">
+            <Link
+              key={headerLink}
+              href={headerLink}
+              className="text-sm font-semibold text-brand-denim transition hover:text-brand-midnight"
+            >
+              {headerTitle || parentTitle}
             </Link>
             {children}
           </div>

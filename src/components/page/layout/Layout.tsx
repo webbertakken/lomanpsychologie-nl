@@ -10,10 +10,10 @@ interface Props {
 
 const Layout = ({ children }: Props): JSX.Element => {
   return (
-    <div className="font-serif min-h-screen flex flex-col">
+    <div className="min-h-screen bg-brand-blush/60 bg-hero-gradient flex flex-col">
       <Banner />
       <NavBar />
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
       <Footer />
     </div>
   );

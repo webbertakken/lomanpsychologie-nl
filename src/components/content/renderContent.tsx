@@ -19,6 +19,7 @@ const options: Options = {
       const isImage = contentType.startsWith('image/');
 
       return isImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img src={url} alt={title || description || fileName} />
       ) : (
         <a

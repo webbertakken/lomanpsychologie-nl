@@ -13,9 +13,11 @@ function IconButton({ children, onClick, dark, className, ariaLabel }: Props): J
     <button
       aria-label={ariaLabel}
       className={cx(
-        'cursor-pointer p-2 md:hidden rounded',
+        'md:hidden rounded-full border border-transparent p-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-denim',
         className,
-        dark ? 'text-white hover:text-gray-100' : 'text-gray-900 hover:text-gray-800',
+        dark
+          ? 'bg-white/10 text-white hover:bg-white/20'
+          : 'bg-brand-denim/10 text-brand-denim hover:bg-brand-denim/20',
       )}
       onClick={onClick}
     >

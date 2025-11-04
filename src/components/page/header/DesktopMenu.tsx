@@ -17,7 +17,7 @@ function DesktopMenu({}: Props): JSX.Element {
         <Image
           src={Logo}
           alt="Loman Psychologiepraktijk"
-          className="h-12 w-auto md:h-14 select-none cursor-pointer"
+          className="h-10 w-auto select-none cursor-pointer md:h-12"
         />
       </Link>
 
@@ -26,12 +26,12 @@ function DesktopMenu({}: Props): JSX.Element {
         ariaLabel="Main navigation"
         menu={menu}
         className={cx(
-          'hidden md:flex pr-8 top-0 left-0 z-0 flex items-center justify-center h-full py-5 -ml-0 space-x-4 text-base md:-ml-5 md:py-0',
+          'hidden items-center gap-8 md:flex',
         )}
         itemClassName={
           hasDarkBackground
-            ? 'text-gray-200 hover:text-gray-100'
-            : 'text-gray-900 hover:text-gray-800'
+            ? 'text-white/70 hover:text-white'
+            : 'text-neutral-700 hover:text-brand-denim'
         }
       />
     </>

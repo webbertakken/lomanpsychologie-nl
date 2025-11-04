@@ -11,6 +11,7 @@ import { ProfileSectionEntry } from '../../../types/section';
 import FadeIntoView from '../../animations/fade-into-view';
 import cx from 'classnames';
 import Image from 'next/image';
+import { CONTACT_DETAILS } from '../../../core/contact';
 
 interface Props {
   section: ProfileSectionEntry;
@@ -40,65 +41,73 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
     height: photo.fields.file.details.image.height,
   };
 
-  const Photo = () => (
-    <div className="w-full lg:w-2/5 hidden lg:block">
-      <Image className="rounded-none lg:rounded-lg shadow-2xl" alt={title} {...image} />
-    </div>
+  const imageFigure = (
+    <FadeIntoView>
+      <div className="relative mx-auto max-w-sm overflow-hidden rounded-3xl bg-white/90 p-4 shadow-soft ring-1 ring-brand-denim/10">
+        <div className="relative overflow-hidden rounded-2xl">
+          <Image
+            alt={title}
+            {...image}
+            className="h-full w-full object-cover"
+            sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 80vw"
+          />
+        </div>
+        <div className="absolute inset-x-6 bottom-6 rounded-2xl bg-white/80 p-4 text-sm text-brand-denim shadow-lg">
+          <p className="font-semibold">{vocation}</p>
+          <p className="text-xs font-medium text-neutral-500">{location}</p>
+        </div>
+      </div>
+    </FadeIntoView>
   );
 
   return (
-    <div
-      id={slug}
-      className="w-full h-auto lg:h-screen py-12 first:pt-36 first:-mt-24 flex items-center justify-center"
-      style={{
-        background: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1446057468532-87b7525217d6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3902&q=80')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'bottom',
-      }}
-    >
-      <div className="max-w-3xl flex items-center h-auto flex-wrap mx-auto my-12 lg:my-0">
-        {photoShouldBeOnTheLeft && <Photo />}
+    <section id={slug} className="relative w-full overflow-hidden bg-gradient-to-b from-brand-blush via-white to-brand-blush/60 py-24">
+      <div className="absolute inset-x-0 -top-40 h-80 bg-brand-sky/40 blur-3xl" aria-hidden />
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-16 px-6 md:px-10 lg:flex-row">
         <div
-          className={cx('w-full lg:w-3/5 shadow-2xl bg-white opacity-75 mx-4 lg:mx-0', {
-            'rounded-lg': true,
-            'lg:rounded-l-lg': !photoShouldBeOnTheLeft,
-            'lg:rounded-r-none': !photoShouldBeOnTheLeft,
-            'lg:rounded-r-lg': photoShouldBeOnTheLeft,
-            'lg:rounded-l-none': photoShouldBeOnTheLeft,
+          className={cx('w-full lg:w-1/2', {
+            'lg:order-1': photoShouldBeOnTheLeft,
+            'lg:order-2': !photoShouldBeOnTheLeft,
           })}
         >
-          <div className="p-4 lg:p-12 text-center lg:text-left">
-            <div
-              className="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-top"
-              style={{ backgroundImage: `url('${image.src}')` }}
-            />
-
-            <FadeIntoView delay={100}>
-              <h1 className="text-3xl font-bold pt-8 lg:pt-0">{title}</h1>
-              <div className="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-emerald-500 opacity-25" />
+          {imageFigure}
+        </div>
+        <div
+          className={cx('w-full lg:w-1/2', {
+            'lg:order-2': photoShouldBeOnTheLeft,
+            'lg:order-1': !photoShouldBeOnTheLeft,
+          })}
+        >
+          <div className="flex flex-col gap-6 text-center lg:text-left">
+            <FadeIntoView>
+              <div className="inline-flex items-center justify-center gap-2 self-center rounded-full bg-brand-sky/60 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-brand-denim lg:self-start">
+                Persoonlijk
+              </div>
             </FadeIntoView>
-
-            <FadeIntoView delay={200}>
+            <FadeIntoView>
+              <h1 className="text-4xl font-semibold leading-tight text-brand-ink sm:text-5xl">{title}</h1>
+            </FadeIntoView>
+            <FadeIntoView>
               <Vocation vocation={vocation} />
             </FadeIntoView>
-
-            <FadeIntoView delay={250}>
+            <FadeIntoView>
               <Location location={location} />
             </FadeIntoView>
-
-            <FadeIntoView delay={300}>
+            <FadeIntoView>
               <Bio shortDescription={shortDescription} />
             </FadeIntoView>
 
-            {getInTouchLink && (
-              <FadeIntoView delay={500}>
-                <GetInTouchButton text={getInTouchText} link={getInTouchLink} />
-              </FadeIntoView>
-            )}
+            <FadeIntoView>
+              <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-start">
+                {getInTouchLink && <GetInTouchButton text={getInTouchText} link={getInTouchLink} />}
+                <a href={CONTACT_DETAILS.email.href} className="button-secondary">
+                  Mail {CONTACT_DETAILS.email.address}
+                </a>
+              </div>
+            </FadeIntoView>
 
-            <FadeIntoView delay={700}>
-              <div className="mt-6 pb-16 lg:pb-0 w-4/5 lg:w-full mx-auto flex flex-wrap items-center justify-between">
-                {/* Use https://simpleicons.org/ to find the svg for your preferred product */}
+            <FadeIntoView>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-brand-denim lg:justify-start">
                 {twitterHandle && <TwitterIcon handle={twitterHandle} />}
                 {facebookHandle && <FacebookIcon handle={facebookHandle} />}
                 {instagramHandle && <InstagramIcon handle={instagramHandle} />}
@@ -108,10 +117,8 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
             </FadeIntoView>
           </div>
         </div>
-
-        {!photoShouldBeOnTheLeft && <Photo />}
       </div>
-    </div>
+    </section>
   );
 };
 

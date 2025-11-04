@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Bio = ({ shortDescription }: Props): JSX.Element => {
-  return <div className="pt-8 text-sm">{renderContent(shortDescription)}</div>;
+  return <div className="prose prose-lg max-w-none text-neutral-600">{renderContent(shortDescription)}</div>;
 };
 
 export default Bio;

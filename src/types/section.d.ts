@@ -82,3 +82,41 @@ interface TherapyTypeDetailsProps {
 }
 
 type TherapyTypeDetailsEntry = Entry<TherapyTypeDetailsProps>;
+
+interface TestimonialProps {
+  quote: Document;
+  author: string;
+  role?: string;
+  portrait?: Entry<any>;
+}
+
+type TestimonialEntry = Entry<TestimonialProps>;
+
+interface TestimonialSectionProps {
+  title: string;
+  slug: string;
+  introduction?: Document;
+  testimonials: TestimonialEntry[];
+  highlight?: string;
+}
+
+type TestimonialSectionEntry = Entry<TestimonialSectionProps>;
+
+interface ProcessStepProps {
+  title: string;
+  description: Document;
+  duration?: string;
+}
+
+type ProcessStepEntry = Entry<ProcessStepProps>;
+
+interface ProcessTimelineSectionProps {
+  title: string;
+  slug: string;
+  introduction?: Document;
+  steps: ProcessStepEntry[];
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+type ProcessTimelineSectionEntry = Entry<ProcessTimelineSectionProps>;

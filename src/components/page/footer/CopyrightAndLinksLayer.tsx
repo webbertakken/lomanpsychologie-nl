@@ -1,30 +1,21 @@
-import MenuItems from '../../menu/MenuItems';
-import { AppContext } from '../context/AppContext';
-import { useContext } from 'react';
+import Link from 'next/link';
 
 interface Props {}
 
-const CopyrightAndLinksLayer = ({}: Props): JSX.Element => {
-  const { footerMenu: menu } = useContext(AppContext);
+const currentYear = new Date().getFullYear();
 
+const CopyrightAndLinksLayer = ({}: Props): JSX.Element => {
   return (
-    <div className="flex flex-col justify-between text-center lg:flex-row p-2 gap-2">
-      <div className="order-last text-sm text-gray-400 lg:order-first flex justify-center gap-4 md:gap-1 flex-col md:flex-row">
-        <hr className="md:invisible my-4 border-gray-400/40" />
-        <div>
-          <strong>Loman Psychologiepraktijk</strong>
-          <strong className="invisible md:visible"> |</strong>
-        </div>
-        <div>
-          <span>Alle rechten voorbehouden</span>
-        </div>
+    <div className="flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/60 md:flex-row md:items-center md:justify-between">
+      <p>© {currentYear} Loman Psychologiepraktijk. Alle rechten voorbehouden.</p>
+      <div className="flex flex-wrap items-center gap-4">
+        <Link href="/privacybeleid" className="hover:text-white">
+          Privacybeleid
+        </Link>
+        <Link href="/algemene-voorwaarden" className="hover:text-white">
+          Algemene voorwaarden
+        </Link>
       </div>
-      <MenuItems
-        menu={menu}
-        ariaLabel="Footer navigation"
-        className="flex flex-col gap-4 md:flex-row justify-center pb-0 -ml-4 -mr-4 text-sm"
-        itemClassName="text-gray-400 hover:text-gray-300"
-      />
     </div>
   );
 };
