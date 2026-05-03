@@ -15,7 +15,15 @@ context('Accessibility', () => {
       });
 
       it('all accessibility tests', () => {
-        cy.checkA11y();
+        cy.checkA11y(undefined, undefined, (violations) => {
+          violations.forEach((v) => {
+            cy.task('log', `\n[${v.impact}] ${v.id}: ${v.description}`);
+            v.nodes.forEach((n) => {
+              cy.task('log', `  at: ${n.target.join(' ')}`);
+              cy.task('log', `    ${n.failureSummary}`);
+            });
+          });
+        });
       });
     });
   });
