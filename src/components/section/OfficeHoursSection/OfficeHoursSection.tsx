@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { Day, translateDay } from '../../../core/locale';
 import cx from 'classnames';
 import { enforceEnDash } from '../../../core/utils';
+import { useEffect, useState } from 'react';
 
 const txClosed = (locale: string) => {
   switch (locale) {
@@ -34,11 +35,19 @@ interface Props {
 
 const OfficeHoursSection = ({ section, index }: Props): JSX.Element => {
   const { locale } = useRouter();
-  const thisDay = new Date().toLocaleString('en-US', { weekday: 'long' }) as Day;
 
-  const daysStartingWithToday = days
-    .slice(days.indexOf(thisDay), days.length)
-    .concat(days.slice(0, days.indexOf(thisDay)));
+  // `new Date()` at render time differs between SSR (server's clock) and
+  // CSR (browser's clock), causing a hydration mismatch when the day-of-week
+  // changes the table order or which row is bolded. Defer the today-aware
+  // reorder + highlight to a client-side effect so SSR HTML is stable.
+  const [thisDay, setThisDay] = useState<Day | null>(null);
+  useEffect(() => {
+    setThisDay(new Date().toLocaleString('en-US', { weekday: 'long' }) as Day);
+  }, []);
+
+  const daysStartingWithToday = thisDay
+    ? days.slice(days.indexOf(thisDay), days.length).concat(days.slice(0, days.indexOf(thisDay)))
+    : days;
 
   const { title, slug, exceptions } = section.fields;
 
