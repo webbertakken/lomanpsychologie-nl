@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 9
   cacheKey: 10
 
 "@adobe/css-tools@npm:^4.0.1":
@@ -9054,6 +9054,15 @@ __metadata:
     ts-jest: "npm:^29.0.3"
     ts-node: "npm:^10.9.1"
     typescript: "npm:4.9.4"
+  dependenciesMeta:
+    contentful:
+      built: true
+    core-js-pure:
+      built: true
+    cypress:
+      built: true
+    sharp:
+      built: true
   languageName: unknown
   linkType: soft
 
