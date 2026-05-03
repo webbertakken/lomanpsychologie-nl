@@ -31,7 +31,11 @@ const Header = ({}: Props): JSX.Element => {
       className={cx(
         'w-full text-gray-300 body-font z-10',
         { 'bg-white/80': !hasDarkBackground },
-        { 'bg-black/50': hasDarkBackground },
+        // axe-core cannot evaluate contrast through translucent backgrounds
+        // and falls back to grey #808080, on which any light menu text
+        // fails the 4.5:1 ratio. Use a solid dark colour instead so the
+        // contrast can be evaluated correctly.
+        { 'bg-gray-900': hasDarkBackground },
       )}
       aria-label="Main navigation bar"
     >
