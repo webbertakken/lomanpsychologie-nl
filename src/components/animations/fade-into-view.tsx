@@ -9,12 +9,20 @@ interface FadeIntoViewProps {
   delay?: number
 }
 
+export const isAutomatedBrowser = (): boolean => {
+  if (typeof window === 'undefined') return false
+  // `navigator.webdriver` is set by all WebDriver-controlled browsers
+  // (Playwright, Cypress, Selenium, etc.). Cypress also exposes
+  // `window.Cypress`; keep that as a fallback for older Cypress versions
+  // that historically left `navigator.webdriver` unset.
+  if (typeof navigator !== 'undefined' && navigator.webdriver) return true
+  // @ts-ignore: legacy detection of Cypress
+  if (typeof window.Cypress !== 'undefined') return true
+  return false
+}
+
 const FadeIntoView = ({ children, className, delay }: FadeIntoViewProps) => {
-  const automatedTest = useMemo(
-    // @ts-ignore: legacy detection of automated browsers
-    () => typeof window !== 'undefined' && typeof window.Cypress !== 'undefined',
-    [],
-  )
+  const automatedTest = useMemo(isAutomatedBrowser, [])
 
   return (
     <VisibilitySensor partialVisibility minTopValue={100}>
