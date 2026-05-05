@@ -1,16 +1,16 @@
-import { BasicSectionEntry } from '../../../types/section';
-import FadeIntoView from '../../animations/fade-into-view';
-import { renderContent } from '../../content/renderContent';
+import { BasicSectionEntry } from '../../../types/section'
+import FadeIntoView from '../../animations/fade-into-view'
+import { renderContent } from '../../content/renderContent'
 
 interface Props {
-  section: BasicSectionEntry;
-  index?: number;
+  section: BasicSectionEntry
+  index?: number
 }
 
 const BasicSection = ({ section, index }: Props): JSX.Element => {
-  const { title, slug, subtitle, content } = section.fields;
+  const { title, slug, subtitle, content } = section.fields
 
-  const backgroundClass = index % 2 === 0 ? 'bg-[#bfc6d6]' : 'bg-white';
+  const backgroundClass = index % 2 === 0 ? 'bg-[#bfc6d6]' : 'bg-white'
 
   return (
     <section id={slug} className={`w-full px-4 md:px-8 py-16 md:py-24 ${backgroundClass} xl:px-0`}>
@@ -32,7 +32,7 @@ const BasicSection = ({ section, index }: Props): JSX.Element => {
         </FadeIntoView>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default BasicSection;
+export default BasicSection

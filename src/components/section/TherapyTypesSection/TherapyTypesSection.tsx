@@ -1,12 +1,12 @@
-import { TypesOfTherapyEntry } from '../../../types/section';
-import { TherapyTypeCard } from './TherapyTypeCard';
+import { TypesOfTherapyEntry } from '../../../types/section'
+import { TherapyTypeCard } from './TherapyTypeCard'
 
 interface Props {
-  section: TypesOfTherapyEntry;
+  section: TypesOfTherapyEntry
 }
 
 const TherapyTypesSection = ({ section }: Props): JSX.Element => {
-  const { slug, therapyTypeCards } = section.fields;
+  const { slug, therapyTypeCards } = section.fields
 
   return (
     <section id={slug} className="w-full bg-white py-6">
@@ -14,7 +14,7 @@ const TherapyTypesSection = ({ section }: Props): JSX.Element => {
         <TherapyTypeCard key={card.sys.id} card={card} />
       ))}
     </section>
-  );
-};
+  )
+}
 
-export default TherapyTypesSection;
+export default TherapyTypesSection

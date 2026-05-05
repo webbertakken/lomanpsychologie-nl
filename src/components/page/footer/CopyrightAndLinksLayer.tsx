@@ -1,11 +1,11 @@
-import MenuItems from '../../menu/MenuItems';
-import { AppContext } from '../context/AppContext';
-import { useContext } from 'react';
+import { useContext } from 'react'
+import MenuItems from '../../menu/MenuItems'
+import { AppContext } from '../context/AppContext'
 
 interface Props {}
 
 const CopyrightAndLinksLayer = ({}: Props): JSX.Element => {
-  const { footerMenu: menu } = useContext(AppContext);
+  const { footerMenu: menu } = useContext(AppContext)
 
   return (
     <div className="flex flex-col justify-between text-center lg:flex-row p-2 gap-2">
@@ -26,7 +26,7 @@ const CopyrightAndLinksLayer = ({}: Props): JSX.Element => {
         itemClassName="text-gray-400 hover:text-gray-300"
       />
     </div>
-  );
-};
+  )
+}
 
-export default CopyrightAndLinksLayer;
+export default CopyrightAndLinksLayer

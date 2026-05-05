@@ -1,23 +1,23 @@
-import Layout from './layout/Layout';
-import LoadingPage from '../loading/LoadingPage';
-import { PageEntry } from '../../types/page';
-import Section from '../section/Section';
-import { MenuProps } from '../../types/menu';
-import { BannerNotificationEntry } from '../../types/banner';
-import { AppContext } from './context/AppContext';
-import { PageContext } from './context/PageContext';
+import { BannerNotificationEntry } from '../../types/banner'
+import { MenuProps } from '../../types/menu'
+import { PageEntry } from '../../types/page'
+import LoadingPage from '../loading/LoadingPage'
+import Section from '../section/Section'
+import { AppContext } from './context/AppContext'
+import { PageContext } from './context/PageContext'
+import Layout from './layout/Layout'
 
 interface Props {
-  page: PageEntry;
-  headerMenu: MenuProps;
-  footerMenu: MenuProps;
-  banner?: BannerNotificationEntry;
+  page: PageEntry
+  headerMenu: MenuProps
+  footerMenu: MenuProps
+  banner?: BannerNotificationEntry
 }
 
 const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
-  if (!page) return <LoadingPage />;
+  if (!page) return <LoadingPage />
 
-  const { sections, hasOwnHeader, hasDarkBackground, subtitle, title } = page.fields;
+  const { sections, hasOwnHeader, hasDarkBackground, subtitle, title } = page.fields
 
   return (
     <AppContext.Provider value={{ headerMenu, footerMenu, banner }}>
@@ -41,7 +41,7 @@ const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
                     </div>
                   )}
                   {sections?.map((section, index) => {
-                    return <Section key={section.sys.id} section={section} index={index} />;
+                    return <Section key={section.sys.id} section={section} index={index} />
                   })}
                 </>
               ) : (
@@ -52,7 +52,7 @@ const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
         </Layout>
       </PageContext.Provider>
     </AppContext.Provider>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

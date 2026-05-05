@@ -1,30 +1,30 @@
-import cx from 'classnames';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { PageContext } from '../context/PageContext';
-import MobileMenu from './MobileMenu';
-import DesktopMenu from './DesktopMenu';
-import MobileMenuToggle from './MobileMenuToggle';
-import { MenuContext } from '../context/MenuContext';
-import { AppContext } from '../context/AppContext';
-import { useRouter } from 'next/router';
+import cx from 'classnames'
+import { useRouter } from 'next/router'
+import { useCallback, useContext, useEffect, useState } from 'react'
+import { AppContext } from '../context/AppContext'
+import { MenuContext } from '../context/MenuContext'
+import { PageContext } from '../context/PageContext'
+import DesktopMenu from './DesktopMenu'
+import MobileMenu from './MobileMenu'
+import MobileMenuToggle from './MobileMenuToggle'
 
 interface Props {}
 
 const Header = ({}: Props): JSX.Element => {
-  const { hasDarkBackground } = useContext(PageContext);
-  const [show, setShow] = useState<boolean>(false);
-  const { headerMenu: menu } = useContext(AppContext);
-  const router = useRouter();
+  const { hasDarkBackground } = useContext(PageContext)
+  const [show, setShow] = useState<boolean>(false)
+  const { headerMenu: menu } = useContext(AppContext)
+  const router = useRouter()
 
   const hideMenu = useCallback(() => {
-    setShow(false);
-  }, [setShow]);
+    setShow(false)
+  }, [setShow])
 
   useEffect(() => {
-    router.events.on('routeChangeStart', hideMenu);
+    router.events.on('routeChangeStart', hideMenu)
 
-    return () => router.events.off('routeChangeStart', hideMenu);
-  }, [hideMenu, router.events]);
+    return () => router.events.off('routeChangeStart', hideMenu)
+  }, [hideMenu, router.events])
 
   return (
     <header
@@ -50,7 +50,7 @@ const Header = ({}: Props): JSX.Element => {
         </div>
       </MenuContext.Provider>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

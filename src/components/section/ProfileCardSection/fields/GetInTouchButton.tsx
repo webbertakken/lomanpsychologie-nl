@@ -1,13 +1,13 @@
-import Link from 'next/link';
-import { useAnimateToAnchorClickHandler } from '../../../animations/useAnimateToAnchorClickHandler';
+import Link from 'next/link'
+import { useAnimateToAnchorClickHandler } from '../../../animations/useAnimateToAnchorClickHandler'
 
 interface Props {
-  link: string;
-  text: string;
+  link: string
+  text: string
 }
 
 const GetInTouchButton = ({ link, text }: Props): JSX.Element => {
-  const onClick = useAnimateToAnchorClickHandler();
+  const onClick = useAnimateToAnchorClickHandler()
 
   return (
     <div className="pt-12 pb-8">
@@ -19,7 +19,7 @@ const GetInTouchButton = ({ link, text }: Props): JSX.Element => {
         {text}
       </Link>
     </div>
-  );
-};
+  )
+}
 
-export default GetInTouchButton;
+export default GetInTouchButton

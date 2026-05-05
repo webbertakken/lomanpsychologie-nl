@@ -1,10 +1,10 @@
-import { ContentfulClientApi, createClient } from 'contentful';
+import { ContentfulClientApi, createClient } from 'contentful'
 
 export const getContentfulClient = (): ContentfulClientApi => {
   const client = createClient({
     space: process.env.CONTENTFUL_SPACE_ID,
     accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-  });
+  })
 
   // client.getSpace()
   //   .then((space) => {
@@ -15,5 +15,5 @@ export const getContentfulClient = (): ContentfulClientApi => {
   //     console.error('Client initialization failed:', error);
   //   });
 
-  return client;
-};
+  return client
+}

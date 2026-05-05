@@ -1,5 +1,5 @@
 interface Props {
-  vocation: string;
+  vocation: string
 }
 
 const Vocation = ({ vocation }: Props): JSX.Element => {
@@ -14,7 +14,7 @@ const Vocation = ({ vocation }: Props): JSX.Element => {
       </svg>
       {vocation}
     </p>
-  );
-};
+  )
+}
 
-export default Vocation;
+export default Vocation

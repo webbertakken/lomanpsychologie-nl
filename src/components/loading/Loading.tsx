@@ -1,5 +1,5 @@
 const Loading = (): JSX.Element => {
-  return <div>Loading...</div>;
-};
+  return <div>Loading...</div>
+}
 
-export default Loading;
+export default Loading

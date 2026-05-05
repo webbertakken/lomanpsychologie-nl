@@ -1,15 +1,15 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const NotFound = (): JSX.Element => {
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     setTimeout(async () => {
-      await router.push('/');
-    }, 4500);
-  });
+      await router.push('/')
+    }, 4500)
+  })
 
   return (
     <div>
@@ -19,7 +19,7 @@ const NotFound = (): JSX.Element => {
         Redirecting to <Link href="/">home</Link>...
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default NotFound;
+export default NotFound

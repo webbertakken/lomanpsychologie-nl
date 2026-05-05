@@ -1,11 +1,11 @@
-import NavBar from '../header/Header';
-import Banner from '../banner/Banner';
-import { BannerNotificationEntry } from '../../../types/banner';
-import Footer from '../footer/Footer';
+import { BannerNotificationEntry } from '../../../types/banner'
+import Banner from '../banner/Banner'
+import Footer from '../footer/Footer'
+import NavBar from '../header/Header'
 
 interface Props {
-  children: JSX.Element;
-  banner?: BannerNotificationEntry;
+  children: JSX.Element
+  banner?: BannerNotificationEntry
 }
 
 const Layout = ({ children }: Props): JSX.Element => {
@@ -16,7 +16,7 @@ const Layout = ({ children }: Props): JSX.Element => {
       <main>{children}</main>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

@@ -1,16 +1,16 @@
-import MenuIcon from '../../../assets/hamburger.svg';
-import Image from 'next/image';
-import { MenuContext } from '../context/MenuContext';
-import { useContext } from 'react';
-import IconButton from '../../icons/IconButton';
-import cx from 'classnames';
+import cx from 'classnames'
+import Image from 'next/image'
+import { useContext } from 'react'
+import MenuIcon from '../../../assets/hamburger.svg'
+import IconButton from '../../icons/IconButton'
+import { MenuContext } from '../context/MenuContext'
 
 interface Props {
-  className?: string;
+  className?: string
 }
 
 function MobileMenuToggle({ className }: Props): JSX.Element {
-  const { show, setShow, hasDarkBackground } = useContext(MenuContext);
+  const { show, setShow, hasDarkBackground } = useContext(MenuContext)
 
   return (
     <IconButton
@@ -21,7 +21,7 @@ function MobileMenuToggle({ className }: Props): JSX.Element {
     >
       <Image src={MenuIcon} alt="menu icon" className={cx('icon', { invert: hasDarkBackground })} />
     </IconButton>
-  );
+  )
 }
 
-export default MobileMenuToggle;
+export default MobileMenuToggle

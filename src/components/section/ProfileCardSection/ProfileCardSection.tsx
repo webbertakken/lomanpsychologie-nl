@@ -1,19 +1,19 @@
-import FacebookIcon from './social/FacebookIcon';
-import TwitterIcon from './social/TwitterIcon';
-import YoutubeIcon from './social/YoutubeIcon';
-import InstagramIcon from './social/InstagramIcon';
-import Vocation from './fields/Vocation';
-import Location from './fields/Location';
-import Bio from './fields/Bio';
-import GetInTouchButton from './fields/GetInTouchButton';
-import LinkedInIcon from './social/LinkedInIcon';
-import { ProfileSectionEntry } from '../../../types/section';
-import FadeIntoView from '../../animations/fade-into-view';
-import cx from 'classnames';
-import Image from 'next/image';
+import cx from 'classnames'
+import Image from 'next/image'
+import { ProfileSectionEntry } from '../../../types/section'
+import FadeIntoView from '../../animations/fade-into-view'
+import Bio from './fields/Bio'
+import GetInTouchButton from './fields/GetInTouchButton'
+import Location from './fields/Location'
+import Vocation from './fields/Vocation'
+import FacebookIcon from './social/FacebookIcon'
+import InstagramIcon from './social/InstagramIcon'
+import LinkedInIcon from './social/LinkedInIcon'
+import TwitterIcon from './social/TwitterIcon'
+import YoutubeIcon from './social/YoutubeIcon'
 
 interface Props {
-  section: ProfileSectionEntry;
+  section: ProfileSectionEntry
 }
 
 const ProfileCardSection = ({ section }: Props): JSX.Element => {
@@ -32,19 +32,19 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
     linkedInHandle,
     twitterHandle,
     youtubeHandle,
-  } = section.fields;
+  } = section.fields
 
   const image = {
     src: `https:${photo.fields.file.url}`,
     width: photo.fields.file.details.image.width,
     height: photo.fields.file.details.image.height,
-  };
+  }
 
   const Photo = () => (
     <div className="w-full lg:w-2/5 hidden lg:block">
       <Image className="rounded-none lg:rounded-lg shadow-2xl" alt={title} {...image} />
     </div>
-  );
+  )
 
   return (
     <div
@@ -112,7 +112,7 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
         {!photoShouldBeOnTheLeft && <Photo />}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProfileCardSection;
+export default ProfileCardSection

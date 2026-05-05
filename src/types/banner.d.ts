@@ -1,8 +1,8 @@
-import { Entry } from 'contentful';
+import { Entry } from 'contentful'
 
 interface BannerNotificationProps {
-  isEnabled: boolean;
-  message: string;
+  isEnabled: boolean
+  message: string
 }
 
-type BannerNotificationEntry = Entry<BannerNotificationProps>;
+type BannerNotificationEntry = Entry<BannerNotificationProps>

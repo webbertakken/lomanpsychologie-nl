@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import Logo from '../../../assets/logo.svg';
+import Link from 'next/link'
+import Logo from '../../../assets/logo.svg'
 
 interface Props {}
 
@@ -45,7 +45,7 @@ const LogoAndSocialLayer = ({}: Props): JSX.Element => {
         {/*</a>*/}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LogoAndSocialLayer;
+export default LogoAndSocialLayer

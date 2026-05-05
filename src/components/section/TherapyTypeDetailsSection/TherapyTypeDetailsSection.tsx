@@ -1,20 +1,20 @@
-import { TherapyTypeDetailsEntry } from '../../../types/section';
-import FadeIntoView from '../../animations/fade-into-view';
-import { renderContent } from '../../content/renderContent';
+import { TherapyTypeDetailsEntry } from '../../../types/section'
+import FadeIntoView from '../../animations/fade-into-view'
+import { renderContent } from '../../content/renderContent'
 
 interface Props {
-  section: TherapyTypeDetailsEntry;
+  section: TherapyTypeDetailsEntry
 }
 
 const TherapyTypeDetailsSection = ({ section }: Props): JSX.Element => {
-  const { slug, therapyTypeCard } = section.fields;
-  const { title, subtitle, image, content } = therapyTypeCard.fields;
+  const { slug, therapyTypeCard } = section.fields
+  const { title, subtitle, image, content } = therapyTypeCard.fields
 
   const imageProps = {
     src: `https:${image.fields.file.url}`,
     width: image.fields.file.details.image.width,
     height: image.fields.file.details.image.height,
-  };
+  }
 
   return (
     <section id={slug} className="w-full bg-white -mt-24">
@@ -48,7 +48,7 @@ const TherapyTypeDetailsSection = ({ section }: Props): JSX.Element => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default TherapyTypeDetailsSection;
+export default TherapyTypeDetailsSection

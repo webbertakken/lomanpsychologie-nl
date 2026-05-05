@@ -1,7 +1,7 @@
-import type { AppProps /*, AppContext */ } from 'next/app';
-import Head from 'next/head';
-import '../styles/globals.css';
-import 'tippy.js/dist/tippy.css';
+import type { AppProps /*, AppContext */ } from 'next/app'
+import Head from 'next/head'
+import '../styles/globals.css'
+import 'tippy.js/dist/tippy.css'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       </Head>
       <Component {...pageProps} />
     </>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

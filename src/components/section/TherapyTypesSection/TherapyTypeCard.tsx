@@ -1,29 +1,29 @@
-import { TherapyTypeCardEntry } from '../../../types/section';
-import FadeIntoView from '../../animations/fade-into-view';
-import Link from 'next/link';
-import { useMemo } from 'react';
-import { renderContent } from '../../content/renderContent';
+import Link from 'next/link'
+import { useMemo } from 'react'
+import { TherapyTypeCardEntry } from '../../../types/section'
+import FadeIntoView from '../../animations/fade-into-view'
+import { renderContent } from '../../content/renderContent'
 
 interface Props {
-  card: TherapyTypeCardEntry;
+  card: TherapyTypeCardEntry
 }
 
 export const TherapyTypeCard = ({ card }: Props): JSX.Element => {
-  const { title, slug, subtitle, summary, image, pageToLinkTo } = card.fields;
+  const { title, slug, subtitle, summary, image, pageToLinkTo } = card.fields
 
   const link = useMemo(() => {
-    if (!pageToLinkTo) return '#';
+    if (!pageToLinkTo) return '#'
 
     return pageToLinkTo.fields.parentPage
       ? `/${pageToLinkTo.fields.parentPage.fields.slug}/${pageToLinkTo.fields.slug}`
-      : `/${pageToLinkTo.fields.slug}`;
-  }, [pageToLinkTo]);
+      : `/${pageToLinkTo.fields.slug}`
+  }, [pageToLinkTo])
 
   const imageProps = {
     src: `https:${image.fields.file.url}`,
     width: image.fields.file.details.image.width,
     height: image.fields.file.details.image.height,
-  };
+  }
 
   return (
     <div id={slug} className="max-w-3xl md:p-6 lg:py-12 sm:text-center mx-auto">
@@ -73,5 +73,5 @@ export const TherapyTypeCard = ({ card }: Props): JSX.Element => {
 
       <div className="w-full border-b border-gray-150 dark:border-gray-750 pt-12" />
     </div>
-  );
-};
+  )
+}

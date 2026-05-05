@@ -1,4 +1,4 @@
-import CopyrightAndLinksLayer from './CopyrightAndLinksLayer';
+import CopyrightAndLinksLayer from './CopyrightAndLinksLayer'
 
 interface Props {}
 
@@ -10,7 +10,7 @@ const Footer = ({}: Props): JSX.Element => {
         <CopyrightAndLinksLayer />
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

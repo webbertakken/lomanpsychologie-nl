@@ -1,11 +1,11 @@
-import Tooltip from '@tippyjs/react';
+import Tooltip from '@tippyjs/react'
 
 interface Props {
-  handle: string;
+  handle: string
 }
 
 const TwitterIcon = ({ handle: dirtyHandle }: Props): JSX.Element => {
-  const handle = dirtyHandle.replace(/^(@)/, '');
+  const handle = dirtyHandle.replace(/^(@)/, '')
   return (
     <Tooltip content={`@${handle}`}>
       <a className="link" target="_blank" rel="noreferrer" href={`https://twitter.com/${handle}`}>
@@ -20,7 +20,7 @@ const TwitterIcon = ({ handle: dirtyHandle }: Props): JSX.Element => {
         </svg>
       </a>
     </Tooltip>
-  );
-};
+  )
+}
 
-export default TwitterIcon;
+export default TwitterIcon

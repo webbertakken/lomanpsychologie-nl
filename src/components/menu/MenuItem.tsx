@@ -1,16 +1,16 @@
-import Link from 'next/link';
-import cx from 'classnames';
-import { useContext, useState } from 'react';
-import { Popover } from '@headlessui/react';
-import { RootMenuItemProps } from '../../types/menu';
-import { HiChevronDown } from 'react-icons/hi';
-import MenuSubItems from './MenuSubItems';
-import MenuPopover from './MenuPopover';
-import { MenuContext } from '../page/context/MenuContext';
+import { Popover } from '@headlessui/react'
+import cx from 'classnames'
+import Link from 'next/link'
+import { useContext, useState } from 'react'
+import { HiChevronDown } from 'react-icons/hi'
+import { RootMenuItemProps } from '../../types/menu'
+import { MenuContext } from '../page/context/MenuContext'
+import MenuPopover from './MenuPopover'
+import MenuSubItems from './MenuSubItems'
 
 interface Props extends RootMenuItemProps {
-  className?: string;
-  subMenuClassName?: string;
+  className?: string
+  subMenuClassName?: string
 }
 
 const MenuItem = ({
@@ -22,10 +22,10 @@ const MenuItem = ({
   className,
   subMenuClassName,
 }: Props): JSX.Element => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { type } = useContext(MenuContext);
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const { type } = useContext(MenuContext)
 
-  const hasSubpages = subPages.length >= 1;
+  const hasSubpages = subPages.length >= 1
 
   return (
     <Popover
@@ -73,7 +73,7 @@ const MenuItem = ({
         </div>
       )}
     </Popover>
-  );
-};
+  )
+}
 
-export default MenuItem;
+export default MenuItem

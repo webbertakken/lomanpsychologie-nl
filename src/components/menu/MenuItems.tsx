@@ -1,14 +1,14 @@
-import MenuItem from './MenuItem';
-import { MenuProps } from '../../types/menu';
+import { MenuProps } from '../../types/menu'
+import MenuItem from './MenuItem'
 
 interface Props {
-  menu: MenuProps;
-  className?: string;
-  itemClassName?: string;
-  role?: string;
-  ariaLabel?: string;
-  ariaLabelledBy?: string;
-  subMenuClassName?: string;
+  menu: MenuProps
+  className?: string
+  itemClassName?: string
+  role?: string
+  ariaLabel?: string
+  ariaLabelledBy?: string
+  subMenuClassName?: string
 }
 
 const MenuItems = ({
@@ -31,6 +31,6 @@ const MenuItems = ({
       />
     ))}
   </nav>
-);
+)
 
-export default MenuItems;
+export default MenuItems

@@ -1,9 +1,9 @@
-import { DynamicIcon } from '../icons/DynamicIcon';
-import Link from 'next/link';
-import { MenuItemProps, RootMenuItemProps } from '../../types/menu';
+import Link from 'next/link'
+import { MenuItemProps, RootMenuItemProps } from '../../types/menu'
+import { DynamicIcon } from '../icons/DynamicIcon'
 
 interface Props {
-  subPages: Array<MenuItemProps>;
+  subPages: Array<MenuItemProps>
 }
 
 function MenuSubItems({ subPages }: Props): JSX.Element {
@@ -26,10 +26,10 @@ function MenuSubItems({ subPages }: Props): JSX.Element {
               <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
             </div>
           </Link>
-        );
+        )
       })}
     </>
-  );
+  )
 }
 
-export default MenuSubItems;
+export default MenuSubItems

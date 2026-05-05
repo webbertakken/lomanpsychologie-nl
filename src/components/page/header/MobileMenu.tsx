@@ -1,17 +1,17 @@
-import { useContext } from 'react';
-import Logo from '../../../assets/logo.svg';
-import Cross from '../../../assets/cross.svg';
-import Link from 'next/link';
-import { MenuContext } from '../context/MenuContext';
-import IconButton from '../../icons/IconButton';
-import MenuItems from '../../menu/MenuItems';
-import cx from 'classnames';
-import Image from 'next/image';
+import cx from 'classnames'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useContext } from 'react'
+import Cross from '../../../assets/cross.svg'
+import Logo from '../../../assets/logo.svg'
+import IconButton from '../../icons/IconButton'
+import MenuItems from '../../menu/MenuItems'
+import { MenuContext } from '../context/MenuContext'
 
 interface Props {}
 
 function MobileMenu({}: Props): JSX.Element {
-  const { show, setShow, menu } = useContext(MenuContext);
+  const { show, setShow, menu } = useContext(MenuContext)
 
   return (
     <>
@@ -54,7 +54,7 @@ function MobileMenu({}: Props): JSX.Element {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default MobileMenu;
+export default MobileMenu
