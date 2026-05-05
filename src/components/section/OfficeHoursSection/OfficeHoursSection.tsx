@@ -1,55 +1,55 @@
-import { OfficeHoursEntry } from '../../../types/section';
-import FadeIntoView from '../../animations/fade-into-view';
-import { useRouter } from 'next/router';
-import { Day, translateDay } from '../../../core/locale';
-import cx from 'classnames';
-import { enforceEnDash } from '../../../core/utils';
-import { useEffect, useState } from 'react';
+import cx from 'classnames'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { Day, translateDay } from '../../../core/locale'
+import { enforceEnDash } from '../../../core/utils'
+import { OfficeHoursEntry } from '../../../types/section'
+import FadeIntoView from '../../animations/fade-into-view'
 
 const txClosed = (locale: string) => {
   switch (locale) {
     case 'en':
-      return 'Closed';
+      return 'Closed'
     case 'nl':
     default:
-      return 'Gesloten';
+      return 'Gesloten'
   }
-};
+}
 
 const txExceptions = (locale: string) => {
   switch (locale) {
     case 'en':
-      return 'Details';
+      return 'Details'
     case 'nl':
     default:
-      return 'Bijzonderheden';
+      return 'Bijzonderheden'
   }
-};
+}
 
-const days: Day[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const days: Day[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 interface Props {
-  section: OfficeHoursEntry;
-  index?: number;
+  section: OfficeHoursEntry
+  index?: number
 }
 
 const OfficeHoursSection = ({ section, index }: Props): JSX.Element => {
-  const { locale } = useRouter();
+  const { locale } = useRouter()
 
   // `new Date()` at render time differs between SSR (server's clock) and
   // CSR (browser's clock), causing a hydration mismatch when the day-of-week
   // changes the table order or which row is bolded. Defer the today-aware
   // reorder + highlight to a client-side effect so SSR HTML is stable.
-  const [thisDay, setThisDay] = useState<Day | null>(null);
+  const [thisDay, setThisDay] = useState<Day | null>(null)
   useEffect(() => {
-    setThisDay(new Date().toLocaleString('en-US', { weekday: 'long' }) as Day);
-  }, []);
+    setThisDay(new Date().toLocaleString('en-US', { weekday: 'long' }) as Day)
+  }, [])
 
   const daysStartingWithToday = thisDay
     ? days.slice(days.indexOf(thisDay), days.length).concat(days.slice(0, days.indexOf(thisDay)))
-    : days;
+    : days
 
-  const { title, slug, exceptions } = section.fields;
+  const { title, slug, exceptions } = section.fields
 
   const row = (day: Day, hours: string) => (
     <tr
@@ -62,9 +62,9 @@ const OfficeHoursSection = ({ section, index }: Props): JSX.Element => {
       <td className="">{translateDay(day, locale)}</td>
       <td className="pl-5">{enforceEnDash(hours)}</td>
     </tr>
-  );
+  )
 
-  const backgroundClass = index % 2 === 0 ? 'bg-[#bfc6d6]' : 'bg-white';
+  const backgroundClass = index % 2 === 0 ? 'bg-[#bfc6d6]' : 'bg-white'
   return (
     <section id={slug} className={`w-full px-4 md:px-8 py-16 md:py-24 ${backgroundClass} xl:px-0`}>
       <div className="flex flex-col max-w-4xl mx-auto">
@@ -99,7 +99,7 @@ const OfficeHoursSection = ({ section, index }: Props): JSX.Element => {
         )}
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default OfficeHoursSection;
+export default OfficeHoursSection

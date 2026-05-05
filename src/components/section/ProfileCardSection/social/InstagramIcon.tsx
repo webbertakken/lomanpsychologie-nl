@@ -1,11 +1,11 @@
-import Tooltip from '@tippyjs/react';
+import Tooltip from '@tippyjs/react'
 
 interface Props {
-  handle: string;
+  handle: string
 }
 
 const InstagramIcon = ({ handle: dirtyHandle }: Props): JSX.Element => {
-  const handle = dirtyHandle.replace(/^(@)/, '');
+  const handle = dirtyHandle.replace(/^(@)/, '')
   return (
     <Tooltip content={`@${handle}`}>
       <a
@@ -25,7 +25,7 @@ const InstagramIcon = ({ handle: dirtyHandle }: Props): JSX.Element => {
         </svg>
       </a>
     </Tooltip>
-  );
-};
+  )
+}
 
-export default InstagramIcon;
+export default InstagramIcon

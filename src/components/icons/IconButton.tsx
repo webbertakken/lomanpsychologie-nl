@@ -1,11 +1,11 @@
-import cx from 'classnames';
+import cx from 'classnames'
 
 interface Props {
-  children: JSX.Element;
-  onClick?: () => void;
-  dark?: boolean;
-  className?: string;
-  ariaLabel: string;
+  children: JSX.Element
+  onClick?: () => void
+  dark?: boolean
+  className?: string
+  ariaLabel: string
 }
 
 function IconButton({ children, onClick, dark, className, ariaLabel }: Props): JSX.Element {
@@ -21,7 +21,7 @@ function IconButton({ children, onClick, dark, className, ariaLabel }: Props): J
     >
       {children}
     </button>
-  );
+  )
 }
 
-export default IconButton;
+export default IconButton

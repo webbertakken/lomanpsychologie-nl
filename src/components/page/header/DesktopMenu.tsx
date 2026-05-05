@@ -1,15 +1,15 @@
-import Logo from '../../../assets/logo.svg';
-import MenuItems from '../../menu/MenuItems';
-import Image from 'next/image';
-import Link from 'next/link';
-import cx from 'classnames';
-import { useContext } from 'react';
-import { MenuContext } from '../context/MenuContext';
+import cx from 'classnames'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useContext } from 'react'
+import Logo from '../../../assets/logo.svg'
+import MenuItems from '../../menu/MenuItems'
+import { MenuContext } from '../context/MenuContext'
 
 interface Props {}
 
 function DesktopMenu({}: Props): JSX.Element {
-  const { hasDarkBackground, menu } = useContext(MenuContext);
+  const { hasDarkBackground, menu } = useContext(MenuContext)
 
   return (
     <>
@@ -35,7 +35,7 @@ function DesktopMenu({}: Props): JSX.Element {
         }
       />
     </>
-  );
+  )
 }
 
-export default DesktopMenu;
+export default DesktopMenu

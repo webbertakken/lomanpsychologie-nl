@@ -1,5 +1,5 @@
 interface Props {
-  location: string;
+  location: string
 }
 
 const Location = ({ location }: Props): JSX.Element => {
@@ -14,7 +14,7 @@ const Location = ({ location }: Props): JSX.Element => {
       </svg>
       {location}
     </p>
-  );
-};
+  )
+}
 
-export default Location;
+export default Location

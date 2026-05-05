@@ -1,7 +1,7 @@
-import Loading from './Loading';
+import Loading from './Loading'
 
 const LoadingPage = (): JSX.Element => {
-  return <Loading />;
-};
+  return <Loading />
+}
 
-export default LoadingPage;
+export default LoadingPage

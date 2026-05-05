@@ -1,12 +1,12 @@
-import { AppContext } from '../context/AppContext';
-import { useContext } from 'react';
+import { useContext } from 'react'
+import { AppContext } from '../context/AppContext'
 
 interface Props {}
 
 const Banner = ({}: Props): JSX.Element => {
-  const { banner } = useContext(AppContext);
+  const { banner } = useContext(AppContext)
 
-  if (!banner || !banner.fields.isEnabled) return null;
+  if (!banner || !banner.fields.isEnabled) return null
 
   return (
     <section
@@ -17,7 +17,7 @@ const Banner = ({}: Props): JSX.Element => {
         {banner.fields.message}
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Banner;
+export default Banner

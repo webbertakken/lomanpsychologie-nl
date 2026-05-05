@@ -1,13 +1,13 @@
-import Link from 'next/link';
-import { Fragment, ReactChildren, useState } from 'react';
-import { Popover, Transition } from '@headlessui/react';
+import { Popover, Transition } from '@headlessui/react'
+import Link from 'next/link'
+import { Fragment, ReactChildren, useState } from 'react'
 
 interface Props {
-  isOpen: boolean;
-  children: JSX.Element;
-  parentTitle: string;
-  headerTitle: string;
-  headerLink: string;
+  isOpen: boolean
+  children: JSX.Element
+  parentTitle: string
+  headerTitle: string
+  headerLink: string
 }
 
 function MenuPopover({
@@ -44,7 +44,7 @@ function MenuPopover({
         </div>
       </Popover.Panel>
     </Transition>
-  );
+  )
 }
 
-export default MenuPopover;
+export default MenuPopover
