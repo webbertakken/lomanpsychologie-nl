@@ -1,6 +1,5 @@
 import { Entry } from 'contentful'
 import { GetStaticProps, GetStaticPaths } from 'next'
-import LoadingPage from '../../components/loading/LoadingPage'
 import Layout from '../../components/page/layout/Layout'
 import Section from '../../components/section/Section'
 import { getContentfulClient } from '../../core/contentful'
@@ -20,7 +19,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: 'blocking',
   }
 }
 
@@ -43,5 +42,9 @@ interface Props {
 }
 
 export default function Sections({ section }: Props): JSX.Element {
-  return <Layout>{section ? <Section section={section} /> : <LoadingPage />}</Layout>
+  return (
+    <Layout>
+      <Section section={section} />
+    </Layout>
+  )
 }

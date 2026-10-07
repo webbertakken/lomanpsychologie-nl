@@ -1,7 +1,6 @@
 import { BannerNotificationEntry } from '../../types/banner'
 import { MenuProps } from '../../types/menu'
 import { PageEntry } from '../../types/page'
-import LoadingPage from '../loading/LoadingPage'
 import Section from '../section/Section'
 import { AppContext } from './context/AppContext'
 import { PageContext } from './context/PageContext'
@@ -15,8 +14,6 @@ interface Props {
 }
 
 const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
-  if (!page) return <LoadingPage />
-
   const { sections, hasOwnHeader, hasDarkBackground, subtitle, title } = page.fields
 
   return (
@@ -24,30 +21,26 @@ const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
       <PageContext.Provider value={{ hasOwnHeader, hasDarkBackground }}>
         <Layout>
           <PageContext.Consumer>
-            {({ hasOwnHeader }) =>
-              page ? (
-                <>
-                  {hasOwnHeader ? (
-                    // Pages with own header (e.g. Home's ProfileCardSection)
-                    // already render a visible h1, but pages like
-                    // /de-praktijk only have section h2s -- axe-core's
-                    // page-has-heading-one rule then fires. Always render
-                    // a sr-only h1 with the page title so every page has at
-                    // least one h1, regardless of which sections are used.
-                    <h1 className="sr-only">{title}</h1>
-                  ) : (
-                    <div className="text-center pt-6">
-                      <h1 className="text-xl md:text-3xl px-6 break-words">{subtitle}</h1>
-                    </div>
-                  )}
-                  {sections?.map((section, index) => {
-                    return <Section key={section.sys.id} section={section} index={index} />
-                  })}
-                </>
-              ) : (
-                <LoadingPage />
-              )
-            }
+            {({ hasOwnHeader }) => (
+              <>
+                {hasOwnHeader ? (
+                  // Pages with own header (e.g. Home's ProfileCardSection)
+                  // already render a visible h1, but pages like
+                  // /de-praktijk only have section h2s -- axe-core's
+                  // page-has-heading-one rule then fires. Always render
+                  // a sr-only h1 with the page title so every page has at
+                  // least one h1, regardless of which sections are used.
+                  <h1 className="sr-only">{title}</h1>
+                ) : (
+                  <div className="text-center pt-6">
+                    <h1 className="text-xl md:text-3xl px-6 break-words">{subtitle}</h1>
+                  </div>
+                )}
+                {sections?.map((section, index) => {
+                  return <Section key={section.sys.id} section={section} index={index} />
+                })}
+              </>
+            )}
           </PageContext.Consumer>
         </Layout>
       </PageContext.Provider>
