@@ -38,3 +38,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# mise (bin/mise keeps its binary and tools here)
+.mise/
+
+# playwright
+/test-results/
+/playwright-report/
