@@ -41,3 +41,7 @@ yarn-error.log*
 
 # mise (bin/mise keeps its binary and tools here)
 .mise/
+
+# playwright
+/test-results/
+/playwright-report/
