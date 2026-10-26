@@ -1,8 +1,12 @@
-import { Entry } from 'contentful'
+import type { EntryFieldTypes } from 'contentful'
+import type { ContentEntry } from './contentful'
 
-interface BannerNotificationProps {
-  isEnabled: boolean
-  message: string
+type BannerNotificationSkeleton = {
+  contentTypeId: 'bannerNotification'
+  fields: {
+    isEnabled: EntryFieldTypes.Boolean
+    message: EntryFieldTypes.Text
+  }
 }
 
-type BannerNotificationEntry = Entry<BannerNotificationProps>
+type BannerNotificationEntry = ContentEntry<BannerNotificationSkeleton>

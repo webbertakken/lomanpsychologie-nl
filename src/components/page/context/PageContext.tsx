@@ -1,7 +1,7 @@
 import React from 'react'
-import { PageProps } from '../../../types/page'
+import { PageFields } from '../../../types/page'
 
-type ContextProps = Pick<PageProps, 'hasOwnHeader' | 'hasDarkBackground'>
+type ContextProps = Pick<PageFields, 'hasOwnHeader' | 'hasDarkBackground'>
 
 export const PageContext = React.createContext<Partial<ContextProps>>({
   hasOwnHeader: false,

@@ -2,14 +2,14 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import Page from '../components/page/Page'
 import { getContentfulClient } from '../core/contentful'
 import { replacePathsRecursively } from '../core/utils'
-import { BannerNotificationEntry, BannerNotificationProps } from '../types/banner'
-import { MenuOptions, MenuSortOrderEntry, MenuSortOrderProps } from '../types/menu'
-import { PageEntry, PageProps } from '../types/page'
+import { BannerNotificationEntry, BannerNotificationSkeleton } from '../types/banner'
+import { MenuOptions, MenuSortOrderEntry, MenuSortOrderSkeleton } from '../types/menu'
+import { PageEntry, PageSkeleton } from '../types/page'
 
 const client = getContentfulClient()
 
 const getPages = async (): Promise<PageEntry[]> => {
-  const { items: pages } = await client.getEntries<PageProps>({
+  const { items: pages } = await client.getEntries<PageSkeleton>({
     content_type: 'page',
     include: 3,
   })
@@ -18,7 +18,7 @@ const getPages = async (): Promise<PageEntry[]> => {
 }
 
 const getMenuSortOrder = async (menu: MenuOptions): Promise<MenuSortOrderEntry> => {
-  const { items: sortOrders } = await client.getEntries<MenuSortOrderProps>({
+  const { items: sortOrders } = await client.getEntries<MenuSortOrderSkeleton>({
     content_type: 'menuSortOrder',
   })
 
@@ -35,7 +35,7 @@ const createMenuSortFn = (menuSortOrder: MenuSortOrderEntry) => {
 }
 
 const getBannerNotification = async (): Promise<BannerNotificationEntry> => {
-  const { items: banners } = await client.getEntries<BannerNotificationProps>({
+  const { items: banners } = await client.getEntries<BannerNotificationSkeleton>({
     content_type: 'bannerNotification',
   })
 
