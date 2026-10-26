@@ -946,22 +946,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contentful/rich-text-react-renderer@npm:^15.16.2":
-  version: 15.16.2
-  resolution: "@contentful/rich-text-react-renderer@npm:15.16.2"
+"@contentful/rich-text-react-renderer@npm:^16.0.0":
+  version: 16.2.2
+  resolution: "@contentful/rich-text-react-renderer@npm:16.2.2"
   dependencies:
-    "@contentful/rich-text-types": "npm:^16.0.2"
+    "@contentful/rich-text-types": "npm:^17.2.7"
   peerDependencies:
-    react: ^16.8.6 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.6 || ^17.0.0 || ^18.0.0
-  checksum: 10/3699fbe442ecce23b6f0408a7a9d33300e728853cde04f80e127d6c3759dd5b8647930f8d17fbdbc180e566005e8b113628a056c7c25ba71ff864d1e01dd10c2
+    react: ^16.8.6 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.6 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/2b3b07063c0d78d893262788e9384095d47b50e77ec95ab1b59f56627ba2b92963fb743464f2269d94a3103e674bc7eb94dd7565796a822b6ca917c49655f7df
   languageName: node
   linkType: hard
 
-"@contentful/rich-text-types@npm:^16.0.2":
-  version: 16.0.2
-  resolution: "@contentful/rich-text-types@npm:16.0.2"
-  checksum: 10/8069c8451e34d76e6323840e9c000975b7885edb208f517f7ed02ca4131fa054d7d859f635935e560ebc3eaafffe1e20ce53da97ce5fe0bac5bb9d6ea15d8bfa
+"@contentful/rich-text-types@npm:^17.0.0, @contentful/rich-text-types@npm:^17.2.7":
+  version: 17.2.7
+  resolution: "@contentful/rich-text-types@npm:17.2.7"
+  checksum: 10/2da5682e61f96fbaecfb0c2470139a6ec654f6a9945afcd0e6e0a304d594528d21f4d4a840be84c67753b7270ee376a1e5a097e7f3729a6bbb585da6952f5d0c
   languageName: node
   linkType: hard
 
@@ -10948,8 +10948,8 @@ __metadata:
     "@axe-core/playwright": "npm:^4.11.3"
     "@commitlint/cli": "npm:^21.0.0"
     "@commitlint/config-conventional": "npm:^21.0.0"
-    "@contentful/rich-text-react-renderer": "npm:^15.16.2"
-    "@contentful/rich-text-types": "npm:^16.0.2"
+    "@contentful/rich-text-react-renderer": "npm:^16.0.0"
+    "@contentful/rich-text-types": "npm:^17.0.0"
     "@headlessui/react": "npm:^1.7.7"
     "@jest/types": "npm:^29.3.1"
     "@loadable/component": "npm:^5.15.2"
