@@ -5858,14 +5858,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.5.0":
-  version: 8.5.0
-  resolution: "eslint-config-prettier@npm:8.5.0"
+"eslint-config-prettier@npm:^10.0.0":
+  version: 10.1.8
+  resolution: "eslint-config-prettier@npm:10.1.8"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: 10/cafd93fb39997969e9e79b3e0b3466d0b8570273d15423986597b8422b7363d4a80f009aec1d1443fa2329972dafde79031b1649590cc35069b0a68d31098e7b
+  checksum: 10/03f8e6ea1a6a9b8f9eeaf7c8c52a96499ec4b275b9ded33331a6cc738ed1d56de734097dbd0091f136f0e84bc197388bd8ec22a52a4658105883f8c8b7d8921a
   languageName: node
   linkType: hard
 
@@ -10914,7 +10914,7 @@ __metadata:
     cypress-dark: "npm:^1.8.3"
     eslint: "npm:^10.3.0"
     eslint-config-next: "npm:^13.0.7"
-    eslint-config-prettier: "npm:^8.5.0"
+    eslint-config-prettier: "npm:^10.0.0"
     eslint-plugin-cypress: "npm:^2.12.1"
     eslint-plugin-testing-library: "npm:^5.9.1"
     eslint-plugin-unicorn: "npm:^64.0.0"
