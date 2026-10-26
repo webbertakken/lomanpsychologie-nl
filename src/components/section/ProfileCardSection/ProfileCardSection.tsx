@@ -1,5 +1,6 @@
 import cx from 'classnames'
 import Image from 'next/image'
+import { isResolved } from '../../../core/links'
 import { ProfileSectionEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'
 import Bio from './fields/Bio'
@@ -33,6 +34,7 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
     twitterHandle,
     youtubeHandle,
   } = section.fields
+  if (!isResolved(photo)) return null
 
   const image = {
     src: `https:${photo.fields.file.url}`,

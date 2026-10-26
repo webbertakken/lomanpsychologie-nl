@@ -1,10 +1,7 @@
 import type { Entry, EntrySkeletonType } from 'contentful'
 
 /**
- * An entry as delivered by our client: links resolved, and links to drafts or
- * deleted entries removed rather than left as bare link objects.
+ * An entry as delivered by our client: links resolved where possible, while
+ * links to drafts or deleted entries stay as bare `UnresolvedLink` objects.
  */
-type ContentEntry<Skeleton extends EntrySkeletonType> = Entry<
-  Skeleton,
-  'WITHOUT_UNRESOLVABLE_LINKS'
->
+type ContentEntry<Skeleton extends EntrySkeletonType> = Entry<Skeleton, undefined>

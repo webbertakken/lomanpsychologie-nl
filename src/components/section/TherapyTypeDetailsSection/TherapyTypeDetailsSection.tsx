@@ -1,3 +1,4 @@
+import { isResolved } from '../../../core/links'
 import { TherapyTypeDetailsEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'
 import { renderContent } from '../../content/renderContent'
@@ -8,6 +9,8 @@ interface Props {
 
 const TherapyTypeDetailsSection = ({ section }: Props): JSX.Element => {
   const { slug, therapyTypeCard } = section.fields
+  if (!isResolved(therapyTypeCard) || !isResolved(therapyTypeCard.fields.image)) return null
+
   const { title, subtitle, image, content } = therapyTypeCard.fields
 
   const imageProps = {

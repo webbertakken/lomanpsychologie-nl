@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Page from '../components/page/Page'
 import { getContentfulClient } from '../core/contentful'
+import { isResolved } from '../core/links'
 import { replacePathsRecursively } from '../core/utils'
 import { BannerNotificationEntry, BannerNotificationSkeleton } from '../types/banner'
 import { MenuOptions, MenuSortOrderEntry, MenuSortOrderSkeleton } from '../types/menu'
@@ -26,7 +27,7 @@ const getMenuSortOrder = async (menu: MenuOptions): Promise<MenuSortOrderEntry> 
 }
 
 const createMenuSortFn = (menuSortOrder: MenuSortOrderEntry) => {
-  const sortOrder = menuSortOrder?.fields.pages.map(({ fields }) => fields.slug)
+  const sortOrder = menuSortOrder?.fields.pages.filter(isResolved).map(({ fields }) => fields.slug)
 
   return (a, b) => {
     if (b.fields.isHomePage) return 1
@@ -79,11 +80,12 @@ const getMenuStructure = (pages, activePath) => {
 
 const replaceReferencesWithSlugs = (rawPage) =>
   replacePathsRecursively(rawPage, ['fields.pageToLinkTo', 'fields.parentPage'], (value) => {
-    if (!value) return
+    if (!isResolved(value)) return
     const { slug, parentPage: parent } = value.fields
 
-    const parentPage = parent
+    const parentPage = isResolved(parent)
       ? {
+          sys: parent.sys,
           fields: {
             slug: parent.fields.slug,
             parentPage: parent.fields.parentPage,
@@ -91,18 +93,19 @@ const replaceReferencesWithSlugs = (rawPage) =>
         }
       : undefined
 
-    return { fields: { slug, parentPage } }
+    return { sys: value.sys, fields: { slug, parentPage } }
   })
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = (await getPages()).map((page) => {
+  const paths = (await getPages()).flatMap((page) => {
     const { slug: pageSlug, isHomePage, parentPage } = page.fields
-    const parentSlug = parentPage?.fields.slug
+    if (parentPage && !isResolved(parentPage)) return []
+    const parentSlug = isResolved(parentPage) ? parentPage.fields.slug : undefined
 
     let slug = parentSlug ? [parentSlug, pageSlug] : [pageSlug]
     if (isHomePage) slug = null
 
-    return { params: { slug } }
+    return [{ params: { slug } }]
   })
 
   return {

@@ -1,3 +1,4 @@
+import { isResolved } from '../../../core/links'
 import { TypesOfTherapyEntry } from '../../../types/section'
 import { TherapyTypeCard } from './TherapyTypeCard'
 
@@ -10,7 +11,7 @@ const TherapyTypesSection = ({ section }: Props): JSX.Element => {
 
   return (
     <section id={slug} className="w-full bg-white py-6">
-      {therapyTypeCards?.map((card) => (
+      {therapyTypeCards?.filter(isResolved).map((card) => (
         <TherapyTypeCard key={card.sys.id} card={card} />
       ))}
     </section>
