@@ -1,18 +1,17 @@
-import { Entry } from 'contentful'
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Layout from '../../components/page/layout/Layout'
 import Section from '../../components/section/Section'
 import { getContentfulClient } from '../../core/contentful'
-import { BasicSectionEntry } from '../../types/section'
+import { BasicSectionEntry, BasicSectionSkeleton } from '../../types/section'
 
 const client = getContentfulClient()
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { items: sections } = await client.getEntries({
+  const { items: sections } = await client.getEntries<BasicSectionSkeleton>({
     content_type: 'section',
   })
 
-  const paths = sections.map((item: Entry<any>) => {
+  const paths = sections.map((item) => {
     const { slug } = item.fields
     return { params: { slug } }
   })
@@ -23,10 +22,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({ params }) => {
   const { slug } = params
 
-  const { items } = await client.getEntries({
+  const { items } = await client.getEntries<BasicSectionSkeleton>({
     content_type: 'section',
     'fields.slug': slug,
   })

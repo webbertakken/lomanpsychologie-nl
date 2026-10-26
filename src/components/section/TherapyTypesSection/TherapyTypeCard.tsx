@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useMemo } from 'react'
+import { isResolved } from '../../../core/links'
 import { TherapyTypeCardEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'
 import { renderContent } from '../../content/renderContent'
@@ -12,12 +13,13 @@ export const TherapyTypeCard = ({ card }: Props): JSX.Element => {
   const { title, slug, subtitle, summary, image, pageToLinkTo } = card.fields
 
   const link = useMemo(() => {
-    if (!pageToLinkTo) return '#'
+    if (!isResolved(pageToLinkTo)) return '#'
 
-    return pageToLinkTo.fields.parentPage
-      ? `/${pageToLinkTo.fields.parentPage.fields.slug}/${pageToLinkTo.fields.slug}`
-      : `/${pageToLinkTo.fields.slug}`
+    const { slug: pageSlug, parentPage } = pageToLinkTo.fields
+    return isResolved(parentPage) ? `/${parentPage.fields.slug}/${pageSlug}` : `/${pageSlug}`
   }, [pageToLinkTo])
+
+  if (!isResolved(image)) return null
 
   const imageProps = {
     src: `https:${image.fields.file.url}`,

@@ -1,3 +1,4 @@
+import { isResolved } from '../../core/links'
 import { BannerNotificationEntry } from '../../types/banner'
 import { MenuProps } from '../../types/menu'
 import { PageEntry } from '../../types/page'
@@ -36,9 +37,11 @@ const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
                     <h1 className="text-xl md:text-3xl px-6 break-words">{subtitle}</h1>
                   </div>
                 )}
-                {sections?.map((section, index) => {
-                  return <Section key={section.sys.id} section={section} index={index} />
-                })}
+                {sections?.map((section, index) =>
+                  isResolved(section) ? (
+                    <Section key={section.sys.id} section={section} index={index} />
+                  ) : null,
+                )}
               </>
             )}
           </PageContext.Consumer>

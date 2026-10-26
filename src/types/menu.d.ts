@@ -1,5 +1,6 @@
-import { Entry } from 'contentful'
-import { PageEntry } from './page'
+import type { EntryFieldTypes } from 'contentful'
+import type { ContentEntry } from './contentful'
+import type { PageSkeleton } from './page'
 
 interface MenuItemProps {
   title: string
@@ -17,10 +18,13 @@ type MenuProps = Array<RootMenuItemProps>
 
 type MenuOptions = 'header' | 'footer'
 
-interface MenuSortOrderProps {
-  menu: MenuOptions
-  shouldShowSubmenus: boolean
-  pages: PageEntry[]
+type MenuSortOrderSkeleton = {
+  contentTypeId: 'menuSortOrder'
+  fields: {
+    menu: EntryFieldTypes.Symbol<MenuOptions>
+    shouldShowSubmenus: EntryFieldTypes.Boolean
+    pages: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<PageSkeleton>>
+  }
 }
 
-type MenuSortOrderEntry = Entry<MenuSortOrderProps>
+type MenuSortOrderEntry = ContentEntry<MenuSortOrderSkeleton>

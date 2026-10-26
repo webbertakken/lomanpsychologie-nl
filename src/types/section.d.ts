@@ -1,84 +1,106 @@
-import { Document } from '@contentful/rich-text-types'
-import { Entry } from 'contentful'
-import { PageEntry } from './page'
+import type { EntryFieldTypes } from 'contentful'
+import type { ContentEntry } from './contentful'
+import type { PageSkeleton } from './page'
 
-interface BasicSectionProps {
-  title: string
-  subtitle: string
-  slug: string
-  content: Document
+type BasicSectionSkeleton = {
+  contentTypeId: 'section'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    subtitle: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    content: EntryFieldTypes.RichText
+  }
 }
 
-type BasicSectionEntry = Entry<BasicSectionProps>
+type BasicSectionEntry = ContentEntry<BasicSectionSkeleton>
 
-interface OfficeHoursProps {
-  title: string
-  slug: string
-  monday: string
-  tuesday: string
-  wednesday: string
-  thursday: string
-  friday: string
-  saturday: string
-  sunday: string
-  exceptions: string[]
+type OfficeHoursSkeleton = {
+  contentTypeId: 'officeHoursSection'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    monday: EntryFieldTypes.Symbol
+    tuesday: EntryFieldTypes.Symbol
+    wednesday: EntryFieldTypes.Symbol
+    thursday: EntryFieldTypes.Symbol
+    friday: EntryFieldTypes.Symbol
+    saturday: EntryFieldTypes.Symbol
+    sunday: EntryFieldTypes.Symbol
+    exceptions: EntryFieldTypes.Array<EntryFieldTypes.Symbol>
+  }
 }
 
-type OfficeHoursEntry = Entry<OfficeHoursProps>
+type OfficeHoursEntry = ContentEntry<OfficeHoursSkeleton>
 
-interface ProfileSectionProps {
-  title: string
-  slug: string
-  photo: Entry<any>
-  photoShouldBeOnTheLeft: boolean
-  vocation: string
-  location: string
-  getInTouchText: string
-  getInTouchLink: string
-  shortDescription: Document
-  instagramHandle: string
-  facebookHandle: string
-  twitterHandle: string
-  youtubeHandle: string
-  linkedInHandle: string
+type ProfileSectionSkeleton = {
+  contentTypeId: 'profileCardSection'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    photo: EntryFieldTypes.AssetLink
+    photoShouldBeOnTheLeft: EntryFieldTypes.Boolean
+    vocation: EntryFieldTypes.Symbol
+    location: EntryFieldTypes.Symbol
+    getInTouchText: EntryFieldTypes.Symbol
+    getInTouchLink: EntryFieldTypes.Symbol
+    shortDescription: EntryFieldTypes.RichText
+    instagramHandle: EntryFieldTypes.Symbol
+    facebookHandle: EntryFieldTypes.Symbol
+    twitterHandle: EntryFieldTypes.Symbol
+    youtubeHandle: EntryFieldTypes.Symbol
+    linkedInHandle: EntryFieldTypes.Symbol
+  }
 }
 
-type ProfileSectionEntry = Entry<ProfileSectionProps>
+type ProfileSectionEntry = ContentEntry<ProfileSectionSkeleton>
 
-interface TherapyTypeCardProps {
-  image: Entry<any>
-  title: string
-  slug: string
-  subtitle: string
-  summary: Document
-  content: Document
-  pageToLinkTo?: PageEntry
+type TherapyTypeCardSkeleton = {
+  contentTypeId: string
+  fields: {
+    image: EntryFieldTypes.AssetLink
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    subtitle: EntryFieldTypes.Symbol
+    summary: EntryFieldTypes.RichText
+    content: EntryFieldTypes.RichText
+    pageToLinkTo?: EntryFieldTypes.EntryLink<PageSkeleton>
+  }
 }
 
-type TherapyTypeCardEntry = Entry<TherapyTypeCardProps>
+type TherapyTypeCardEntry = ContentEntry<TherapyTypeCardSkeleton>
 
-interface TypesOfTherapyProps {
-  title: string
-  slug: string
-  therapyTypeCards: TherapyTypeCardEntry[]
-  vocation: string
-  location: string
-  getInTouchText: string
-  getInTouchLink: string
-  shortDescription: Document
-  instagramHandle: string
-  facebookHandle: string
-  twitterHandle: string
-  youtubeHandle: string
-  linkedInHandle: string
+type TypesOfTherapySkeleton = {
+  contentTypeId: 'therapyTypesSection'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    therapyTypeCards: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TherapyTypeCardSkeleton>>
+  }
 }
 
-type TypesOfTherapyEntry = Entry<TypesOfTherapyProps>
+type TypesOfTherapyEntry = ContentEntry<TypesOfTherapySkeleton>
 
-interface TherapyTypeDetailsProps {
-  title: string
-  slug: string
-  therapyTypeCard: TherapyTypeCardEntry
+type TherapyTypeDetailsSkeleton = {
+  contentTypeId: 'TherapyTypeDetailedSection'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    therapyTypeCard: EntryFieldTypes.EntryLink<TherapyTypeCardSkeleton>
+  }
 }
 
-type TherapyTypeDetailsEntry = Entry<TherapyTypeDetailsProps>
+type TherapyTypeDetailsEntry = ContentEntry<TherapyTypeDetailsSkeleton>
+
+type SectionSkeleton =
+  | BasicSectionSkeleton
+  | OfficeHoursSkeleton
+  | ProfileSectionSkeleton
+  | TypesOfTherapySkeleton
+  | TherapyTypeDetailsSkeleton
+
+type SectionEntry =
+  | BasicSectionEntry
+  | OfficeHoursEntry
+  | ProfileSectionEntry
+  | TypesOfTherapyEntry
+  | TherapyTypeDetailsEntry

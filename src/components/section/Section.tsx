@@ -1,4 +1,11 @@
-import { Entry } from 'contentful'
+import {
+  BasicSectionEntry,
+  OfficeHoursEntry,
+  ProfileSectionEntry,
+  SectionEntry,
+  TherapyTypeDetailsEntry,
+  TypesOfTherapyEntry,
+} from '../../types/section'
 import BasicSection from './BasicSection/BasicSection'
 import OfficeHoursSection from './OfficeHoursSection/OfficeHoursSection'
 import ProfileCardSection from './ProfileCardSection/ProfileCardSection'
@@ -6,28 +13,24 @@ import TherapyTypeDetailsSection from './TherapyTypeDetailsSection/TherapyTypeDe
 import TherapyTypesSection from './TherapyTypesSection/TherapyTypesSection'
 
 interface Props {
-  section: Entry<any>
+  section: SectionEntry
   index?: number
 }
+
+// The content type id is the discriminant of `SectionEntry`, but Contentful
+// types `sys.contentType.sys.id` as a plain string, so each case names its entry.
 const Section = ({ section, index }: Props): JSX.Element => {
-  if (!section.sys.contentType) {
-    // Section is still in draft
-    return null
-  }
-
-  const sectionType = section.sys.contentType.sys.id
-
-  switch (sectionType) {
+  switch (section.sys.contentType.sys.id) {
     case 'section':
-      return <BasicSection section={section} index={index} />
+      return <BasicSection section={section as BasicSectionEntry} index={index} />
     case 'profileCardSection':
-      return <ProfileCardSection section={section} />
+      return <ProfileCardSection section={section as ProfileSectionEntry} />
     case 'therapyTypesSection':
-      return <TherapyTypesSection section={section} />
+      return <TherapyTypesSection section={section as TypesOfTherapyEntry} />
     case 'TherapyTypeDetailedSection':
-      return <TherapyTypeDetailsSection section={section} />
+      return <TherapyTypeDetailsSection section={section as TherapyTypeDetailsEntry} />
     case 'officeHoursSection':
-      return <OfficeHoursSection section={section} index={index} />
+      return <OfficeHoursSection section={section as OfficeHoursEntry} index={index} />
     default:
       return null
   }

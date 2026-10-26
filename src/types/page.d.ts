@@ -1,21 +1,26 @@
-// import { Document } from '@contentful/rich-text-types'
+import type { EntryFieldTypes } from 'contentful'
+import type { ContentEntry } from './contentful'
+import type { SectionSkeleton } from './section'
 
-import { Entry } from 'contentful'
-
-interface PageProps {
-  title: string
-  slug: string
-  menuItemTitle: string
-  subtitle: string
-  icon: string
-  isHomePage: boolean
-  hasOwnHeader: boolean
-  hasDarkBackground: boolean
-  parentPage: any
-  shouldBeShownInHeader: boolean
-  shouldBeShownInFooter: boolean
-  shouldBeShownInSubmenus: boolean
-  sections: any
+type PageSkeleton = {
+  contentTypeId: 'page'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    menuItemTitle: EntryFieldTypes.Symbol
+    subtitle: EntryFieldTypes.Symbol
+    icon: EntryFieldTypes.Symbol
+    isHomePage: EntryFieldTypes.Boolean
+    hasOwnHeader: EntryFieldTypes.Boolean
+    hasDarkBackground: EntryFieldTypes.Boolean
+    parentPage: EntryFieldTypes.EntryLink<PageSkeleton>
+    shouldBeShownInHeader: EntryFieldTypes.Boolean
+    shouldBeShownInFooter: EntryFieldTypes.Boolean
+    shouldBeShownInSubmenus: EntryFieldTypes.Boolean
+    sections: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<SectionSkeleton>>
+  }
 }
 
-type PageEntry = Entry<PageProps>
+type PageEntry = ContentEntry<PageSkeleton>
+
+type PageFields = PageEntry['fields']

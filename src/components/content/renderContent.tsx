@@ -3,7 +3,7 @@ import { BLOCKS, Document, Node } from '@contentful/rich-text-types'
 import Link from 'next/link'
 import { ReactNode, createElement } from 'react'
 import { humanFileSize } from '../../core/humanFileSize'
-import { PageProps } from '../../types/page'
+import { PageFields } from '../../types/page'
 import { DynamicIcon } from '../icons/DynamicIcon'
 import { fileTypeIcon } from './fileTypeIcon'
 
@@ -70,7 +70,7 @@ const options: Options = {
 
       // Link to a page
       if (sys?.contentType?.sys?.id === 'page') {
-        const { title, slug } = fields as PageProps
+        const { title, slug } = fields as PageFields
         return (
           <Link href={`/${slug}`} title={title}>
             {children}
