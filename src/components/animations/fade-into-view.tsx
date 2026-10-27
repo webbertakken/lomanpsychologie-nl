@@ -1,10 +1,9 @@
-import { ReactNodeLike } from 'prop-types'
-import React, { useMemo } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { animated, Spring } from 'react-spring'
 import VisibilitySensor from 'react-visibility-sensor'
 
 interface FadeIntoViewProps {
-  children: ReactNodeLike
+  children: ReactNode
   className?: string
   delay?: number
 }

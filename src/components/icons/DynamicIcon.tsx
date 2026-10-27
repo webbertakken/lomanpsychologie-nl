@@ -6,17 +6,14 @@ interface Props extends IconContext {
 }
 
 export function DynamicIcon({ icon, ...iconContext }: Props) {
-  const library = icon?.match(/[A-Z][a-z]+/g)[0].toLowerCase()
+  const library = icon?.match(/^[A-Z][a-z]+/)?.[0].toLowerCase()
   const fallback = <div>•</div>
 
-  if (!library || !icon) return fallback
+  if (!library) return fallback
 
-  const Icon = loadable(
-    () => import(/* webpackPrefetch: true */ `react-icons/${library}/index.js`),
-    {
-      resolveComponent: (element: JSX.Element) => element[icon as keyof JSX.Element],
-    },
-  )
+  const Icon = loadable(() => import(/* webpackPrefetch: true */ `react-icons/${library}`), {
+    resolveComponent: (element: JSX.Element) => element[icon as keyof JSX.Element],
+  })
 
   return (
     <IconContext.Provider value={iconContext}>
