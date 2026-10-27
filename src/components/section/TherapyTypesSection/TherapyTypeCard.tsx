@@ -31,7 +31,6 @@ export const TherapyTypeCard = ({ card }: Props): JSX.Element => {
     <div id={slug} className="max-w-3xl md:p-6 lg:py-12 sm:text-center mx-auto">
       <FadeIntoView>
         <Link href={link} className="block mb-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt={title}
             {...imageProps}
