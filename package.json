@@ -58,7 +58,7 @@
     "@vitest/coverage-v8": "^4.1.12",
     "autoprefixer": "^10.4.13",
     "eslint": "^10.3.0",
-    "eslint-plugin-unicorn": "^64.0.0",
+    "eslint-plugin-unicorn": "^79.0.0",
     "happy-dom": "^21.0.4",
     "husky": "9",
     "lint-staged": "^13.1.0",
