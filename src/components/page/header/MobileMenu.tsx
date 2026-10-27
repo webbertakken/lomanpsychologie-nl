@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext } from 'react'
+import { type JSX, useContext } from 'react'
 import Cross from '../../../assets/cross.svg'
 import Logo from '../../../assets/logo.svg'
 import IconButton from '../../icons/IconButton'

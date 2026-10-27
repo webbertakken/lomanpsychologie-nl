@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { isResolved } from '../../../core/links'
 import { TherapyTypeDetailsEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'

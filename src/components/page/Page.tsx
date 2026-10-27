@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { isResolved } from '../../core/links'
 import { BannerNotificationEntry } from '../../types/banner'
 import { MenuProps } from '../../types/menu'

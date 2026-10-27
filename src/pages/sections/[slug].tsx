@@ -1,4 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
+import type { JSX } from 'react'
 import Layout from '../../components/page/layout/Layout'
 import Section from '../../components/section/Section'
 import { getContentfulClient } from '../../core/contentful'

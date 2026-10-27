@@ -1,4 +1,5 @@
 import loadable from '@loadable/component'
+import type { JSX } from 'react'
 import { IconContext } from 'react-icons'
 
 interface Props extends IconContext {

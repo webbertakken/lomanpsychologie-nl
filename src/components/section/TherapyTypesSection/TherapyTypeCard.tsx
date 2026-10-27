@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { type JSX, useMemo } from 'react'
 import { isResolved } from '../../../core/links'
 import { TherapyTypeCardEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'

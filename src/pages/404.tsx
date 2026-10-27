@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { type JSX, useEffect } from 'react'
 
 const NotFound = (): JSX.Element => {
   const router = useRouter()

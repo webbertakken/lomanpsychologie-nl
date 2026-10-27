@@ -1,7 +1,7 @@
 import { Popover } from '@headlessui/react'
 import cx from 'classnames'
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { type JSX, useContext, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
 import { RootMenuItemProps } from '../../types/menu'
 import { MenuContext } from '../page/context/MenuContext'

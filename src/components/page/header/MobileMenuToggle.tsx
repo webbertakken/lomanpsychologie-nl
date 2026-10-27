@@ -1,6 +1,6 @@
 import cx from 'classnames'
 import Image from 'next/image'
-import { useContext } from 'react'
+import { type JSX, useContext } from 'react'
 import MenuIcon from '../../../assets/hamburger.svg'
 import IconButton from '../../icons/IconButton'
 import { MenuContext } from '../context/MenuContext'

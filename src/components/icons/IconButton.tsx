@@ -1,4 +1,5 @@
 import cx from 'classnames'
+import type { JSX } from 'react'
 
 interface Props {
   children: JSX.Element
