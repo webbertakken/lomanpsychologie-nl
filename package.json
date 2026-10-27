@@ -16,7 +16,7 @@
   },
   "lint-staged": {
     "*.@(ts|tsx|mts|js|jsx|mjs|cjs)": [
-      "oxlint --fix --report-unused-disable-directives",
+      "oxlint --fix --report-unused-disable-directives --no-error-on-unmatched-pattern",
       "oxfmt --write"
     ],
     "*.@(json|jsonc|json5|md|mdx|yaml|yml|css|scss|sass|html|toml)": "oxfmt --write",
