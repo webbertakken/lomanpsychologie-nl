@@ -50,7 +50,7 @@ const options: Options = {
         >
           <DynamicIcon
             icon={fileTypeIcon(contentType)}
-            className="shrink-0 grow-1 h-10 w-10 text-indigo-600 inline mb-2"
+            className="shrink-0 grow h-10 w-10 text-indigo-600 inline mb-2"
             aria-hidden="true"
           />
           <span className="text-sm text-center">{title}</span>

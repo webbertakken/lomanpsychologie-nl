@@ -34,7 +34,7 @@ export const TherapyTypeCard = ({ card }: Props): JSX.Element => {
           <img
             alt={title}
             {...imageProps}
-            className="object-cover object-center w-full md:rounded h-72"
+            className="object-cover object-center w-full md:rounded-sm h-72"
           />
         </Link>
       </FadeIntoView>
