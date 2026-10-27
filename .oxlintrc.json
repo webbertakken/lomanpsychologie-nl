@@ -137,6 +137,7 @@
     "**/node_modules/**",
     "**/dist/**",
     "**/build/**",
+    "**/out/**",
     "**/.next/**",
     "**/coverage/**",
     "**/.yarn/**",
