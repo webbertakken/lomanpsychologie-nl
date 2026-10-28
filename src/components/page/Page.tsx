@@ -35,7 +35,7 @@ const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
                   <h1 className="sr-only">{title}</h1>
                 ) : (
                   <div className="text-center pt-6">
-                    <h1 className="text-xl md:text-3xl px-6 break-words">{subtitle}</h1>
+                    <h1 className="text-xl md:text-3xl px-6 wrap-break-word">{subtitle}</h1>
                   </div>
                 )}
                 {sections?.map((section, index) =>

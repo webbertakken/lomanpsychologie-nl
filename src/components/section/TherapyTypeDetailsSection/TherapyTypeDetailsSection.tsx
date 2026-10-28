@@ -30,13 +30,13 @@ const TherapyTypeDetailsSection = ({ section }: Props): JSX.Element => {
           <div className="h-2/5" />
 
           <FadeIntoView className="px-3">
-            <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl bg-white py-3 px-3 sm:px-12 rounded text-center">
+            <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl bg-white py-3 px-3 sm:px-12 rounded-sm text-center">
               {title}
             </h1>
           </FadeIntoView>
 
           <FadeIntoView className="px-3">
-            <p className="text-xl md:text-xl lg:text-2xl bg-white py-3 px-3 sm:px-12 rounded text-center">
+            <p className="text-xl md:text-xl lg:text-2xl bg-white py-3 px-3 sm:px-12 rounded-sm text-center">
               {subtitle}
             </p>
           </FadeIntoView>

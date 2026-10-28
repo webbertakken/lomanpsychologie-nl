@@ -26,7 +26,7 @@ function DesktopMenu({}: Props): JSX.Element {
         ariaLabel="Main navigation"
         menu={menu}
         className={cx(
-          'hidden md:flex pr-8 top-0 left-0 z-0 flex items-center justify-center h-full py-5 -ml-0 space-x-4 text-base md:-ml-5 md:py-0',
+          'hidden md:flex pr-8 top-0 left-0 z-0 flex items-center justify-center h-full py-5 ml-0 gap-4 text-base md:-ml-5 md:py-0',
         )}
         itemClassName={
           hasDarkBackground

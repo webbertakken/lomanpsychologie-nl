@@ -14,7 +14,7 @@ function IconButton({ children, onClick, dark, className, ariaLabel }: Props): J
     <button
       aria-label={ariaLabel}
       className={cx(
-        'cursor-pointer p-2 md:hidden rounded',
+        'cursor-pointer p-2 md:hidden rounded-sm',
         className,
         dark ? 'text-white hover:text-gray-100' : 'text-gray-900 hover:text-gray-800',
       )}
