@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { isResolved } from '../../../core/links'
 import { TypesOfTherapyEntry } from '../../../types/section'
 import { TherapyTypeCard } from './TherapyTypeCard'

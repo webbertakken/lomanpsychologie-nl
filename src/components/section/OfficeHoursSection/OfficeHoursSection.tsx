@@ -1,6 +1,6 @@
 import cx from 'classnames'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
 import { Day, translateDay } from '../../../core/locale'
 import { enforceEnDash } from '../../../core/utils'
 import { OfficeHoursEntry } from '../../../types/section'

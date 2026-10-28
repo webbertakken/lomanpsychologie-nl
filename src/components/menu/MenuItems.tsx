@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { MenuProps } from '../../types/menu'
 import MenuItem from './MenuItem'
 

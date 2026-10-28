@@ -1,4 +1,5 @@
 import { Document } from '@contentful/rich-text-types'
+import type { JSX } from 'react'
 import { renderContent } from '../../../content/renderContent'
 
 interface Props {

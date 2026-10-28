@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { JSX } from 'react'
 import { MenuItemProps, RootMenuItemProps } from '../../types/menu'
 import { DynamicIcon } from '../icons/DynamicIcon'
 

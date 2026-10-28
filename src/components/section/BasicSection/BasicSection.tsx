@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { BasicSectionEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'
 import { renderContent } from '../../content/renderContent'

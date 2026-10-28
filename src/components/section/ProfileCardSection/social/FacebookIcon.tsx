@@ -1,4 +1,5 @@
 import Tooltip from '@tippyjs/react'
+import type { JSX } from 'react'
 
 interface Props {
   handle: string

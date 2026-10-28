@@ -1,6 +1,6 @@
 import { Popover, Transition } from '@headlessui/react'
 import Link from 'next/link'
-import { Fragment, ReactChildren, useState } from 'react'
+import { type JSX, Fragment, useState } from 'react'
 
 interface Props {
   isOpen: boolean

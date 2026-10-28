@@ -1,6 +1,6 @@
-import React, { ReactNode, useMemo } from 'react'
-import { animated, Spring } from 'react-spring'
-import VisibilitySensor from 'react-visibility-sensor'
+import { ReactNode, useMemo, useRef } from 'react'
+import { animated, useSpring } from 'react-spring'
+import { useIsInView } from './useIsInView'
 
 interface FadeIntoViewProps {
   children: ReactNode
@@ -20,32 +20,23 @@ export const isAutomatedBrowser = (): boolean => {
   return false
 }
 
-const FadeIntoView = ({ children, className, delay }: FadeIntoViewProps) => {
+const FadeIntoView = ({ children, className, delay = 0 }: FadeIntoViewProps) => {
   const automatedTest = useMemo(isAutomatedBrowser, [])
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useIsInView(ref, 100)
+
+  const style = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: isInView || automatedTest ? 1 : 0.1 },
+    delay,
+    config: automatedTest ? { duration: 0 } : { friction: 60 },
+  })
 
   return (
-    <VisibilitySensor partialVisibility minTopValue={100}>
-      {({ isVisible }) => (
-        <Spring
-          from={{ opacity: 0 }}
-          delay={delay}
-          to={{ opacity: isVisible ? 1 : automatedTest ? 1 : 0.1 }}
-          config={automatedTest ? { duration: 0 } : { friction: 60 }}
-        >
-          {({ opacity }) => (
-            <animated.div className={className} style={{ opacity }}>
-              {children}
-            </animated.div>
-          )}
-        </Spring>
-      )}
-    </VisibilitySensor>
+    <animated.div ref={ref} className={className} style={style}>
+      {children}
+    </animated.div>
   )
-}
-
-FadeIntoView.defaultProps = {
-  delay: 0,
-  className: undefined,
 }
 
 export default FadeIntoView

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { JSX } from 'react'
 import Logo from '../../../assets/logo.svg'
 
 interface Props {}

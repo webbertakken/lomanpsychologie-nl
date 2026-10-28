@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { BannerNotificationEntry } from '../../../types/banner'
 import Banner from '../banner/Banner'
 import Footer from '../footer/Footer'

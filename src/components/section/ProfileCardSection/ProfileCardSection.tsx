@@ -1,5 +1,6 @@
 import cx from 'classnames'
 import Image from 'next/image'
+import type { JSX } from 'react'
 import { isResolved } from '../../../core/links'
 import { ProfileSectionEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'

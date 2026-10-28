@@ -1,6 +1,6 @@
 import cx from 'classnames'
 import { useRouter } from 'next/router'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { type JSX, useCallback, useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import { MenuContext } from '../context/MenuContext'
 import { PageContext } from '../context/PageContext'
