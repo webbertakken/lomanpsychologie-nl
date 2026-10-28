@@ -1,5 +1,14 @@
 export type IconLibrary = Readonly<Record<string, unknown>>
 
+// Newer react-icons sets reuse their predecessor's prefix (FaXTwitter lives
+// in fa6), so a prefix covers both; the older glyph wins where names overlap.
+const withNewerSet =
+  (older: () => Promise<IconLibrary>, newer: () => Promise<IconLibrary>) =>
+  async (): Promise<IconLibrary> => {
+    const [olderIcons, newerIcons] = await Promise.all([older(), newer()])
+    return { ...newerIcons, ...olderIcons }
+  }
+
 // Bundlers only emit chunks for import specifiers they can see, so every
 // react-icons library is listed explicitly; each loads lazily on first use.
 const loaders: Record<string, () => Promise<IconLibrary>> = {
@@ -9,15 +18,24 @@ const loaders: Record<string, () => Promise<IconLibrary>> = {
   cg: () => import('react-icons/cg'),
   ci: () => import('react-icons/ci'),
   di: () => import('react-icons/di'),
-  fa: () => import('react-icons/fa'),
+  fa: withNewerSet(
+    () => import('react-icons/fa'),
+    () => import('react-icons/fa6'),
+  ),
   fc: () => import('react-icons/fc'),
   fi: () => import('react-icons/fi'),
   gi: () => import('react-icons/gi'),
   go: () => import('react-icons/go'),
   gr: () => import('react-icons/gr'),
-  hi: () => import('react-icons/hi'),
+  hi: withNewerSet(
+    () => import('react-icons/hi'),
+    () => import('react-icons/hi2'),
+  ),
   im: () => import('react-icons/im'),
-  io: () => import('react-icons/io'),
+  io: withNewerSet(
+    () => import('react-icons/io'),
+    () => import('react-icons/io5'),
+  ),
   lia: () => import('react-icons/lia'),
   lu: () => import('react-icons/lu'),
   md: () => import('react-icons/md'),
