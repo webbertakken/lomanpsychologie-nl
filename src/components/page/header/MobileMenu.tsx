@@ -26,7 +26,7 @@ function MobileMenu({}: Props): JSX.Element {
           className="bg-gray-800 opacity-50 inset-0 fixed w-full h-full"
           onClick={() => setShow(!show)}
         />
-        <div className="w-64 z-20 absolute left-0 z-40 top-0 bg-white shadow flex-col justify-between transition duration-150 ease-in-out h-full">
+        <div className="w-64 z-20 absolute left-0 z-40 top-0 bg-white shadow-sm flex-col justify-between transition duration-150 ease-in-out h-full">
           <div className="flex flex-col justify-between h-full">
             <div className="px-6 pt-4">
               <div className="flex justify-between items-center">
@@ -45,7 +45,7 @@ function MobileMenu({}: Props): JSX.Element {
 
               <MenuItems
                 menu={menu}
-                className={cx('flex-col py-5 space-y-4 text-base')}
+                className={cx('flex flex-col py-5 gap-4 text-base')}
                 itemClassName={'text-gray-900 hover:text-gray-800'}
                 subMenuClassName={'pt-4'}
               />
