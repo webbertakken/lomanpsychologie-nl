@@ -13,6 +13,12 @@ describe('DynamicIcon', () => {
     await waitFor(() => expect(container.querySelector('svg')).not.toBeNull())
   })
 
+  it('finds icons that only exist in the newer set sharing their prefix', async () => {
+    const { container } = render(<DynamicIcon icon="FaPersonCircleExclamation" />)
+
+    await waitFor(() => expect(container.querySelector('svg')).not.toBeNull())
+  })
+
   it('renders the fallback when no icon is given', () => {
     render(<DynamicIcon icon="" />)
 
