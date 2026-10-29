@@ -81,6 +81,6 @@
   },
   "resolutions": {
     "tinypool@npm:2.1.0": "npm:2.2.0",
-    "postcss-selector-parser@npm:6.0.10": "npm:postcss-selector-parser@7.1.7"
+    "postcss-selector-parser@npm:6.0.10": "npm:7.1.7"
   }
 }
