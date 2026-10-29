@@ -1,6 +1,6 @@
 export function daysForLocale(localeName = 'en-GB', weekday: 'long' | 'short' | 'narrow' = 'long') {
   const { format } = new Intl.DateTimeFormat(localeName, { weekday })
-  return Array.from(new Array(7).keys()).map((day) => format(new Date(Date.UTC(2021, 5, day))))
+  return Array.from({ length: 7 }, (_, day) => format(new Date(Date.UTC(2021, 5, day))))
 }
 
 export type Day = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday'

@@ -22,7 +22,6 @@ function DesktopMenu({}: Props): JSX.Element {
       </Link>
 
       <MenuItems
-        role="navigation"
         ariaLabel="Main navigation"
         menu={menu}
         className={cx(

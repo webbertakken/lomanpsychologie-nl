@@ -18,6 +18,17 @@ interface Props {
   section: ProfileSectionEntry
 }
 
+interface PhotoProps {
+  alt: string
+  image: { src: string; width: number; height: number }
+}
+
+const Photo = ({ alt, image }: PhotoProps): JSX.Element => (
+  <div className="w-full lg:w-2/5 hidden lg:block">
+    <Image className="rounded-none lg:rounded-lg shadow-2xl" alt={alt} {...image} />
+  </div>
+)
+
 const ProfileCardSection = ({ section }: Props): JSX.Element => {
   const {
     title,
@@ -43,12 +54,6 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
     height: photo.fields.file.details.image.height,
   }
 
-  const Photo = () => (
-    <div className="w-full lg:w-2/5 hidden lg:block">
-      <Image className="rounded-none lg:rounded-lg shadow-2xl" alt={title} {...image} />
-    </div>
-  )
-
   return (
     <div
       id={slug}
@@ -60,7 +65,7 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
       }}
     >
       <div className="max-w-3xl flex items-center h-auto flex-wrap mx-auto my-12 lg:my-0">
-        {photoShouldBeOnTheLeft && <Photo />}
+        {photoShouldBeOnTheLeft && <Photo alt={title} image={image} />}
         <div
           className={cx('w-full lg:w-3/5 shadow-2xl bg-white opacity-75 mx-4 lg:mx-0', {
             'rounded-lg': true,
@@ -112,7 +117,7 @@ const ProfileCardSection = ({ section }: Props): JSX.Element => {
           </div>
         </div>
 
-        {!photoShouldBeOnTheLeft && <Photo />}
+        {!photoShouldBeOnTheLeft && <Photo alt={title} image={image} />}
       </div>
     </div>
   )
