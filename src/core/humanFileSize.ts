@@ -6,7 +6,7 @@
  *           binary (IEC), aka powers of 1024.
  * @param dp Number of decimal places to display.
  *
- * @return Formatted string.
+ * @returns Formatted string.
  */
 export function humanFileSize(bytes: number, si = false, dp = 1) {
   const thresh = si ? 1000 : 1024

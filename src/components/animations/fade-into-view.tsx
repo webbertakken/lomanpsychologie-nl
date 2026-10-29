@@ -21,7 +21,7 @@ export const isAutomatedBrowser = (): boolean => {
 }
 
 const FadeIntoView = ({ children, className, delay = 0 }: FadeIntoViewProps) => {
-  const automatedTest = useMemo(isAutomatedBrowser, [])
+  const automatedTest = useMemo(() => isAutomatedBrowser(), [])
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useIsInView(ref, 100)
 

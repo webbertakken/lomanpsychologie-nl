@@ -1,12 +1,38 @@
 import loadable from '@loadable/component'
 import { IconContext, IconType } from 'react-icons'
-import { IconLibraries } from './iconLibraries'
+import { IconLibraries, IconLibrary } from './iconLibraries'
 
 interface Props extends IconContext {
   icon: string
 }
 
 const Fallback = () => <div>•</div>
+
+const LoadedIconLibrary = loadable.lib(
+  ({ library }: { library: string }) => IconLibraries.load(library),
+  {
+    cacheKey: ({ library }) => library,
+    resolveComponent: (icons: IconLibrary) => icons,
+  },
+)
+
+const IconFrom = ({
+  icons,
+  icon,
+  library,
+}: {
+  icons: IconLibrary
+  icon: string
+  library: string
+}) => {
+  const Found = icons[icon]
+  if (typeof Found !== 'function') {
+    console.warn(`DynamicIcon: react-icons/${library} has no icon "${icon}"`)
+    return <Fallback />
+  }
+  const Icon = Found as IconType
+  return <Icon />
+}
 
 export function DynamicIcon({ icon, ...iconContext }: Props) {
   const library = icon ? IconLibraries.libraryOf(icon) : undefined
@@ -16,18 +42,11 @@ export function DynamicIcon({ icon, ...iconContext }: Props) {
     return <Fallback />
   }
 
-  const Icon = loadable(() => IconLibraries.load(library), {
-    resolveComponent: (icons): IconType => {
-      const Found = icons[icon]
-      if (typeof Found === 'function') return Found as IconType
-      console.warn(`DynamicIcon: react-icons/${library} has no icon "${icon}"`)
-      return Fallback
-    },
-  })
-
   return (
     <IconContext.Provider value={iconContext}>
-      <Icon />
+      <LoadedIconLibrary library={library}>
+        {(icons) => <IconFrom icons={icons} icon={icon} library={library} />}
+      </LoadedIconLibrary>
     </IconContext.Provider>
   )
 }

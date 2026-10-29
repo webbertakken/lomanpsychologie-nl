@@ -1,7 +1,8 @@
 import cx from 'classnames'
 import { useRouter } from 'next/router'
-import { type JSX, useEffect, useState } from 'react'
+import type { JSX } from 'react'
 import { Day, translateDay } from '../../../core/locale'
+import { useClientValue } from '../../../core/useClientValue'
 import { enforceEnDash } from '../../../core/utils'
 import { OfficeHoursEntry } from '../../../types/section'
 import FadeIntoView from '../../animations/fade-into-view'
@@ -28,6 +29,8 @@ const txExceptions = (locale: string) => {
 
 const days: Day[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
+const today = (): Day => new Date().toLocaleString('en-US', { weekday: 'long' }) as Day
+
 interface Props {
   section: OfficeHoursEntry
   index?: number
@@ -36,14 +39,9 @@ interface Props {
 const OfficeHoursSection = ({ section, index }: Props): JSX.Element => {
   const { locale } = useRouter()
 
-  // `new Date()` at render time differs between SSR (server's clock) and
-  // CSR (browser's clock), causing a hydration mismatch when the day-of-week
-  // changes the table order or which row is bolded. Defer the today-aware
-  // reorder + highlight to a client-side effect so SSR HTML is stable.
-  const [thisDay, setThisDay] = useState<Day | null>(null)
-  useEffect(() => {
-    setThisDay(new Date().toLocaleString('en-US', { weekday: 'long' }) as Day)
-  }, [])
+  // `new Date()` differs between the server's clock and the browser's, so the
+  // today-aware reorder and highlight only apply once rendering in the browser.
+  const thisDay = useClientValue<Day | null>(today, null)
 
   const daysStartingWithToday = thisDay
     ? days.slice(days.indexOf(thisDay), days.length).concat(days.slice(0, days.indexOf(thisDay)))

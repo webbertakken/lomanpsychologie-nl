@@ -1,28 +1,31 @@
 import { RefObject, useEffect, useState } from 'react'
+import { useClientValue } from '../../core/useClientValue'
+
+const lacksIntersectionObserver = () => typeof IntersectionObserver === 'undefined'
 
 /**
  * Whether the element is in the viewport, counting it only once its top has
  * risen `bottomOffset` pixels above the viewport's bottom edge.
+ * Where IntersectionObserver is unavailable, the element counts as in view.
  */
 export const useIsInView = (ref: RefObject<Element | null>, bottomOffset: number): boolean => {
-  const [isInView, setIsInView] = useState(false)
+  const [isIntersecting, setIsIntersecting] = useState(false)
+  const cannotObserve = useClientValue(lacksIntersectionObserver, false)
 
   useEffect(() => {
     const element = ref.current
-    if (!element) return undefined
+    if (!element || cannotObserve) return undefined
 
-    if (typeof IntersectionObserver === 'undefined') {
-      setIsInView(true)
-      return undefined
-    }
-
-    const observer = new IntersectionObserver(([entry]) => setIsInView(entry.isIntersecting), {
-      rootMargin: `0px 0px -${bottomOffset}px 0px`,
-    })
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsIntersecting(entry.isIntersecting),
+      {
+        rootMargin: `0px 0px -${bottomOffset}px 0px`,
+      },
+    )
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [ref, bottomOffset])
+  }, [ref, bottomOffset, cannotObserve])
 
-  return isInView
+  return cannotObserve || isIntersecting
 }
