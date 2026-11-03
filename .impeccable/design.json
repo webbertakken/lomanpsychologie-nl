@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-03T23:59:00Z",
+  "title": "Design System: Loman Psychologiepraktijk",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Card stock",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#1c2329",
+          "#3a444c",
+          "#5d6870",
+          "#828d95",
+          "#a9b3ba",
+          "#cfd7dc",
+          "#eef2f4",
+          "#ffffff"
+        ]
+      },
+      "paper-deep": {
+        "role": "neutral",
+        "displayName": "Folder back",
+        "canonical": "#f1f6f8",
+        "tonalRamp": [
+          "#17252c",
+          "#2f4049",
+          "#4c5f69",
+          "#6c808a",
+          "#90a3ac",
+          "#b6c7cf",
+          "#dbe7ec",
+          "#f1f6f8"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Ballpoint ink",
+        "canonical": "#15283a",
+        "tonalRamp": [
+          "#0b1622",
+          "#15283a",
+          "#25405a",
+          "#3a5a78",
+          "#557697",
+          "#7894b2",
+          "#a2b6cc",
+          "#d0dce7"
+        ]
+      },
+      "label": {
+        "role": "primary",
+        "displayName": "Label cyan",
+        "canonical": "#006a85",
+        "tonalRamp": [
+          "#00303d",
+          "#004a5d",
+          "#006a85",
+          "#0e88a8",
+          "#3ea6c4",
+          "#76c3da",
+          "#acdcea",
+          "#def2f8"
+        ]
+      },
+      "rule-strong": {
+        "role": "secondary",
+        "displayName": "Dropout cyan",
+        "canonical": "#00a7d3",
+        "tonalRamp": [
+          "#003f50",
+          "#005f78",
+          "#0080a1",
+          "#00a7d3",
+          "#3cbfe2",
+          "#7bd4ec",
+          "#b6e1ec",
+          "#e3f5fa"
+        ]
+      },
+      "stamp": {
+        "role": "tertiary",
+        "displayName": "Stamp rust",
+        "canonical": "#a84c14",
+        "tonalRamp": [
+          "#3d1a05",
+          "#5f290a",
+          "#83390f",
+          "#a84c14",
+          "#c96a2e",
+          "#e08f5a",
+          "#f0b88f",
+          "#fae2d1"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The page h1 only." },
+      "title": { "displayName": "Field title", "purpose": "Section names in the label column." },
+      "quote": {
+        "displayName": "Own words",
+        "purpose": "The psychologist's introduction in the hero."
+      },
+      "body": { "displayName": "Body", "purpose": "All prose, max 68ch." },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field names, subtitles, table heads, in label cyan."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "settle",
+        "value": "900ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The appointment card settles 1rem upward once on load; disabled under reduced motion."
+      },
+      {
+        "name": "rule-in",
+        "value": "900ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "A header or card rule draws from the left once; disabled under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Ink button",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "The one primary action in a view.",
+      "html": "<a class=\"ds-btn-ink\" href=\"#\">Contact</a>",
+      "css": ".ds-btn-ink { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 18px; border: 1px solid var(--ink, #15283a); border-radius: 2px; background: var(--ink, #15283a); color: var(--on-ink, #ffffff); font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; font-weight: 700; text-decoration: none; transition: background-color 160ms ease-out; } .ds-btn-ink:hover { background: var(--label, #006a85); border-color: var(--label, #006a85); } .ds-btn-ink:focus-visible { outline: 2px solid var(--label, #006a85); outline-offset: 3px; }"
+    },
+    {
+      "name": "Appointment card",
+      "kind": "card",
+      "refersTo": "appointment-card",
+      "description": "The hero's ruled card: how to register, with tappable rows.",
+      "html": "<aside class=\"ds-card\"><h2 class=\"ds-card-title\">Afspraak maken</h2><p class=\"ds-card-lead\">Verwezen door uw huisarts? Neem contact op voor een eerste gesprek.</p><dl class=\"ds-card-rows\"><div><dt>Wachttijd</dt><dd><a href=\"#\">Actuele wachttijd</a></dd></div><div><dt>Mailen</dt><dd><a href=\"#\">info@lomanpsychologie.nl</a></dd></div><div><dt>Bellen</dt><dd><a href=\"#\">06-21591133</a></dd></div></dl></aside>",
+      "css": ".ds-card { max-width: 30rem; padding: 32px; border: 1px solid var(--rule-strong, #00a7d3); background: var(--paper, #ffffff); color: var(--ink, #15283a); font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; } .ds-card-title { margin: 0; font-family: Literata, Georgia, serif; font-weight: 500; font-size: 1.875rem; } .ds-card-lead { margin: 8px 0 0; color: var(--ink-soft, #3f5567); } .ds-card-rows { margin: 20px 0 0; border-top: 1px solid var(--rule-strong, #00a7d3); } .ds-card-rows > div { display: grid; grid-template-columns: 6rem 1fr; align-items: center; border-bottom: 1px solid var(--rule, #b6e1ec); } .ds-card-rows dt { font-size: 0.875rem; font-weight: 700; color: var(--label, #006a85); } .ds-card-rows dd { margin: 0; } .ds-card-rows a { display: flex; min-height: 48px; align-items: center; color: inherit; font-weight: 700; text-decoration: none; } .ds-card-rows a:hover { text-decoration: underline; text-decoration-color: var(--rule-strong, #00a7d3); }"
+    },
+    {
+      "name": "Main navigation",
+      "kind": "nav",
+      "description": "Text links; the current page carries a 2px dropout-cyan line.",
+      "html": "<nav class=\"ds-nav\"><a aria-current=\"page\" href=\"#\">Home</a><a href=\"#\">Behandelingen</a><a href=\"#\">Tarieven</a><a href=\"#\">De praktijk</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 28px; font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; font-weight: 700; } .ds-nav a { display: inline-flex; min-height: 44px; align-items: center; border-bottom: 2px solid transparent; color: var(--ink-soft, #3f5567); text-decoration: none; } .ds-nav a:hover { color: var(--ink, #15283a); border-color: var(--rule, #b6e1ec); } .ds-nav a[aria-current=page] { color: var(--ink, #15283a); border-color: var(--rule-strong, #00a7d3); }"
+    },
+    {
+      "name": "Stamp",
+      "kind": "chip",
+      "refersTo": "stamp",
+      "description": "Status notice, rust, only where status changes what to do.",
+      "html": "<span class=\"ds-stamp\">Let op</span>",
+      "css": ".ds-stamp { display: inline-block; padding: 1px 8px; border: 1.5px solid var(--stamp, #a84c14); border-radius: 2px; color: var(--stamp, #a84c14); font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; font-weight: 700; font-size: 0.875rem; letter-spacing: 0.02em; }"
+    },
+    {
+      "name": "Download tile",
+      "kind": "custom",
+      "description": "A CMS document offered with its kind and size.",
+      "html": "<a class=\"ds-download\" href=\"#\"><span class=\"ds-download-title\">Folder</span><span class=\"ds-download-meta\">PDF, 226 kB</span></a>",
+      "css": ".ds-download { display: inline-flex; flex-direction: column; min-height: 48px; justify-content: center; padding: 8px 16px; border: 1px solid var(--rule, #b6e1ec); background: var(--paper, #ffffff); color: var(--ink, #15283a); font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; text-decoration: none; line-height: 1.2; } .ds-download:hover { border-color: var(--rule-strong, #00a7d3); } .ds-download-title { font-weight: 700; } .ds-download-meta { font-size: 0.875rem; color: var(--ink-soft, #3f5567); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The practice's paperwork, made kind",
+    "overview": "White card stock ruled in cyan dropout ink, blue-black ballpoint text and the logo's rust as the only stamp. Every topic is a labelled field; status and contact come before story. The dark scheme is the carbon copy.",
+    "keyCharacteristics": [
+      "Ruled hairlines instead of boxes and shadows",
+      "A sticky label column per field",
+      "The appointment card overlapping the portrait",
+      "Two voices: Literata for names, Atkinson Hyperlegible for reading"
+    ],
+    "rules": [
+      {
+        "name": "The Dropout Rule",
+        "body": "Cyan is printed as lines, never as fills behind text.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Stamp Rule",
+        "body": "Rust appears only where status changes what the reader should do.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Literata for names and headings, Atkinson Hyperlegible 400/700 for everything read or acted on.",
+        "section": "typography"
+      },
+      {
+        "name": "Depth by overlap",
+        "body": "No shadows; depth only by one sheet lying over another.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put status and contact before story.",
+      "Do make every phone number and e-mail tappable.",
+      "Do carry state in line form plus words."
+    ],
+    "donts": [
+      "Don't use shadows, gradients or glass.",
+      "Don't fill areas with cyan or rust.",
+      "Don't animate content into view on scroll."
+    ]
+  }
+}
