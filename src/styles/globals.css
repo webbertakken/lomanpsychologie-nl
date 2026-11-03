@@ -1,45 +1,401 @@
 @import 'tailwindcss' source('../');
 
-@plugin '@tailwindcss/typography';
-
 /*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
+  The practice's paperwork, made kind: white card stock ruled in cyan dropout
+  ink (the logo's cyan), blue-black ballpoint for text and the logo's rust as
+  the only stamp colour. The dark scheme is the carbon copy.
 */
+:root {
+  --paper: #ffffff;
+  --paper-deep: #f1f6f8;
+  --ink: #15283a;
+  --ink-soft: #3f5567;
+  --rule: #b6e1ec;
+  --rule-strong: #00a7d3;
+  --label: #006a85;
+  --stamp: #a84c14;
+  --on-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0e1a24;
+    --paper-deep: #13232f;
+    --ink: #e6eef2;
+    --ink-soft: #a9bac6;
+    --rule: #1f4656;
+    --rule-strong: #2bb8de;
+    --label: #6fd0ea;
+    --stamp: #f0a070;
+    --on-ink: #0e1a24;
+  }
+}
+
+@theme {
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-literata), ui-serif, Georgia, serif;
+
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-label: var(--label);
+  --color-stamp: var(--stamp);
+  --color-on-ink: var(--on-ink);
+}
+
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: var(--rule);
+  }
+
+  html {
+    color-scheme: light dark;
+    background: var(--paper);
+    color: var(--ink);
+    scroll-padding-top: 6rem;
+    scrollbar-color: var(--rule) var(--paper);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    overflow-wrap: break-word;
+    caret-color: var(--label);
+    -webkit-font-smoothing: antialiased;
+    /* keeps the scrollbar, so navigating between short and long pages never shifts the layout */
+    overflow-y: scroll;
+  }
+
+  @media (min-width: 64rem) {
+    body {
+      font-size: 1.125rem;
+    }
+  }
+
+  ::selection {
+    background: var(--rule);
+    color: var(--ink);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    hyphens: manual;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--label);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer components {
+  /* The sheet: one centred column that every block aligns to. */
+  .sheet {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 48rem) {
+    .sheet {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .link {
+    color: var(--ink);
+    text-decoration-line: underline;
+    text-decoration-color: var(--rule-strong);
+    transition: text-decoration-color 160ms ease-out;
+  }
+
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.125rem;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      background-color 160ms ease-out,
+      color 160ms ease-out;
+  }
+
+  .button-ink {
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+
+  .button-ink:hover {
+    background: var(--label);
+    border-color: var(--label);
+  }
+
+  .button-line {
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .button-line:hover {
+    background: var(--paper-deep);
+  }
+
+  .stamp {
+    display: inline-block;
+    padding: 0.05rem 0.5rem;
+    border: 1.5px solid var(--stamp);
+    border-radius: 2px;
+    color: var(--stamp);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+  }
+
+  .index-links {
+    display: grid;
+    gap: 0;
+    max-width: 32rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .index-links a {
+    display: block;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .index-links a:hover {
+    color: var(--label);
+  }
+}
+
+/* Rich text from Contentful: the practice's own words. */
+@layer components {
+  .rich-text {
+    max-width: 68ch;
+    color: var(--ink);
+  }
+
+  .rich-text > * + * {
+    margin-top: 1em;
+  }
+
+  .rich-text h2,
+  .rich-text h3 {
+    margin-top: 2.25em;
+    font-size: 1.4rem;
+  }
+
+  .rich-text h4,
+  .rich-text h5,
+  .rich-text h6 {
+    margin-top: 2em;
+    font-family: var(--font-sans);
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .rich-text > :first-child {
+    margin-top: 0;
+  }
+
+  .rich-text :is(h2, h3, h4, h5, h6) + * {
+    margin-top: 0.5em;
+  }
+
+  .rich-text strong,
+  .rich-text b {
+    font-weight: 700;
+  }
+
+  .rich-text a {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--rule-strong);
+  }
+
+  .rich-text a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .rich-text ul,
+  .rich-text ol {
+    display: grid;
+    gap: 0.35em;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .rich-text ul > li {
+    position: relative;
+    padding-left: 1.25em;
+  }
+
+  .rich-text ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.82em;
+    width: 0.6em;
+    height: 1px;
+    background: var(--rule-strong);
+  }
+
+  .rich-text ol {
+    counter-reset: item;
+  }
+
+  .rich-text ol > li {
+    position: relative;
+    padding-left: 1.75em;
+    counter-increment: item;
+  }
+
+  .rich-text ol > li::before {
+    content: counter(item) '.';
+    position: absolute;
+    left: 0;
+    color: var(--label);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rich-text li > p {
+    margin: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .rich-text ul.long-list {
+      display: block;
+      columns: 2;
+      column-gap: 2.5rem;
+    }
+
+    .rich-text ul.long-list > li {
+      break-inside: avoid;
+      margin-bottom: 0.5em;
+    }
+  }
+
+  .rich-text .table-frame {
+    overflow-x: auto;
+    border-top: 2px solid var(--rule-strong);
+  }
+
+  .rich-text table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.95em;
+  }
+
+  .rich-text th,
+  .rich-text td {
+    padding: 0.6rem 0.75rem 0.6rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .rich-text th {
+    color: var(--label);
+    font-weight: 700;
+  }
+
+  .rich-text :is(th, td) > p {
+    margin: 0;
+  }
+
+  .rich-text .logo-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem 2.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--rule);
+    background: #ffffff;
+    width: fit-content;
+  }
+
+  .rich-text .logo-row img {
+    max-height: 3.5rem;
+    width: auto;
+  }
+
+  .rich-text figure img {
+    border: 1px solid var(--rule);
   }
 }
 
 @layer utilities {
-  /* use text colour for stroke */
-  .icon,
-  .icon:hover,
-  .icon:active,
-  .icon:focus {
-    stroke: currentColor;
-  }
-}
-
-@layer base {
-  body {
-    /* prevent layout breaks */
-    word-break: break-word;
-
-    /* fix layout shift when navigating */
-    overflow-y: scroll;
+  @keyframes rule-in {
+    from {
+      transform: scaleX(0);
+    }
   }
 
-  a {
-    @apply outline-offset-4;
+  @keyframes settle {
+    from {
+      transform: translateY(1rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-settle {
+      animation: settle 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .animate-rule-in {
+      transform-origin: left;
+      animation: rule-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
   }
 }

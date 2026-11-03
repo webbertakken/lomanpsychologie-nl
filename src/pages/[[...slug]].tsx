@@ -1,160 +1,63 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
-import Page from '../components/page/Page'
-import { getContentfulClient } from '../core/contentful'
+import type { GetStaticPaths, GetStaticProps } from 'next'
+import Page, { type PageProps } from '../components/page/Page'
 import { isResolved } from '../core/links'
+import { activePathFor, pagePath } from '../core/navigation'
+import { getPages, getSiteChrome } from '../core/site'
 import { replacePathsRecursively } from '../core/utils'
-import { BannerNotificationEntry, BannerNotificationSkeleton } from '../types/banner'
-import { MenuOptions, MenuSortOrderEntry, MenuSortOrderSkeleton } from '../types/menu'
-import { PageEntry, PageSkeleton } from '../types/page'
+import type { PageEntry } from '../types/page'
 
-const client = getContentfulClient()
-
-const getPages = async (): Promise<PageEntry[]> => {
-  const { items: pages } = await client.getEntries<PageSkeleton>({
-    content_type: 'page',
-    include: 3,
-  })
-
-  return pages
-}
-
-const getMenuSortOrder = async (menu: MenuOptions): Promise<MenuSortOrderEntry> => {
-  const { items: sortOrders } = await client.getEntries<MenuSortOrderSkeleton>({
-    content_type: 'menuSortOrder',
-  })
-
-  return sortOrders?.find((order) => order.fields.menu === menu)
-}
-
-const createMenuSortFn = (menuSortOrder: MenuSortOrderEntry) => {
-  const sortOrder = menuSortOrder?.fields.pages.filter(isResolved).map(({ fields }) => fields.slug)
-
-  return (a, b) => {
-    if (b.fields.isHomePage) return 1
-    return sortOrder.indexOf(a.fields.slug) - sortOrder.indexOf(b.fields.slug)
-  }
-}
-
-const getBannerNotification = async (): Promise<BannerNotificationEntry> => {
-  const { items: banners } = await client.getEntries<BannerNotificationSkeleton>({
-    content_type: 'bannerNotification',
-  })
-
-  return banners?.[0] || null
-}
-
-const getActivePath = (slug: null | string | string[]) => {
-  if (slug === null) return '/'
-  return typeof slug === 'string' ? `/${slug}` : `/${slug.join('/')}`
-}
-
-const getMenuStructure = (pages, activePath) => {
-  return pages
-    .filter(({ fields }) => !fields.parentPage)
-    .map((page) => {
-      const { slug: rootPageSlug, menuItemTitle: title, subtitle = '', icon = '' } = page.fields
-      const path = page.fields.isHomePage ? '/' : `/${rootPageSlug}`
-      const isActive = path === activePath
-
-      // Pages can have `parentPage`, which is a hydrated reference to another page.
-      const subPages = pages
-        .filter(({ fields }) => fields.parentPage?.sys.id === page.sys.id)
-        .filter(({ fields }) => fields.shouldBeShownInSubmenus)
-        .sort((a, b) => a.fields.title.localeCompare(b.fields.title))
-        .map((subPage) => {
-          const {
-            menuItemTitle: title,
-            slug: subPageSlug,
-            subtitle = '',
-            icon = '',
-          } = subPage.fields
-          const subPath = `/${rootPageSlug}/${subPageSlug}`
-          const isActive = subPath === activePath
-
-          return { title, path: subPath, isActive, subtitle, icon }
-        })
-
-      return { title, path, isActive, subPages, subtitle, icon }
-    })
-}
-
-const replaceReferencesWithSlugs = (rawPage) =>
+// Pages link to each other; keep only what a link needs, so the props stay
+// small and free of circular references.
+const replaceReferencesWithSlugs = (rawPage: PageEntry): PageEntry =>
   replacePathsRecursively(rawPage, ['fields.pageToLinkTo', 'fields.parentPage'], (value) => {
     if (!isResolved(value)) return
     const { slug, parentPage: parent } = value.fields
 
     const parentPage = isResolved(parent)
-      ? {
-          sys: parent.sys,
-          fields: {
-            slug: parent.fields.slug,
-            parentPage: parent.fields.parentPage,
-          },
-        }
+      ? { sys: parent.sys, fields: { slug: parent.fields.slug } }
       : undefined
 
     return { sys: value.sys, fields: { slug, parentPage } }
-  })
+  }) as PageEntry
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = (await getPages()).flatMap((page) => {
-    const { slug: pageSlug, isHomePage, parentPage } = page.fields
+    const { parentPage } = page.fields
     if (parentPage && !isResolved(parentPage)) return []
-    const parentSlug = isResolved(parentPage) ? parentPage.fields.slug : undefined
-
-    let slug = parentSlug ? [parentSlug, pageSlug] : [pageSlug]
-    if (isHomePage) slug = null
-
-    return [{ params: { slug } }]
+    const path = pagePath(page)
+    return [{ params: { slug: path === '/' ? null : path.slice(1).split('/') } }]
   })
 
-  return {
-    paths,
-    fallback: 'blocking',
-  }
+  return { paths, fallback: 'blocking' }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  // Route
-  const fullSlug: string | string[] = params.slug || null
-  const pageSlug = Array.isArray(fullSlug) ? fullSlug.slice(-1)[0] : fullSlug
-  const activePath = getActivePath(fullSlug)
+export const getStaticProps: GetStaticProps<PageProps> = async ({ params }) => {
+  const slug = params?.slug ?? null
+  const activePath = activePathFor(slug)
+  const pageSlug = Array.isArray(slug) ? slug.at(-1) : slug
 
-  // Page
   const pages = await getPages()
   const rawPage = pageSlug
     ? pages.find((page) => page.fields.slug === pageSlug)
     : pages.find((page) => page.fields.isHomePage)
-  if (!rawPage) return { redirect: { destination: '/', permanent: false } }
 
-  // Props
-  const page = replaceReferencesWithSlugs(rawPage)
-  const banner = await getBannerNotification()
+  if (!rawPage) {
+    console.info(`[pages] no page for ${activePath}, answering 404`)
+    return { notFound: true, revalidate: 60 }
+  }
 
-  const headerSortOrder = await getMenuSortOrder('header')
-  const headerMenu = getMenuStructure(
-    pages
-      .filter(({ fields }) => fields.shouldBeShownInHeader)
-      .sort(createMenuSortFn(headerSortOrder)),
-    activePath,
-  )
-
-  const footerSortOrder = await getMenuSortOrder('footer')
-  const footerMenu = getMenuStructure(
-    pages
-      .filter(({ fields }) => fields.shouldBeShownInFooter)
-      .sort(await createMenuSortFn(footerSortOrder)),
-    'footer',
-  )
+  const canonicalPath = pagePath(rawPage)
+  if (canonicalPath !== activePath) {
+    console.info(`[pages] ${activePath} lives at ${canonicalPath}, redirecting`)
+    return { redirect: { destination: canonicalPath, permanent: false }, revalidate: 60 }
+  }
 
   return {
     props: {
-      page,
-      banner,
-      headerMenu,
-      footerMenu,
+      page: replaceReferencesWithSlugs(rawPage),
+      chrome: await getSiteChrome(pages, activePath),
     },
-    revalidate: 3, // hit backend max once every 3 seconds
+    revalidate: 3, // hit the CMS at most once every 3 seconds
   }
 }
 

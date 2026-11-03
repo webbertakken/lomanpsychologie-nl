@@ -44,3 +44,11 @@ yarn-error.log*
 # playwright
 /test-results/
 /playwright-report/
+
+# agent notes
+DECISIONS.md
+AMBIGUITIES.md
+
+# impeccable review captures
+.impeccable/review/
+.impeccable/questions/

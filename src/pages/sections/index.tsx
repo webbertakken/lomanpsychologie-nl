@@ -1,34 +1,35 @@
-import { GetStaticProps } from 'next'
+import type { GetStaticProps } from 'next'
+import Link from 'next/link'
 import type { JSX } from 'react'
 import Layout from '../../components/page/layout/Layout'
-import SectionPreview from '../../components/section/SectionPreview'
+import PageHeader from '../../components/page/PageHeader'
 import { getContentfulClient } from '../../core/contentful'
-import { BasicSectionEntry, BasicSectionSkeleton } from '../../types/section'
+import type { BasicSectionEntry, BasicSectionSkeleton } from '../../types/section'
 
-export const getStaticProps: GetStaticProps = async (_context) => {
-  const client = getContentfulClient()
-  const { items: sections } = await client.getEntries<BasicSectionSkeleton>({
+export const getStaticProps: GetStaticProps = async () => {
+  const { items: sections } = await getContentfulClient().getEntries<BasicSectionSkeleton>({
     content_type: 'section',
   })
 
-  return {
-    props: { sections },
-    revalidate: 3,
-  }
+  return { props: { sections }, revalidate: 3 }
 }
 
 interface Props {
   sections: BasicSectionEntry[]
 }
 
+/** An index of every basic section, for previewing them one by one. */
 export default function Sections({ sections }: Props): JSX.Element {
   return (
-    <Layout>
-      <div className="list">
-        {sections.map((section) => (
-          <SectionPreview key={section.sys.id} section={section} />
+    <Layout title="Secties">
+      <PageHeader title="Secties" />
+      <ul className="sheet index-links">
+        {sections.map(({ sys, fields }) => (
+          <li key={sys.id}>
+            <Link href={`/sections/${fields.slug}`}>{fields.title}</Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </Layout>
   )
 }

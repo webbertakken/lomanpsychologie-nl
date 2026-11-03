@@ -1,25 +1,44 @@
+import type { GetStaticProps } from 'next'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { type JSX, useEffect } from 'react'
+import type { JSX } from 'react'
+import { AppContext } from '../components/page/context/AppContext'
+import Layout from '../components/page/layout/Layout'
+import PageHeader from '../components/page/PageHeader'
+import { getPages, getSiteChrome, type SiteChrome } from '../core/site'
 
-const NotFound = (): JSX.Element => {
-  const router = useRouter()
+export const getStaticProps: GetStaticProps<{ chrome: SiteChrome }> = async () => ({
+  props: { chrome: await getSiteChrome(await getPages(), '') },
+  revalidate: 60,
+})
 
-  useEffect(() => {
-    setTimeout(async () => {
-      await router.push('/')
-    }, 4500)
-  })
-
-  return (
-    <div>
-      <h1>404</h1>
-      <h2>Ooops! That page can not be found :(</h2>
-      <p>
-        Redirecting to <Link href="/">home</Link>...
-      </p>
-    </div>
-  )
-}
+const NotFound = ({ chrome }: { chrome: SiteChrome }): JSX.Element => (
+  <AppContext.Provider value={chrome}>
+    <Layout title="Pagina niet gevonden">
+      <PageHeader title="Deze pagina bestaat niet (meer)">
+        <p>
+          Misschien is de pagina verplaatst, of zat er een typefout in het adres. Hieronder vindt u
+          de weg terug.
+        </p>
+      </PageHeader>
+      <div className="sheet pb-24">
+        <ul className="index-links">
+          <li>
+            <Link href="/">Naar de homepage</Link>
+          </li>
+          {chrome.headerMenu
+            .filter(({ path }) => path !== '/')
+            .map(({ path, title }) => (
+              <li key={path}>
+                <Link href={path}>{title}</Link>
+              </li>
+            ))}
+          <li>
+            <Link href="/contact">Contact met de praktijk</Link>
+          </li>
+        </ul>
+      </div>
+    </Layout>
+  </AppContext.Provider>
+)
 
 export default NotFound
