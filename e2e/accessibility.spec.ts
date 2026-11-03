@@ -8,22 +8,105 @@ const pages = [
   { title: 'CGT', url: '/behandelingen/cognitieve-gedragstherapie' },
   { title: 'eHealth', url: '/behandelingen/e-health' },
   { title: 'EMDR', url: '/behandelingen/emdr' },
+  { title: 'Tarieven', url: '/tarieven' },
   { title: 'De praktijk', url: '/de-praktijk' },
+  { title: 'Contact', url: '/contact' },
+  { title: 'Not found', url: '/deze-pagina-bestaat-niet' },
 ] as const
 
-for (const page of pages) {
-  test(`${page.title} has no automatically detectable accessibility violations`, async ({
-    page: pwPage,
-  }) => {
-    await pwPage.goto(page.url)
-    const result = await new AxeBuilder({ page: pwPage }).analyze()
-    for (const v of result.violations) {
-      console.error(`\n[${v.impact}] ${v.id}: ${v.description}`)
-      for (const n of v.nodes) {
-        console.error(`  at: ${n.target.join(' ')}`)
-        console.error(`    ${n.failureSummary}`)
-      }
+for (const colorScheme of ['light', 'dark'] as const) {
+  test.describe(`${colorScheme} scheme`, () => {
+    test.use({ colorScheme })
+
+    for (const page of pages) {
+      test(`${page.title} has no automatically detectable accessibility violations`, async ({
+        page: pwPage,
+      }) => {
+        await pwPage.goto(page.url)
+        const result = await new AxeBuilder({ page: pwPage })
+          .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+          .analyze()
+        for (const v of result.violations) {
+          console.error(`\n[${v.impact}] ${v.id}: ${v.description}`)
+          for (const n of v.nodes) {
+            console.error(`  at: ${n.target.join(' ')}`)
+            console.error(`    ${n.failureSummary}`)
+          }
+        }
+        expect(result.violations).toEqual([])
+      })
     }
-    expect(result.violations).toEqual([])
   })
 }
+
+test.describe('not found', () => {
+  test('answers an unknown path with a Dutch 404 page instead of the home page', async ({
+    page,
+  }) => {
+    const response = await page.goto('/deze-pagina-bestaat-niet')
+
+    expect(response?.status()).toBe(404)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Deze pagina bestaat niet (meer)',
+    )
+    await expect(page).toHaveURL(/deze-pagina-bestaat-niet$/)
+  })
+})
+
+test.describe('mobile menu', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('opens as a dialog, keeps focus inside and closes on Escape', async ({ page }) => {
+    await page.goto('/')
+    const toggle = page.getByRole('button', { name: 'Menu' })
+
+    await toggle.click()
+    const dialog = page.getByRole('dialog', { name: 'Menu' })
+    await expect(dialog.getByRole('link', { name: 'Tarieven' })).toBeVisible()
+
+    for (let index = 0; index < 20; index++) await page.keyboard.press('Tab')
+    expect(await page.evaluate(() => !!document.activeElement?.closest('[role=dialog]'))).toBe(true)
+
+    await page.keyboard.press('Escape')
+    await expect(dialog).toHaveCount(0)
+    await expect(toggle).toBeFocused()
+  })
+
+  test('hides the closed menu from the tab order', async ({ page }) => {
+    await page.goto('/')
+
+    await page.keyboard.press('Tab')
+    await expect(page.getByRole('link', { name: 'Naar de inhoud' })).toBeFocused()
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Tab')
+    await expect(page.getByRole('button', { name: 'Menu' })).toBeFocused()
+  })
+})
+
+test.describe('treatments submenu', () => {
+  test('opens with the keyboard and closes on Escape', async ({ page }) => {
+    await page.goto('/tarieven')
+    const button = page.getByRole('button', { name: 'Behandelingen' })
+
+    await button.focus()
+    await page.keyboard.press('Enter')
+    await expect(page.getByRole('link', { name: /EMDR/ })).toBeVisible()
+
+    await page.keyboard.press('Escape')
+    await expect(button).toHaveAttribute('aria-expanded', 'false')
+    await expect(button).toBeFocused()
+  })
+})
+
+test.describe('home', () => {
+  test('offers phone and e-mail in the first viewport', async ({ page }) => {
+    await page.goto('/')
+    const card = page.getByRole('complementary', { name: 'Afspraak maken' })
+
+    await expect(card.getByRole('link', { name: '06-21591133' })).toHaveAttribute(
+      'href',
+      'tel:0621591133',
+    )
+    await expect(card.getByRole('link', { name: 'info@lomanpsychologie.nl' })).toBeInViewport()
+  })
+})
