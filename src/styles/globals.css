@@ -369,10 +369,6 @@
     max-height: 3.5rem;
     width: auto;
   }
-
-  .rich-text figure img {
-    border: 1px solid var(--rule);
-  }
 }
 
 @layer utilities {

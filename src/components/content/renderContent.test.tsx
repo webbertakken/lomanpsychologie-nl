@@ -64,6 +64,19 @@ describe('renderContent', () => {
     expect(screen.getAllByRole('img', { name: 'LVVP' })).toHaveLength(1)
   })
 
+  it('shows an image embedded twice, as block and inline, once and without a frame', () => {
+    const { container } = renderDocument(
+      richDocument(
+        block('embedded-asset-block', [], { target: lvvp }),
+        block('paragraph', [block('asset-hyperlink', [text('')], { target: lvvp })]),
+      ),
+    )
+
+    expect(screen.getAllByRole('img', { name: 'LVVP' })).toHaveLength(1)
+    expect(container.querySelector('figure')).toBeNull()
+    expect(container.querySelectorAll('p')).toHaveLength(1)
+  })
+
   it('offers documents as a download with their kind and size', () => {
     renderDocument(
       richDocument(block('paragraph', [block('asset-hyperlink', [text('')], { target: folder })])),

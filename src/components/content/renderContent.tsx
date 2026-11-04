@@ -56,12 +56,20 @@ const createOptions = (): Options => {
     shown.add(asset.sys.id)
     return true
   }
+  // Repeated assets render nothing, so a paragraph holding only those is left out too.
+  const repeats = new WeakSet<Node>()
+  const onlyRepeats = (node: Node): boolean => {
+    const content = (node as Block).content.filter(
+      (child) => !(child.nodeType === 'text' && !child.value.trim()),
+    )
+    return content.length > 0 && content.every((child) => repeats.has(child))
+  }
 
   return {
     renderText,
     renderNode: {
       [BLOCKS.PARAGRAPH]: (node, children) => {
-        if (isEmptyParagraph(node)) return null
+        if (isEmptyParagraph(node) || onlyRepeats(node)) return null
         if (isLastUpdatedNote(node)) {
           return (
             <p className="flex items-center gap-2 text-sm text-ink-soft">
@@ -104,11 +112,7 @@ const createOptions = (): Options => {
       [BLOCKS.EMBEDDED_ASSET]: (node) => {
         const asset = assetOf(node)
         if (!asset || !firstShowing(asset)) return null
-        return asset.fields.file.contentType.startsWith('image/') ? (
-          <figure>
-            <Asset asset={asset} />
-          </figure>
-        ) : (
+        return (
           <p>
             <Asset asset={asset} />
           </p>
@@ -117,7 +121,10 @@ const createOptions = (): Options => {
       [INLINES.ASSET_HYPERLINK]: (node) => {
         const asset = assetOf(node)
         if (!asset) return null
-        firstShowing(asset)
+        if (!firstShowing(asset)) {
+          repeats.add(node)
+          return null
+        }
         return <Asset asset={asset} />
       },
       [INLINES.HYPERLINK]: (node) => {
