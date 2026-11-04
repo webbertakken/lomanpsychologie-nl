@@ -51,3 +51,36 @@ export const imagesInLayoutTable = (table: Node): Node[] | null => {
 /** Lists this long read better in columns on wide screens. */
 export const isLongList = (list: Node): boolean =>
   hasContent(list) && list.content.length >= 8 && plainText(list).length / list.content.length < 90
+
+const headingTypes = new Set(['heading-1', 'heading-2', 'heading-3'])
+
+const slugify = (text: string): string =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+export interface Heading {
+  id: string
+  text: string
+}
+
+/**
+ * The headings of a text, each with a unique anchor id, in reading order. The
+ * renderer gives each heading the id at its position, so an index built from
+ * this list always links to the right place.
+ */
+export const headingsOf = (document: Document | undefined): Heading[] => {
+  const seen = new Map<string, number>()
+  return (document?.content ?? [])
+    .filter((node) => headingTypes.has(node.nodeType) && plainText(node).trim() !== '')
+    .map((node) => {
+      const text = plainText(node).trim()
+      const base = slugify(text) || 'kop'
+      const count = (seen.get(base) ?? 0) + 1
+      seen.set(base, count)
+      return { id: count === 1 ? base : `${base}-${count}`, text }
+    })
+}
