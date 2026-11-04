@@ -1,6 +1,6 @@
 import type { Document, Node } from '@contentful/rich-text-types'
 import { describe, expect, it } from 'vitest'
-import { imagesInLayoutTable, isLongList, plainText, summarise } from './richText'
+import { headingsOf, imagesInLayoutTable, isLongList, plainText, summarise } from './richText'
 
 const text = (value: string) => ({ nodeType: 'text', value, marks: [], data: {} })
 const block = (nodeType: string, content: unknown[], data = {}) => ({ nodeType, content, data })
@@ -62,5 +62,43 @@ describe('isLongList', () => {
   it('rejects short lists and lists of long items', () => {
     expect(isLongList(list('a', 'b'))).toBe(false)
     expect(isLongList(list(...Array.from({ length: 8 }, () => 'x'.repeat(120))))).toBe(false)
+  })
+})
+
+describe('headingsOf', () => {
+  const heading = (nodeType: string, value: string) => block(nodeType, [text(value)])
+
+  it('lists headings with an anchor id each, skipping empty ones', () => {
+    const headings = headingsOf(
+      richDocument(
+        heading('heading-3', 'Verwerking van persoonsgegevens'),
+        heading('heading-3', '  '),
+        paragraph('tekst'),
+        heading('heading-2', 'Binnen de EU'),
+      ),
+    )
+
+    expect(headings).toEqual([
+      { id: 'verwerking-van-persoonsgegevens', text: 'Verwerking van persoonsgegevens' },
+      { id: 'binnen-de-eu', text: 'Binnen de EU' },
+    ])
+  })
+
+  it('keeps ids unique and readable for accents and repeats', () => {
+    const headings = headingsOf(
+      richDocument(
+        heading('heading-3', 'Cliënten & oud-cliënten'),
+        heading('heading-3', 'Cliënten & oud-cliënten'),
+      ),
+    )
+
+    expect(headings.map(({ id }) => id)).toEqual([
+      'clienten-oud-clienten',
+      'clienten-oud-clienten-2',
+    ])
+  })
+
+  it('returns no headings without a document', () => {
+    expect(headingsOf(undefined)).toEqual([])
   })
 })

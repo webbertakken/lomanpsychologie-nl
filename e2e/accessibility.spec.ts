@@ -12,6 +12,8 @@ const pages = [
   { title: 'De praktijk', url: '/de-praktijk' },
   { title: 'Contact', url: '/contact' },
   { title: 'Veelgestelde vragen', url: '/veelgestelde-vragen' },
+  { title: 'Privacybeleid', url: '/privacybeleid' },
+  { title: 'Privacy policy in English', url: '/en/privacy-policy' },
   { title: 'Not found', url: '/deze-pagina-bestaat-niet' },
   { title: 'Home in English', url: '/en' },
   { title: 'Rates in English', url: '/en/rates' },
@@ -160,5 +162,17 @@ test.describe('mobile header', () => {
 
     await page.getByRole('button', { name: 'Menu' }).click()
     await expect(page.getByRole('dialog').getByRole('link', { name: 'Nederlands' })).toBeVisible()
+  })
+})
+
+test.describe('long texts', () => {
+  test('index their headings and jump to the one chosen', async ({ page }) => {
+    await page.goto('/privacybeleid')
+    const index = page.getByRole('navigation', { name: 'Op deze pagina' })
+
+    await index.getByRole('link', { name: 'Beveiliging' }).click()
+
+    await expect(page).toHaveURL(/#beveiliging$/)
+    await expect(page.getByRole('heading', { name: 'Beveiliging' })).toBeInViewport()
   })
 })
