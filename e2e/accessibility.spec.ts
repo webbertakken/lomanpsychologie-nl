@@ -146,3 +146,19 @@ test.describe('language switch', () => {
     await expect(page).toHaveURL(/\/en\/rates$/)
   })
 })
+
+test.describe('mobile header', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('keeps the menu button on screen and the language switch inside the menu', async ({
+    page,
+  }) => {
+    await page.goto('/en')
+
+    await expect(page.getByRole('button', { name: 'Menu' })).toBeInViewport({ ratio: 1 })
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Nederlands' })).toBeHidden()
+
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await expect(page.getByRole('dialog').getByRole('link', { name: 'Nederlands' })).toBeVisible()
+  })
+})

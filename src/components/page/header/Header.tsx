@@ -17,7 +17,9 @@ const Header = (): JSX.Element => {
         <Logo />
         <DesktopNav />
         <div className="flex items-center gap-3">
-          <LanguageSwitch className="hidden md:inline-flex" />
+          <div className="hidden md:block">
+            <LanguageSwitch />
+          </div>
           <a
             href={practice.phone.href}
             className="link hidden font-bold tabular-nums no-underline hover:underline xl:inline"
