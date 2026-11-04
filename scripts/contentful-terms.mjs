@@ -244,7 +244,7 @@ const terms = (pages) => ({
       ),
       paragraph(
         text(
-          'Teksten, foto’s en het logo op deze website zijn eigendom van Loman Psychologiepraktijk of worden met toestemming gebruikt. Wilt u iets overnemen, neem dan eerst contact op.',
+          'Teksten en het logo op deze website zijn eigendom van Loman Psychologiepraktijk. Foto’s zijn van de praktijk zelf of worden gebruikt onder de licentie van de fotograaf, zoals de licentie van Unsplash. Wilt u iets overnemen, neem dan eerst contact op.',
         ),
       ),
       heading('Wijzigingen'),
@@ -368,7 +368,7 @@ const terms = (pages) => ({
       ),
       paragraph(
         text(
-          'Texts, photos and the logo on this website are owned by Loman Psychologiepraktijk or used with permission. If you would like to reuse anything, please get in touch first.',
+          'Texts and the logo on this website are owned by Loman Psychologiepraktijk. Photos are the practice’s own or are used under the photographer’s licence, such as the Unsplash licence. If you would like to reuse anything, please get in touch first.',
         ),
       ),
       heading('Changes'),
