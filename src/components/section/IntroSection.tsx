@@ -73,15 +73,15 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
         {cardRows(waitingTime, copy).map(({ name, href, text, icon: Icon }) => (
           <div
             key={name}
-            className="grid grid-cols-[4.75rem_1fr] items-center border-b border-rule sm:grid-cols-[6rem_1fr]"
+            className="grid grid-cols-1 border-b border-rule sm:grid-cols-[6rem_1fr] sm:items-center"
           >
-            <dt className="text-sm font-bold text-label">{name}</dt>
+            <dt className="pt-2.5 text-sm font-bold text-label sm:pt-0">{name}</dt>
             <dd>
               <a
                 href={href}
-                className="flex min-h-12 items-center gap-2 font-bold no-underline hover:underline hover:decoration-rule-strong"
+                className="flex min-h-11 items-center gap-2 font-bold no-underline hover:underline hover:decoration-rule-strong"
               >
-                <Icon aria-hidden className="hidden size-4.5 shrink-0 text-label sm:block" />
+                <Icon aria-hidden className="size-4.5 shrink-0 text-label" />
                 <span className="tabular-nums [overflow-wrap:anywhere]">{text}</span>
               </a>
             </dd>
