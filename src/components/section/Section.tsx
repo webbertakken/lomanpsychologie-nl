@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 import type {
   BasicSectionEntry,
+  ContactSectionEntry,
   FaqSectionEntry,
   OfficeHoursEntry,
   ProfileSectionEntry,
@@ -9,6 +10,7 @@ import type {
   TypesOfTherapyEntry,
 } from '../../types/section'
 import BasicSection from './BasicSection'
+import ContactSection from './ContactSection'
 import FaqSection from './FaqSection'
 import IntroSection from './IntroSection'
 import OfficeHoursSection from './OfficeHoursSection'
@@ -38,6 +40,8 @@ const Section = ({ section, isFirst, pageSections = [] }: Props): JSX.Element | 
       return <TreatmentListSection section={section as TypesOfTherapyEntry} />
     case 'TherapyTypeDetailedSection':
       return <TreatmentDetailSection section={section as TherapyTypeDetailsEntry} />
+    case 'contactSection':
+      return <ContactSection section={section as ContactSectionEntry} />
     case 'faqSection':
       return <FaqSection section={section as FaqSectionEntry} isFirst={isFirst} />
     case 'officeHoursSection':

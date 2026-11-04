@@ -6,7 +6,7 @@ import { useSiteChrome } from '../context/AppContext'
 import Logo from '../header/Logo'
 import PracticeContact from '../PracticeContact'
 
-const Footer = (): JSX.Element => {
+const Footer = ({ showContact = true }: { showContact?: boolean }): JSX.Element => {
   const { footerMenu } = useSiteChrome()
   const copy = useCopy()
 
@@ -19,9 +19,11 @@ const Footer = (): JSX.Element => {
             {copy.footerAbout(practice.psychologist, practice.building, practice.town)}
           </p>
         </div>
-        <div className="lg:col-span-8">
-          <PracticeContact />
-        </div>
+        {showContact && (
+          <div className="lg:col-span-8">
+            <PracticeContact />
+          </div>
+        )}
       </div>
 
       <div className="border-t">

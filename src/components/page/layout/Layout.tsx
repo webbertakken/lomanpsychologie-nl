@@ -12,9 +12,11 @@ interface Props {
   children: ReactNode
   title?: string
   description?: string
+  /** The contact page already shows every contact detail, so the footer leaves them out. */
+  isContactPage?: boolean
 }
 
-const Layout = ({ children, title, description }: Props): JSX.Element => {
+const Layout = ({ children, title, description, isContactPage }: Props): JSX.Element => {
   const documentTitle = title ? `${title} · ${practice.name}` : practice.name
   const copy = useCopy()
   const language = useLanguage()
@@ -47,7 +49,7 @@ const Layout = ({ children, title, description }: Props): JSX.Element => {
         <main id="inhoud" tabIndex={-1} className="flex-1 focus:outline-none">
           {children}
         </main>
-        <Footer />
+        <Footer showContact={!isContactPage} />
       </div>
     </>
   )

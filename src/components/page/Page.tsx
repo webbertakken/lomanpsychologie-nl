@@ -28,7 +28,11 @@ const Page = ({ page, chrome }: PageProps): JSX.Element => {
 
   return (
     <AppContext.Provider value={chrome}>
-      <Layout title={isHomePage ? undefined : title} description={describe(page, sections)}>
+      <Layout
+        title={isHomePage ? undefined : title}
+        description={describe(page, sections)}
+        isContactPage={sections.some(({ sys }) => sys.contentType.sys.id === 'contactSection')}
+      >
         {!hasOwnHeading && <PageHeader title={title} lead={subtitle} />}
         <PageTitleContext.Provider value={title}>
           {sections.map((section, index) => (

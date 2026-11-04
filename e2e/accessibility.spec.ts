@@ -13,6 +13,7 @@ const pages = [
   { title: 'Contact', url: '/contact' },
   { title: 'Veelgestelde vragen', url: '/veelgestelde-vragen' },
   { title: 'Privacybeleid', url: '/privacybeleid' },
+  { title: 'Contact in English', url: '/en/contact' },
   { title: 'Privacy policy in English', url: '/en/privacy-policy' },
   { title: 'Not found', url: '/deze-pagina-bestaat-niet' },
   { title: 'Home in English', url: '/en' },
@@ -174,5 +175,33 @@ test.describe('long texts', () => {
 
     await expect(page).toHaveURL(/#beveiliging$/)
     await expect(page.getByRole('heading', { name: 'Beveiliging' })).toBeInViewport()
+  })
+})
+
+test.describe('contact page', () => {
+  test('leads with the address, the route and the way to the waiting room', async ({ page }) => {
+    await page.goto('/contact')
+
+    await expect(page.getByText('Schoolstraat 27').first()).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Route plannen' })).toHaveAttribute(
+      'href',
+      /maps\.app\.goo\.gl/,
+    )
+    await expect(
+      page.getByRole('list', { name: 'Zo vindt u de wachtkamer' }).getByRole('listitem'),
+    ).toHaveCount(3)
+    await expect(
+      page
+        .getByRole('complementary', { name: 'Bij crisis' })
+        .getByRole('link', { name: '088-5880588' }),
+    ).toHaveAttribute('href', 'tel:0885880588')
+  })
+
+  test('does not repeat the contact details in the footer', async ({ page }) => {
+    await page.goto('/contact')
+
+    await expect(
+      page.getByRole('contentinfo').getByText('Buiten kantoortijden en bij crisis'),
+    ).toHaveCount(0)
   })
 })
