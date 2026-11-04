@@ -5,6 +5,7 @@ import { useCopy } from '../../../core/useLanguage'
 import { useSiteChrome } from '../context/AppContext'
 import Logo from '../header/Logo'
 import PracticeContact from '../PracticeContact'
+import ThemeSwitch from '../ThemeSwitch'
 
 const Footer = ({ showContact = true }: { showContact?: boolean }): JSX.Element => {
   const { footerMenu } = useSiteChrome()
@@ -42,7 +43,10 @@ const Footer = ({ showContact = true }: { showContact?: boolean }): JSX.Element 
               ))}
             </ul>
           </nav>
-          <p>© {practice.name}</p>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <ThemeSwitch />
+            <p>© {practice.name}</p>
+          </div>
         </div>
       </div>
     </footer>

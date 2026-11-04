@@ -7,6 +7,7 @@ import { LuMenu, LuX } from 'react-icons/lu'
 import { useCopy } from '../../../core/useLanguage'
 import { useSiteChrome } from '../context/AppContext'
 import PracticeContact from '../PracticeContact'
+import ThemeSwitch from '../ThemeSwitch'
 import LanguageSwitch from './LanguageSwitch'
 import Logo from './Logo'
 
@@ -91,8 +92,9 @@ const MobileNav = (): JSX.Element => {
             </ul>
           </nav>
 
-          <div className="sheet pt-2">
+          <div className="sheet flex flex-wrap items-center justify-between gap-4 pt-2">
             <LanguageSwitch />
+            <ThemeSwitch />
           </div>
 
           <div className="sheet pt-6 pb-10">

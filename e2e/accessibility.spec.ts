@@ -205,3 +205,51 @@ test.describe('contact page', () => {
     ).toHaveCount(0)
   })
 })
+
+test.describe('theme switch', () => {
+  test.use({ colorScheme: 'light' })
+
+  test('overrides the system, survives a reload and paints dark from the start', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await page
+      .getByRole('contentinfo')
+      .getByRole('radio', { name: 'Donker' })
+      .check({ force: true })
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+
+    // Read the page as the browser first draws it, before any of the app has run.
+    await page.addInitScript(() => {
+      document.addEventListener('DOMContentLoaded', () => {
+        ;(window as unknown as { firstPaint: string }).firstPaint = getComputedStyle(
+          document.body,
+        ).backgroundColor
+      })
+    })
+    await page.reload()
+
+    expect(
+      await page.evaluate(() => (window as unknown as { firstPaint: string }).firstPaint),
+    ).toBe('rgb(14, 26, 36)')
+    await expect(page.getByRole('contentinfo').getByRole('radio', { name: 'Donker' })).toBeChecked()
+
+    const result = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze()
+    expect(result.violations).toEqual([])
+  })
+
+  test('follows the system again after choosing Systeem', async ({ page }) => {
+    await page.goto('/')
+    const footer = page.getByRole('contentinfo')
+    await footer.getByRole('radio', { name: 'Donker' }).check({ force: true })
+    await footer.getByRole('radio', { name: 'Systeem' }).check({ force: true })
+
+    await page.reload()
+    await expect(page.locator('html')).not.toHaveAttribute('data-theme')
+    expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe(
+      'rgb(255, 255, 255)',
+    )
+  })
+})

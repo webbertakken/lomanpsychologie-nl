@@ -17,8 +17,9 @@
   --on-ink: #ffffff;
 }
 
+/* The carbon copy: follows the system unless the visitor chose light or dark (data-theme). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --paper: #0e1a24;
     --paper-deep: #13232f;
     --ink: #e6eef2;
@@ -29,6 +30,18 @@
     --stamp: #f0a070;
     --on-ink: #0e1a24;
   }
+}
+
+:root[data-theme='dark'] {
+  --paper: #0e1a24;
+  --paper-deep: #13232f;
+  --ink: #e6eef2;
+  --ink-soft: #a9bac6;
+  --rule: #1f4656;
+  --rule-strong: #2bb8de;
+  --label: #6fd0ea;
+  --stamp: #f0a070;
+  --on-ink: #0e1a24;
 }
 
 @theme {
