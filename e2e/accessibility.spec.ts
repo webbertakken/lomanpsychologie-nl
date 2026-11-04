@@ -223,7 +223,7 @@ test.describe('theme switch', () => {
     await page.addInitScript(() => {
       document.addEventListener('DOMContentLoaded', () => {
         ;(window as unknown as { firstPaint: string }).firstPaint = getComputedStyle(
-          document.body,
+          document.documentElement,
         ).backgroundColor
       })
     })
@@ -248,8 +248,8 @@ test.describe('theme switch', () => {
 
     await page.reload()
     await expect(page.locator('html')).not.toHaveAttribute('data-theme')
-    expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe(
-      'rgb(255, 255, 255)',
-    )
+    expect(
+      await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor),
+    ).toBe('rgb(255, 255, 255)')
   })
 })
