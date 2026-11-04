@@ -11,6 +11,7 @@ const pages = [
   { title: 'Tarieven', url: '/tarieven' },
   { title: 'De praktijk', url: '/de-praktijk' },
   { title: 'Contact', url: '/contact' },
+  { title: 'Veelgestelde vragen', url: '/veelgestelde-vragen' },
   { title: 'Not found', url: '/deze-pagina-bestaat-niet' },
 ] as const
 
@@ -108,5 +109,17 @@ test.describe('home', () => {
       'tel:0621591133',
     )
     await expect(card.getByRole('link', { name: 'info@lomanpsychologie.nl' })).toBeInViewport()
+  })
+})
+
+test.describe('faq', () => {
+  test('lists questions from Contentful that open in place', async ({ page }) => {
+    await page.goto('/veelgestelde-vragen')
+    const question = page.getByText('Hoe meld ik me aan?')
+
+    await question.click()
+
+    await expect(page.getByRole('link', { name: 'info@lomanpsychologie.nl' }).first()).toBeVisible()
+    await expect(page.getByText('In aanbouw')).toHaveCount(0)
   })
 })

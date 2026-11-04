@@ -26,7 +26,9 @@ const PageHeader = ({ title, lead, parent, children }: Props): JSX.Element => (
       </nav>
     )}
     <h1 className="max-w-4xl text-4xl md:text-6xl">{title}</h1>
-    {lead && <p className="mt-5 max-w-2xl text-xl text-ink-soft md:text-2xl">{lead}</p>}
+    {lead && lead.trim() !== title.trim() && (
+      <p className="mt-5 max-w-2xl text-xl text-ink-soft md:text-2xl">{lead}</p>
+    )}
     {children && <div className="mt-5 max-w-2xl text-lg text-ink-soft">{children}</div>}
     <div aria-hidden className="animate-rule-in mt-8 h-px bg-rule-strong md:mt-12" />
   </div>
