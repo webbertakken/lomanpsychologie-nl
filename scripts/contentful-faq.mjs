@@ -44,9 +44,29 @@ const request = async (method, path, { body, version, contentType } = {}) => {
   return response.status === 204 ? null : response.json()
 }
 
-const upsert = async (kind, id, body, contentType) => {
+// A rerun merges into what is there: other locales, and fields or translations
+// an author added in Contentful, are kept.
+const mergeEntryFields = (existing, fields) => {
+  const merged = { ...existing }
+  for (const [key, value] of Object.entries(fields)) merged[key] = { ...existing[key], ...value }
+  return merged
+}
+
+const mergeContentTypeFields = (existing, fields) => [
+  ...fields,
+  ...existing.filter((field) => !fields.some(({ id }) => id === field.id)),
+]
+
+const merge = (kind, existing, body) => {
+  if (!existing) return body
+  if (kind === 'entries') return { fields: mergeEntryFields(existing.fields, body.fields) }
+  return { ...body, fields: mergeContentTypeFields(existing.fields, body.fields) }
+}
+
+const upsert = async (kind, id, newBody, contentType) => {
   const path = `/${kind}/${id}`
   const existing = await request('GET', path)
+  const body = merge(kind, existing, newBody)
   if (dryRun) {
     console.info(`[faq] would ${existing ? 'update' : 'create'} ${kind} ${id}`)
     return
@@ -257,6 +277,26 @@ const entryLink = (id) => ({ sys: { type: 'Link', linkType: 'Entry', id } })
 const localised = (fields) =>
   Object.fromEntries(Object.entries(fields).map(([key, value]) => [key, { [locale]: value }]))
 
+// The page's sections field lists the section types it accepts; add ours to it.
+const allowFaqSectionsOnPages = async () => {
+  const pageType = await request('GET', '/content_types/page')
+  const sections = pageType.fields.find(({ id }) => id === 'sections')
+  const rule = sections.items.validations.find((validation) => validation.linkContentType)
+  if (!rule || rule.linkContentType.includes('faqSection')) return
+  if (dryRun) {
+    console.info('[faq] would allow faqSection in the page sections field')
+    return
+  }
+  rule.linkContentType.push('faqSection')
+  const { name, description, displayField, fields } = pageType
+  const saved = await request('PUT', '/content_types/page', {
+    body: { name, description, displayField, fields },
+    version: pageType.sys.version,
+  })
+  await request('PUT', '/content_types/page/published', { version: saved.sys.version })
+  console.info('[faq] pages now accept faqSection')
+}
+
 const main = async () => {
   for (const { id, body } of contentTypes) await upsert('content_types', id, body)
 
@@ -287,14 +327,19 @@ const main = async () => {
     await upsert('entries', `faq-section-${slug}`, { fields }, 'faqSection')
   }
 
+  await allowFaqSectionsOnPages()
+
   const page = await request('GET', `/entries/${pages.faq}`)
   const sectionLinks = sections.map(({ slug }) => entryLink(`faq-section-${slug}`))
   if (dryRun) {
     console.info(`[faq] would point page ${pages.faq} at ${sectionLinks.length} FAQ sections`)
     return
   }
-  page.fields.sections = { [locale]: sectionLinks }
-  page.fields.subtitle = { [locale]: 'Antwoorden op wat cliënten het vaakst vragen' }
+  page.fields.sections = { ...page.fields.sections, [locale]: sectionLinks }
+  page.fields.subtitle = {
+    ...page.fields.subtitle,
+    [locale]: 'Antwoorden op wat cliënten het vaakst vragen',
+  }
   const saved = await request('PUT', `/entries/${pages.faq}`, {
     body: { fields: page.fields },
     version: page.sys.version,
