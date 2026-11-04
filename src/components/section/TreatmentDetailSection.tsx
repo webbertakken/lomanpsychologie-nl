@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { JSX } from 'react'
 import { isResolved } from '../../core/links'
+import { useCopy } from '../../core/useLanguage'
 import type { TherapyTypeDetailsEntry } from '../../types/section'
 import { renderContent } from '../content/renderContent'
 import { useSiteChrome } from '../page/context/AppContext'
@@ -19,6 +20,7 @@ const TreatmentDetailSection = ({
   section: TherapyTypeDetailsEntry
 }): JSX.Element | null => {
   const branch = useMenuBranch()
+  const copy = useCopy()
   const { slug, therapyTypeCard } = section.fields
   if (!isResolved(therapyTypeCard)) return null
 
@@ -53,7 +55,7 @@ const TreatmentDetailSection = ({
         {siblings.length > 0 && (
           <nav aria-labelledby="andere-behandelingen" className="lg:col-span-3 lg:col-start-10">
             <h2 id="andere-behandelingen" className="font-sans text-sm font-bold text-label">
-              Andere behandelingen
+              {copy.otherTreatments}
             </h2>
             <ul className="mt-2 border-t-2 border-rule-strong">
               {siblings.map((sibling) => (

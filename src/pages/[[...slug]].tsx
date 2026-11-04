@@ -1,8 +1,9 @@
 import type { GetStaticPaths, GetStaticProps } from 'next'
 import Page, { type PageProps } from '../components/page/Page'
+import { asLanguage, languages, resolveRoute, withLanguage } from '../core/languages'
 import { isResolved } from '../core/links'
 import { activePathFor, pagePath } from '../core/navigation'
-import { getPages, getSiteChrome } from '../core/site'
+import { getPages, getPagesByLanguage, getSiteChrome } from '../core/site'
 import { replacePathsRecursively } from '../core/utils'
 import type { PageEntry } from '../types/page'
 
@@ -21,41 +22,43 @@ const replaceReferencesWithSlugs = (rawPage: PageEntry): PageEntry =>
   }) as PageEntry
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = (await getPages()).flatMap((page) => {
-    const { parentPage } = page.fields
-    if (parentPage && !isResolved(parentPage)) return []
-    const path = pagePath(page)
-    return [{ params: { slug: path === '/' ? null : path.slice(1).split('/') } }]
-  })
+  const paths = (
+    await Promise.all(
+      languages.map(async (locale) =>
+        (await getPages(locale)).flatMap((page) => {
+          const { parentPage } = page.fields
+          if (parentPage && !isResolved(parentPage)) return []
+          const path = pagePath(page)
+          return [{ params: { slug: path === '/' ? null : path.slice(1).split('/') }, locale }]
+        }),
+      ),
+    )
+  ).flat()
 
   return { paths, fallback: 'blocking' }
 }
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ params }) => {
-  const slug = params?.slug ?? null
-  const activePath = activePathFor(slug)
-  const pageSlug = Array.isArray(slug) ? slug.at(-1) : slug
+export const getStaticProps: GetStaticProps<PageProps> = async ({ params, locale }) => {
+  const language = asLanguage(locale)
+  const activePath = activePathFor(params?.slug ?? null)
+  const pages = await getPagesByLanguage()
+  const route = resolveRoute(pages, language, activePath)
 
-  const pages = await getPages()
-  const rawPage = pageSlug
-    ? pages.find((page) => page.fields.slug === pageSlug)
-    : pages.find((page) => page.fields.isHomePage)
-
-  if (!rawPage) {
-    console.info(`[pages] no page for ${activePath}, answering 404`)
+  if (route.kind === 'notFound') {
+    console.info(`[pages] no ${language} page for ${activePath}, answering 404`)
     return { notFound: true, revalidate: 60 }
   }
 
-  const canonicalPath = pagePath(rawPage)
-  if (canonicalPath !== activePath) {
-    console.info(`[pages] ${activePath} lives at ${canonicalPath}, redirecting`)
-    return { redirect: { destination: canonicalPath, permanent: false }, revalidate: 60 }
+  if (route.kind === 'redirect') {
+    const destination = withLanguage(route.language, route.path)
+    console.info(`[pages] ${language} ${activePath} lives at ${destination}, redirecting`)
+    return { redirect: { destination, permanent: false }, revalidate: 60 }
   }
 
   return {
     props: {
-      page: replaceReferencesWithSlugs(rawPage),
-      chrome: await getSiteChrome(pages, activePath),
+      page: replaceReferencesWithSlugs(route.page),
+      chrome: await getSiteChrome(pages, language, activePath, route.alternates),
     },
     revalidate: 3, // hit the CMS at most once every 3 seconds
   }

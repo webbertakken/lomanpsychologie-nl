@@ -3,20 +3,10 @@ import { useRouter } from 'next/router'
 import type { JSX } from 'react'
 import { type Day, translateDay } from '../../core/locale'
 import { useClientValue } from '../../core/useClientValue'
+import { useCopy } from '../../core/useLanguage'
 import { enforceEnDash } from '../../core/utils'
 import type { OfficeHoursEntry } from '../../types/section'
 import FieldSection from './FieldSection'
-
-const copy = {
-  nl: {
-    closed: 'Gesloten',
-    today: 'vandaag',
-    exceptions: 'Bijzonderheden',
-    day: 'Dag',
-    hours: 'Tijden',
-  },
-  en: { closed: 'Closed', today: 'today', exceptions: 'Details', day: 'Day', hours: 'Hours' },
-}
 
 const days: Day[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -31,7 +21,7 @@ interface Props {
 
 const OfficeHoursSection = ({ section, isFirst }: Props): JSX.Element => {
   const { locale = 'nl' } = useRouter()
-  const tx = copy[locale as keyof typeof copy] ?? copy.nl
+  const tx = useCopy()
 
   // The server's clock and the browser's differ, so "today" is only marked in the browser.
   const thisDay = useClientValue<Day | null>(today, null)
@@ -77,7 +67,7 @@ const OfficeHoursSection = ({ section, isFirst }: Props): JSX.Element => {
 
       {exceptions && exceptions.length > 0 && (
         <div className="rich-text mt-10">
-          <h3>{tx.exceptions}</h3>
+          <h3>{tx.details}</h3>
           <ul>
             {exceptions.map((exception) => (
               <li key={exception}>{exception}</li>

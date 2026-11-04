@@ -2,8 +2,10 @@ import Image from 'next/image'
 import type { JSX } from 'react'
 import type { IconType } from 'react-icons'
 import { LuArrowRight, LuClock, LuLinkedin, LuMail, LuPhone } from 'react-icons/lu'
+import type { Copy } from '../../core/copy'
 import { isResolved } from '../../core/links'
 import { practice } from '../../core/practice'
+import { useCopy } from '../../core/useLanguage'
 import type { ProfileSectionEntry, SectionEntry } from '../../types/section'
 import { renderContent } from '../content/renderContent'
 
@@ -24,7 +26,7 @@ const anchorsOf = (sections: SectionEntry[]): Anchor[] =>
     .filter(({ slug, title }) => slug && title)
 
 const waitingTimeOf = (anchors: Anchor[]): Anchor | undefined =>
-  anchors.find(({ title }) => /wacht|toegangstijd/i.test(title))
+  anchors.find(({ title }) => /wacht|toegangstijd|waiting|access time/i.test(title))
 
 interface CardRow {
   name: string
@@ -33,24 +35,25 @@ interface CardRow {
   icon: IconType
 }
 
-const cardRows = (waitingTime: Anchor | undefined): CardRow[] => [
+const cardRows = (waitingTime: Anchor | undefined, copy: Copy): CardRow[] => [
   ...(waitingTime
     ? [
         {
-          name: 'Wachttijd',
+          name: copy.waitingTime,
           href: `#${waitingTime.slug}`,
-          text: 'Actuele wachttijd',
+          text: copy.currentWaitingTime,
           icon: LuClock,
         },
       ]
     : []),
-  { name: 'Mailen', href: practice.email.href, text: practice.email.label, icon: LuMail },
-  { name: 'Bellen', href: practice.phone.href, text: practice.phone.label, icon: LuPhone },
+  { name: copy.email, href: practice.email.href, text: practice.email.label, icon: LuMail },
+  { name: copy.phone, href: practice.phone.href, text: practice.phone.label, icon: LuPhone },
 ]
 
 /** The appointment card: how to register, filled in like the practice's own card. */
 const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
   const waitingTime = waitingTimeOf(anchors)
+  const copy = useCopy()
 
   return (
     <aside
@@ -58,16 +61,16 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
       className="animate-settle relative border border-rule-strong bg-paper p-6 md:p-8"
     >
       <h2 id="afspraak-titel" className="text-2xl md:text-3xl">
-        Afspraak maken
+        {copy.appointmentTitle}
       </h2>
       <p className="mt-2 text-ink-soft">
-        Verwezen door uw huisarts? Neem contact op voor een eerste gesprek.
-        {waitingTime && ' Bekijk eerst de actuele wachttijd.'}
+        {copy.appointmentLead}
+        {waitingTime && ` ${copy.appointmentWaitingFirst}`}
       </p>
 
       <dl className="mt-5">
         <div aria-hidden className="animate-rule-in h-px bg-rule-strong" />
-        {cardRows(waitingTime).map(({ name, href, text, icon: Icon }) => (
+        {cardRows(waitingTime, copy).map(({ name, href, text, icon: Icon }) => (
           <div
             key={name}
             className="grid grid-cols-[4.75rem_1fr] items-center border-b border-rule sm:grid-cols-[6rem_1fr]"
@@ -89,7 +92,7 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
       {anchors.length > 0 && (
         <nav aria-labelledby="op-deze-pagina" className="mt-6">
           <h3 id="op-deze-pagina" className="font-sans text-sm font-bold text-label">
-            Op deze pagina
+            {copy.onThisPage}
           </h3>
           <ul className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
             {anchors.map(({ slug, title }) => (
@@ -116,6 +119,7 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
 const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
   const { title, slug, photo, vocation, location, shortDescription, linkedInHandle } =
     section.fields
+  const copy = useCopy()
   if (!isResolved(photo)) return null
 
   const { url, details } = photo.fields.file
@@ -137,7 +141,7 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
               rel="noopener noreferrer"
             >
               <LuLinkedin aria-hidden className="size-4.5" />
-              {title} op LinkedIn
+              {copy.onLinkedIn(title)}
             </a>
           )}
         </div>
@@ -147,7 +151,7 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
             src={`https:${url}`}
             width={details.image.width}
             height={details.image.height}
-            alt={`Portret van ${title}`}
+            alt={copy.portraitOf(title)}
             priority
             sizes="(min-width: 1024px) 30rem, 9rem"
             className="aspect-[4/5] w-full border border-rule object-cover object-top"
