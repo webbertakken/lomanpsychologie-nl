@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Fragment, type ReactNode, createElement } from 'react'
 import { LuClock } from 'react-icons/lu'
 import { linkify } from '../../core/linkify'
-import { imagesInLayoutTable, isLongList, plainText } from '../../core/richText'
+import { headingsOf, imagesInLayoutTable, isLongList, plainText } from '../../core/richText'
 import Asset, { type ContentfulAsset } from './Asset'
 
 type Heading = 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
@@ -24,9 +24,10 @@ const renderText = (text: string): ReactNode =>
 // Authors sometimes toggle a heading on an empty line; an empty heading is
 // noise to screen readers, so it is left out. Rich text sits under a section's
 // h2, so its headings start one level lower: an authored h1 becomes an h2.
-const heading = (tag: Heading) =>
+const heading = (tag: Heading, nextId?: () => string | undefined) =>
   function RichTextHeading(node: Node, children: ReactNode): ReactNode {
-    return plainText(node).trim() ? createElement(tag, null, children) : null
+    if (!plainText(node).trim()) return null
+    return createElement(tag, { id: nextId?.() }, children)
   }
 
 const isEmptyParagraph = (node: Node): boolean =>
@@ -50,7 +51,11 @@ const pageHref = (target: {
 }
 
 // An asset embedded twice in one text (a logo in a table and again below it) shows once.
-const createOptions = (): Options => {
+const createOptions = (document: Document): Options => {
+  // Headings get the anchor ids headingsOf assigns, in the same order, so a page index links to them.
+  const ids = headingsOf(document).map(({ id }) => id)
+  const nextId = () => ids.shift()
+
   const shown = new Set<string>()
   const firstShowing = (asset: ContentfulAsset): boolean => {
     if (shown.has(asset.sys.id)) return false
@@ -81,9 +86,9 @@ const createOptions = (): Options => {
         }
         return <p>{children}</p>
       },
-      [BLOCKS.HEADING_1]: heading('h2'),
-      [BLOCKS.HEADING_2]: heading('h3'),
-      [BLOCKS.HEADING_3]: heading('h3'),
+      [BLOCKS.HEADING_1]: heading('h2', nextId),
+      [BLOCKS.HEADING_2]: heading('h3', nextId),
+      [BLOCKS.HEADING_3]: heading('h3', nextId),
       [BLOCKS.HEADING_4]: heading('h4'),
       [BLOCKS.HEADING_5]: heading('h5'),
       [BLOCKS.HEADING_6]: heading('h6'),
@@ -151,4 +156,4 @@ const createOptions = (): Options => {
 }
 
 export const renderContent = (content: Document | undefined): ReactNode =>
-  content ? documentToReactComponents(content, createOptions()) : null
+  content ? documentToReactComponents(content, createOptions(content)) : null
