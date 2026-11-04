@@ -206,7 +206,7 @@ test.describe('contact page', () => {
   })
 })
 
-test.describe('theme switch', () => {
+test.describe('theme toggle', () => {
   test.use({ colorScheme: 'light' })
 
   test('overrides the system, survives a reload and paints dark from the start', async ({
@@ -214,9 +214,9 @@ test.describe('theme switch', () => {
   }) => {
     await page.goto('/')
     await page
-      .getByRole('contentinfo')
-      .getByRole('radio', { name: 'Donker' })
-      .check({ force: true })
+      .getByRole('banner')
+      .getByRole('button', { name: /Wissel naar donker/ })
+      .click()
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
 
     // Read the page as the browser first draws it, before any of the app has run.
@@ -232,7 +232,9 @@ test.describe('theme switch', () => {
     expect(
       await page.evaluate(() => (window as unknown as { firstPaint: string }).firstPaint),
     ).toBe('rgb(14, 26, 36)')
-    await expect(page.getByRole('contentinfo').getByRole('radio', { name: 'Donker' })).toBeChecked()
+    await expect(
+      page.getByRole('banner').getByRole('button', { name: /Weergave: donker/ }),
+    ).toBeVisible()
 
     const result = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
@@ -240,16 +242,31 @@ test.describe('theme switch', () => {
     expect(result.violations).toEqual([])
   })
 
-  test('follows the system again after choosing Systeem', async ({ page }) => {
+  test('returns to the system after light', async ({ page }) => {
     await page.goto('/')
-    const footer = page.getByRole('contentinfo')
-    await footer.getByRole('radio', { name: 'Donker' }).check({ force: true })
-    await footer.getByRole('radio', { name: 'Systeem' }).check({ force: true })
+    const banner = page.getByRole('banner')
+    await banner.getByRole('button', { name: /Wissel naar donker/ }).click()
+    await banner.getByRole('button', { name: /Wissel naar licht/ }).click()
+    await banner.getByRole('button', { name: /Wissel naar systeem/ }).click()
 
     await page.reload()
     await expect(page.locator('html')).not.toHaveAttribute('data-theme')
     expect(
       await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor),
     ).toBe('rgb(255, 255, 255)')
+  })
+})
+
+test.describe('theme toggle on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('sits in the menu on the line of the language switch', async ({ page }) => {
+    await page.goto('/en')
+    await page.getByRole('button', { name: 'Menu' }).click()
+    const dialog = page.getByRole('dialog')
+    const language = await dialog.getByRole('link', { name: 'Nederlands' }).boundingBox()
+    const toggle = await dialog.getByRole('button', { name: /Appearance/ }).boundingBox()
+
+    expect(Math.abs((language?.y ?? 0) - (toggle?.y ?? 99))).toBeLessThan(12)
   })
 })

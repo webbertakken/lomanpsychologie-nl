@@ -9,7 +9,7 @@ import { useSiteChrome } from '../context/AppContext'
 
 const itemClass = (isActive: boolean) =>
   cx(
-    'inline-flex min-h-11 items-center gap-1 border-b-2 px-1 pt-0.5 font-bold no-underline transition-colors duration-150',
+    'inline-flex min-h-11 items-center gap-1 border-b-2 px-1 pt-0.5 font-bold whitespace-nowrap no-underline transition-colors duration-150',
     isActive
       ? 'border-rule-strong text-ink'
       : 'border-transparent text-ink-soft hover:border-rule hover:text-ink',
@@ -68,8 +68,8 @@ const DesktopNav = (): JSX.Element => {
   const copy = useCopy()
 
   return (
-    <nav aria-label={copy.mainMenu} className="hidden flex-1 md:block">
-      <ul className="flex items-center gap-5 lg:gap-7">
+    <nav aria-label={copy.mainMenu} className="hidden flex-1 lg:block">
+      <ul className="flex items-center gap-5 xl:gap-7">
         {headerMenu.map((item) => (
           <li key={item.path}>
             {item.subPages.length > 0 ? (

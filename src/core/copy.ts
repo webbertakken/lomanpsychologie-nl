@@ -46,6 +46,8 @@ const dutch = {
   themeSystem: 'Systeem',
   themeLight: 'Licht',
   themeDark: 'Donker',
+  themeToggle: (current: string, next: string) =>
+    `Weergave: ${current.toLowerCase()}. Wissel naar ${next.toLowerCase()}`,
   visitingAddress: 'Bezoekadres',
   planRoute: 'Route plannen',
   inBuilding: (building: string) => `In ${building}`,
@@ -109,6 +111,8 @@ const english: Copy = {
   themeSystem: 'System',
   themeLight: 'Light',
   themeDark: 'Dark',
+  themeToggle: (current, next) =>
+    `Appearance: ${current.toLowerCase()}. Switch to ${next.toLowerCase()}`,
   visitingAddress: 'Visiting address',
   planRoute: 'Plan your route',
   inBuilding: (building) => `At ${building}`,

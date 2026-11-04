@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { asThemeChoice, resolveTheme, themeColours } from './theme'
+import { asThemeChoice, nextThemeChoice, resolveTheme, themeColours } from './theme'
 
 describe('asThemeChoice', () => {
   it('accepts a stored choice and falls back to the system for anything else', () => {
@@ -23,5 +23,19 @@ describe('resolveTheme', () => {
 describe('themeColours', () => {
   it('gives the browser chrome the page colour of each theme', () => {
     expect(themeColours).toEqual({ light: '#ffffff', dark: '#0e1a24' })
+  })
+})
+
+describe('nextThemeChoice', () => {
+  it('leaves the system for the opposite of what it shows, so a press always changes the page', () => {
+    expect(nextThemeChoice('system', false)).toBe('dark')
+    expect(nextThemeChoice('system', true)).toBe('light')
+  })
+
+  it('then goes to the other theme and back to the system', () => {
+    expect(nextThemeChoice('dark', false)).toBe('light')
+    expect(nextThemeChoice('light', false)).toBe('system')
+    expect(nextThemeChoice('light', true)).toBe('dark')
+    expect(nextThemeChoice('dark', true)).toBe('system')
   })
 })

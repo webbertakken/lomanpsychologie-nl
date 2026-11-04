@@ -42,3 +42,16 @@ export const applyTheme = (choice: ThemeChoice): void => {
     meta.setAttribute('content', themeColours[theme])
   }
 }
+
+/**
+ * The choice one press of the toggle moves to. From the system it goes to the
+ * opposite of what the system shows, then to the other theme, then back to the
+ * system, so every press except the last visibly changes the page.
+ */
+export const nextThemeChoice = (current: ThemeChoice, systemPrefersDark: boolean): ThemeChoice => {
+  const systemTheme: Theme = systemPrefersDark ? 'dark' : 'light'
+  const opposite: Theme = systemPrefersDark ? 'light' : 'dark'
+  if (current === 'system') return opposite
+  if (current === opposite) return systemTheme
+  return 'system'
+}
