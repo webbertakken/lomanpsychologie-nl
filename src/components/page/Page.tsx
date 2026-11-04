@@ -6,6 +6,7 @@ import type { PageEntry } from '../../types/page'
 import type { SectionEntry } from '../../types/section'
 import Section, { introducesPage } from '../section/Section'
 import { AppContext } from './context/AppContext'
+import { PageTitleContext } from './context/PageTitleContext'
 import Layout from './layout/Layout'
 import PageHeader from './PageHeader'
 
@@ -29,14 +30,16 @@ const Page = ({ page, chrome }: PageProps): JSX.Element => {
     <AppContext.Provider value={chrome}>
       <Layout title={isHomePage ? undefined : title} description={describe(page, sections)}>
         {!hasOwnHeading && <PageHeader title={title} lead={subtitle} />}
-        {sections.map((section, index) => (
-          <Section
-            key={section.sys.id}
-            section={section}
-            isFirst={index === 0}
-            pageSections={sections}
-          />
-        ))}
+        <PageTitleContext.Provider value={title}>
+          {sections.map((section, index) => (
+            <Section
+              key={section.sys.id}
+              section={section}
+              isFirst={index === 0}
+              pageSections={sections}
+            />
+          ))}
+        </PageTitleContext.Provider>
       </Layout>
     </AppContext.Provider>
   )

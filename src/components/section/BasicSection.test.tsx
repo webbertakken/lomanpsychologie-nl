@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { BasicSectionEntry } from '../../types/section'
+import { PageTitleContext } from '../page/context/PageTitleContext'
 import BasicSection from './BasicSection'
 
 const text = (value: string) => ({ nodeType: 'text', value, marks: [], data: {} })
@@ -48,5 +49,17 @@ describe('BasicSection', () => {
     render(<BasicSection section={section(['Bewaartermijn', 'Klachten'])} />)
 
     expect(screen.queryByRole('navigation', { name: 'Op deze pagina' })).toBeNull()
+  })
+})
+
+describe('BasicSection under a page of the same name', () => {
+  it('keeps the repeated title for screen readers only', () => {
+    render(
+      <PageTitleContext.Provider value="Privacybeleid">
+        <BasicSection section={section(['Bewaartermijn'])} />
+      </PageTitleContext.Provider>,
+    )
+
+    expect(screen.getByRole('heading', { level: 2, name: 'Privacybeleid' })).toHaveClass('sr-only')
   })
 })
