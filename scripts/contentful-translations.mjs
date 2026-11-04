@@ -57,6 +57,18 @@ const request = async (method, url, { body, version } = {}) => {
   return response.status === 204 ? null : response.json()
 }
 
+// Compares values regardless of key order, which Contentful does not keep stable.
+const canonical = (value) => {
+  if (!value || typeof value !== 'object') return value
+  if (Array.isArray(value)) return value.map(canonical)
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .map((key) => [key, canonical(value[key])]),
+  )
+}
+const sameValue = (a, b) => JSON.stringify(canonical(a)) === JSON.stringify(canonical(b))
+
 // Rich text: everything but text values must match.
 const shape = (node) => {
   if (!node || typeof node !== 'object') return node
@@ -70,7 +82,7 @@ const shape = (node) => {
   )
 }
 const isRichText = (value) => value?.nodeType === 'document'
-const sameTree = (a, b) => JSON.stringify(shape(a)) === JSON.stringify(shape(b))
+const sameTree = (a, b) => sameValue(shape(a), shape(b))
 
 // Fields of these types become translatable before English is written.
 const localise = { faqItem: ['question', 'answer'], faqSection: ['title', 'subtitle'] }
@@ -156,7 +168,7 @@ const main = async () => {
           )
           continue
         }
-        if (JSON.stringify(entry.fields[field][english]) === JSON.stringify(value)) continue
+        if (sameValue(entry.fields[field][english], value)) continue
         entry.fields[field] = { ...entry.fields[field], [english]: value }
         changed++
       }
