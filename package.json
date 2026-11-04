@@ -26,17 +26,12 @@
     "@contentful/rich-text-react-renderer": "^16.0.0",
     "@contentful/rich-text-types": "^17.0.0",
     "@headlessui/react": "^2.0.0",
-    "@loadable/component": "^5.15.2",
-    "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/typography": "^0.5.20",
-    "@tippyjs/react": "^4.2.6",
     "classnames": "^2.3.2",
     "contentful": "^11.0.0",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.0.0",
-    "react-spring": "10.0.4",
     "sharp": "^0.35.0"
   },
   "devDependencies": {

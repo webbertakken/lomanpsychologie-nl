@@ -1,53 +1,43 @@
 import type { JSX } from 'react'
 import { isResolved } from '../../core/links'
-import { BannerNotificationEntry } from '../../types/banner'
-import { MenuProps } from '../../types/menu'
-import { PageEntry } from '../../types/page'
-import Section from '../section/Section'
+import { summarise } from '../../core/richText'
+import type { SiteChrome } from '../../core/site'
+import type { PageEntry } from '../../types/page'
+import type { SectionEntry } from '../../types/section'
+import Section, { introducesPage } from '../section/Section'
 import { AppContext } from './context/AppContext'
-import { PageContext } from './context/PageContext'
 import Layout from './layout/Layout'
+import PageHeader from './PageHeader'
 
-interface Props {
+export interface PageProps {
   page: PageEntry
-  headerMenu: MenuProps
-  footerMenu: MenuProps
-  banner?: BannerNotificationEntry
+  chrome: SiteChrome
 }
 
-const Page = ({ page, headerMenu, footerMenu, banner }: Props): JSX.Element => {
-  const { sections, hasOwnHeader, hasDarkBackground, subtitle, title } = page.fields
+const describe = (page: PageEntry, sections: SectionEntry[]): string | undefined => {
+  const intro = sections.find((section) => section.sys.contentType.sys.id === 'profileCardSection')
+  if (intro && 'shortDescription' in intro.fields) return summarise(intro.fields.shortDescription)
+  return page.fields.subtitle || undefined
+}
+
+const Page = ({ page, chrome }: PageProps): JSX.Element => {
+  const { title, subtitle, isHomePage } = page.fields
+  const sections = (page.fields.sections ?? []).filter(isResolved) as SectionEntry[]
+  const hasOwnHeading = sections.length > 0 && introducesPage(sections[0])
 
   return (
-    <AppContext.Provider value={{ headerMenu, footerMenu, banner }}>
-      <PageContext.Provider value={{ hasOwnHeader, hasDarkBackground }}>
-        <Layout>
-          <PageContext.Consumer>
-            {({ hasOwnHeader }) => (
-              <>
-                {hasOwnHeader ? (
-                  // Pages with own header (e.g. Home's ProfileCardSection)
-                  // already render a visible h1, but pages like
-                  // /de-praktijk only have section h2s -- axe-core's
-                  // page-has-heading-one rule then fires. Always render
-                  // a sr-only h1 with the page title so every page has at
-                  // least one h1, regardless of which sections are used.
-                  <h1 className="sr-only">{title}</h1>
-                ) : (
-                  <div className="text-center pt-6">
-                    <h1 className="text-xl md:text-3xl px-6 wrap-break-word">{subtitle}</h1>
-                  </div>
-                )}
-                {sections?.map((section, index) =>
-                  isResolved(section) ? (
-                    <Section key={section.sys.id} section={section} index={index} />
-                  ) : null,
-                )}
-              </>
-            )}
-          </PageContext.Consumer>
-        </Layout>
-      </PageContext.Provider>
+    <AppContext.Provider value={chrome}>
+      <Layout title={isHomePage ? undefined : title} description={describe(page, sections)}>
+        {!hasOwnHeading && <PageHeader title={title} lead={subtitle} />}
+        {sections.map((section, index) => (
+          <Section
+            key={section.sys.id}
+            section={section}
+            isFirst={index === 0}
+            pageSections={sections}
+          />
+        ))}
+      </Layout>
     </AppContext.Provider>
   )
 }

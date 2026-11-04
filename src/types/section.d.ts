@@ -91,12 +91,36 @@ type TherapyTypeDetailsSkeleton = {
 
 type TherapyTypeDetailsEntry = ContentEntry<TherapyTypeDetailsSkeleton>
 
+type FaqItemSkeleton = {
+  contentTypeId: 'faqItem'
+  fields: {
+    question: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    answer: EntryFieldTypes.RichText
+  }
+}
+
+type FaqItemEntry = ContentEntry<FaqItemSkeleton>
+
+type FaqSectionSkeleton = {
+  contentTypeId: 'faqSection'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    subtitle: EntryFieldTypes.Symbol
+    questions: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<FaqItemSkeleton>>
+  }
+}
+
+type FaqSectionEntry = ContentEntry<FaqSectionSkeleton>
+
 type SectionSkeleton =
   | BasicSectionSkeleton
   | OfficeHoursSkeleton
   | ProfileSectionSkeleton
   | TypesOfTherapySkeleton
   | TherapyTypeDetailsSkeleton
+  | FaqSectionSkeleton
 
 type SectionEntry =
   | BasicSectionEntry
@@ -104,3 +128,4 @@ type SectionEntry =
   | ProfileSectionEntry
   | TypesOfTherapyEntry
   | TherapyTypeDetailsEntry
+  | FaqSectionEntry

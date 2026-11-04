@@ -1,15 +1,10 @@
-import React from 'react'
-import { BannerNotificationEntry } from '../../../types/banner'
-import { MenuProps } from '../../../types/menu'
+import { createContext, useContext } from 'react'
+import type { SiteChrome } from '../../../core/site'
 
-type ContextProps = {
-  headerMenu: MenuProps
-  footerMenu: MenuProps
-  banner?: BannerNotificationEntry
-}
-
-export const AppContext = React.createContext<Partial<ContextProps>>({
+export const AppContext = createContext<SiteChrome>({
   headerMenu: [],
   footerMenu: [],
   banner: null,
 })
+
+export const useSiteChrome = (): SiteChrome => useContext(AppContext)

@@ -1,38 +1,49 @@
 import type { JSX } from 'react'
-import {
+import type {
   BasicSectionEntry,
+  FaqSectionEntry,
   OfficeHoursEntry,
   ProfileSectionEntry,
   SectionEntry,
   TherapyTypeDetailsEntry,
   TypesOfTherapyEntry,
 } from '../../types/section'
-import BasicSection from './BasicSection/BasicSection'
-import OfficeHoursSection from './OfficeHoursSection/OfficeHoursSection'
-import ProfileCardSection from './ProfileCardSection/ProfileCardSection'
-import TherapyTypeDetailsSection from './TherapyTypeDetailsSection/TherapyTypeDetailsSection'
-import TherapyTypesSection from './TherapyTypesSection/TherapyTypesSection'
+import BasicSection from './BasicSection'
+import FaqSection from './FaqSection'
+import IntroSection from './IntroSection'
+import OfficeHoursSection from './OfficeHoursSection'
+import TreatmentDetailSection from './TreatmentDetailSection'
+import TreatmentListSection from './TreatmentListSection'
 
 interface Props {
   section: SectionEntry
-  index?: number
+  isFirst?: boolean
+  pageSections?: SectionEntry[]
 }
+
+/** Sections that open a page with their own `h1`. */
+export const introducesPage = (section: SectionEntry): boolean =>
+  ['profileCardSection', 'TherapyTypeDetailedSection'].includes(section.sys.contentType.sys.id)
 
 // The content type id is the discriminant of `SectionEntry`, but Contentful
 // types `sys.contentType.sys.id` as a plain string, so each case names its entry.
-const Section = ({ section, index }: Props): JSX.Element => {
-  switch (section.sys.contentType.sys.id) {
+const Section = ({ section, isFirst, pageSections = [] }: Props): JSX.Element | null => {
+  const contentType: string = section.sys.contentType.sys.id
+  switch (contentType) {
     case 'section':
-      return <BasicSection section={section as BasicSectionEntry} index={index} />
+      return <BasicSection section={section as BasicSectionEntry} isFirst={isFirst} />
     case 'profileCardSection':
-      return <ProfileCardSection section={section as ProfileSectionEntry} />
+      return <IntroSection section={section as ProfileSectionEntry} pageSections={pageSections} />
     case 'therapyTypesSection':
-      return <TherapyTypesSection section={section as TypesOfTherapyEntry} />
+      return <TreatmentListSection section={section as TypesOfTherapyEntry} />
     case 'TherapyTypeDetailedSection':
-      return <TherapyTypeDetailsSection section={section as TherapyTypeDetailsEntry} />
+      return <TreatmentDetailSection section={section as TherapyTypeDetailsEntry} />
+    case 'faqSection':
+      return <FaqSection section={section as FaqSectionEntry} isFirst={isFirst} />
     case 'officeHoursSection':
-      return <OfficeHoursSection section={section as OfficeHoursEntry} index={index} />
+      return <OfficeHoursSection section={section as OfficeHoursEntry} isFirst={isFirst} />
     default:
+      console.warn(`[sections] no component for content type ${contentType}`)
       return null
   }
 }

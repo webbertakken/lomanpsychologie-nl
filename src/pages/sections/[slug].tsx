@@ -41,10 +41,10 @@ interface Props {
   section: BasicSectionEntry
 }
 
-export default function Sections({ section }: Props): JSX.Element {
+export default function SectionPreview({ section }: Props): JSX.Element {
   return (
-    <Layout>
-      <Section section={section} />
+    <Layout title={section.fields.title}>
+      <Section section={section} isFirst />
     </Layout>
   )
 }

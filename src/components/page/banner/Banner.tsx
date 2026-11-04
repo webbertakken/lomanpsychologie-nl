@@ -1,22 +1,18 @@
-import { type JSX, useContext } from 'react'
-import { AppContext } from '../context/AppContext'
+import type { JSX } from 'react'
+import { useSiteChrome } from '../context/AppContext'
 
-interface Props {}
-
-const Banner = ({}: Props): JSX.Element => {
-  const { banner } = useContext(AppContext)
-
-  if (!banner || !banner.fields.isEnabled) return null
+/** A temporary notice from the practice, such as a holiday closure. */
+const Banner = (): JSX.Element | null => {
+  const { banner } = useSiteChrome()
+  if (!banner?.fields.isEnabled || !banner.fields.message) return null
 
   return (
-    <section
-      className="relative w-full px-8 text-gray-800 bg-[#00a7d3]"
-      aria-label="Temporary information banner"
-    >
-      <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto max-w-7xl">
-        {banner.fields.message}
-      </div>
-    </section>
+    <aside aria-label="Mededeling van de praktijk" className="border-b bg-paper-deep">
+      <p className="sheet flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3">
+        <span className="stamp">Let op</span>
+        <span>{banner.fields.message}</span>
+      </p>
+    </aside>
   )
 }
 

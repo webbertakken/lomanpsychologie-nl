@@ -1,14 +1,46 @@
+import Link from 'next/link'
 import type { JSX } from 'react'
-import CopyrightAndLinksLayer from './CopyrightAndLinksLayer'
+import { practice } from '../../../core/practice'
+import { useSiteChrome } from '../context/AppContext'
+import Logo from '../header/Logo'
+import PracticeContact from '../PracticeContact'
 
-interface Props {}
+const Footer = (): JSX.Element => {
+  const { footerMenu } = useSiteChrome()
 
-const Footer = ({}: Props): JSX.Element => {
   return (
-    <footer role="contentinfo" className="py-10 bg-black mt-auto">
-      <div className="px-10 mx-auto max-w-7xl">
-        {/*<LogoAndSocialLayer />*/}
-        <CopyrightAndLinksLayer />
+    <footer className="mt-24 border-t bg-paper-deep">
+      <div className="sheet grid gap-10 py-14 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <Logo className="h-12 w-auto" />
+          <p className="mt-5 max-w-xs text-ink-soft">
+            Vrijgevestigde praktijk voor basis-generalistische GGZ van {practice.psychologist},
+            GZ-psycholoog, in {practice.building} in {practice.town}.
+          </p>
+        </div>
+        <div className="lg:col-span-8">
+          <PracticeContact />
+        </div>
+      </div>
+
+      <div className="border-t">
+        <div className="sheet flex flex-col gap-4 py-6 text-sm text-ink-soft md:flex-row md:items-center md:justify-between">
+          <nav aria-label="Over de praktijk">
+            <ul className="flex flex-wrap gap-x-6 gap-y-1">
+              {footerMenu.map(({ path, title }) => (
+                <li key={path}>
+                  <Link
+                    href={path}
+                    className="inline-flex min-h-11 items-center hover:text-ink hover:underline"
+                  >
+                    {title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <p>© {practice.name}</p>
+        </div>
       </div>
     </footer>
   )
