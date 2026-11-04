@@ -33,7 +33,8 @@ const isEmptyParagraph = (node: Node): boolean =>
   'content' in node &&
   (node as Block).content.every((child) => child.nodeType === 'text' && !child.value.trim())
 
-const isLastUpdatedNote = (node: Node): boolean => /^\s*laatst (ge)?üpdatet/i.test(plainText(node))
+const isLastUpdatedNote = (node: Node): boolean =>
+  /^\s*(laatst (ge)?üpdatet|last updated)/i.test(plainText(node))
 
 const assetOf = (node: Node): ContentfulAsset | undefined => {
   const target = node.data?.target
@@ -129,6 +130,7 @@ const createOptions = (): Options => {
       },
       [INLINES.HYPERLINK]: (node) => {
         const uri: string = node.data.uri
+        if (uri.startsWith('/')) return <Link href={uri}>{plainText(node)}</Link>
         const isExternal = /^https?:\/\//.test(uri) && !uri.includes('lomanpsychologie.nl')
         return (
           <a href={uri} rel={isExternal ? 'noopener noreferrer' : undefined}>

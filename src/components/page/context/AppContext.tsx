@@ -5,6 +5,8 @@ export const AppContext = createContext<SiteChrome>({
   headerMenu: [],
   footerMenu: [],
   banner: null,
+  contactPath: '/contact',
+  alternates: { nl: '/', en: '/' },
 })
 
 export const useSiteChrome = (): SiteChrome => useContext(AppContext)

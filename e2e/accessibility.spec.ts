@@ -13,6 +13,9 @@ const pages = [
   { title: 'Contact', url: '/contact' },
   { title: 'Veelgestelde vragen', url: '/veelgestelde-vragen' },
   { title: 'Not found', url: '/deze-pagina-bestaat-niet' },
+  { title: 'Home in English', url: '/en' },
+  { title: 'Rates in English', url: '/en/rates' },
+  { title: 'EMDR in English', url: '/en/therapy/emdr' },
 ] as const
 
 for (const colorScheme of ['light', 'dark'] as const) {
@@ -121,5 +124,41 @@ test.describe('faq', () => {
 
     await expect(page.getByRole('link', { name: 'info@lomanpsychologie.nl' }).first()).toBeVisible()
     await expect(page.getByText('In aanbouw')).toHaveCount(0)
+  })
+})
+
+test.describe('language switch', () => {
+  test('opens the same page in English and back in Dutch', async ({ page }) => {
+    await page.goto('/tarieven')
+
+    await page.getByRole('link', { name: 'English' }).click()
+    await expect(page).toHaveURL(/\/en\/rates$/)
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+
+    await page.getByRole('link', { name: 'Nederlands' }).click()
+    await expect(page).toHaveURL(/\/tarieven$/)
+    await expect(page.locator('html')).toHaveAttribute('lang', 'nl')
+  })
+
+  test('redirects a Dutch address under /en to its English address', async ({ page }) => {
+    await page.goto('/en/tarieven')
+
+    await expect(page).toHaveURL(/\/en\/rates$/)
+  })
+})
+
+test.describe('mobile header', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('keeps the menu button on screen and the language switch inside the menu', async ({
+    page,
+  }) => {
+    await page.goto('/en')
+
+    await expect(page.getByRole('button', { name: 'Menu' })).toBeInViewport({ ratio: 1 })
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Nederlands' })).toBeHidden()
+
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await expect(page.getByRole('dialog').getByRole('link', { name: 'Nederlands' })).toBeVisible()
   })
 })

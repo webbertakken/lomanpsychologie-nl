@@ -2,53 +2,84 @@ import type { BannerNotificationEntry, BannerNotificationSkeleton } from '../typ
 import type { MenuOptions, MenuProps, MenuSortOrderSkeleton } from '../types/menu'
 import type { PageEntry, PageSkeleton } from '../types/page'
 import { getContentfulClient } from './contentful'
+import {
+  alternatesOf,
+  contentfulLocale,
+  type Alternates,
+  type Language,
+  languages,
+  type PagesByLanguage,
+} from './languages'
 import { buildMenu, sortByMenuOrder } from './navigation'
 
 export interface SiteChrome {
   headerMenu: MenuProps
   footerMenu: MenuProps
   banner: BannerNotificationEntry | null
+  contactPath: string
+  /** This page's path in each language, for the language switch. */
+  alternates: Alternates
 }
 
-export const getPages = async (): Promise<PageEntry[]> => {
+const contactSlug = 'contact'
+
+export const getPages = async (language: Language): Promise<PageEntry[]> => {
   const { items } = await getContentfulClient().getEntries<PageSkeleton>({
     content_type: 'page',
     include: 3,
+    locale: contentfulLocale[language],
   })
   return items
 }
 
-const getMenuSortOrder = async (menu: MenuOptions) => {
+export const getPagesByLanguage = async (): Promise<PagesByLanguage> => {
+  const [nl, en] = await Promise.all(languages.map(getPages))
+  return { nl, en }
+}
+
+const getMenuSortOrder = async (menu: MenuOptions, language: Language) => {
   const { items } = await getContentfulClient().getEntries<MenuSortOrderSkeleton>({
     content_type: 'menuSortOrder',
+    locale: contentfulLocale[language],
   })
   return items.find((order) => order.fields.menu === menu)
 }
 
-const getBanner = async (): Promise<BannerNotificationEntry | null> => {
+const getBanner = async (language: Language): Promise<BannerNotificationEntry | null> => {
   const { items } = await getContentfulClient().getEntries<BannerNotificationSkeleton>({
     content_type: 'bannerNotification',
+    locale: contentfulLocale[language],
   })
   return items[0] ?? null
 }
 
+const contactPathIn = (pages: PagesByLanguage, language: Language): string => {
+  const contact = pages.nl.find(({ fields }) => fields.slug === contactSlug)
+  return contact ? alternatesOf(contact.sys.id, pages)[language] : `/${contactSlug}`
+}
+
 /** Header, footer and banner: everything every page shows around its content. */
 export const getSiteChrome = async (
-  pages: PageEntry[],
+  pages: PagesByLanguage,
+  language: Language,
   activePath: string,
+  alternates: Alternates = { nl: '/', en: '/' },
 ): Promise<SiteChrome> => {
   const [headerOrder, footerOrder, banner] = await Promise.all([
-    getMenuSortOrder('header'),
-    getMenuSortOrder('footer'),
-    getBanner(),
+    getMenuSortOrder('header', language),
+    getMenuSortOrder('footer', language),
+    getBanner(language),
   ])
 
-  const inHeader = pages.filter(({ fields }) => fields.shouldBeShownInHeader)
-  const inFooter = pages.filter(({ fields }) => fields.shouldBeShownInFooter)
+  const inLanguage = pages[language]
+  const inHeader = inLanguage.filter(({ fields }) => fields.shouldBeShownInHeader)
+  const inFooter = inLanguage.filter(({ fields }) => fields.shouldBeShownInFooter)
 
   return {
-    headerMenu: buildMenu(sortByMenuOrder(inHeader, headerOrder), pages, activePath),
+    headerMenu: buildMenu(sortByMenuOrder(inHeader, headerOrder), inLanguage, activePath),
     footerMenu: buildMenu(sortByMenuOrder(inFooter, footerOrder), [], activePath),
     banner,
+    contactPath: contactPathIn(pages, language),
+    alternates,
   }
 }

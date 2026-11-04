@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { JSX } from 'react'
 import { LuArrowRight } from 'react-icons/lu'
 import { isResolved } from '../../core/links'
+import { useCopy } from '../../core/useLanguage'
 import type { TherapyTypeCardEntry, TypesOfTherapyEntry } from '../../types/section'
 import { renderContent } from '../content/renderContent'
 
@@ -15,6 +16,7 @@ const linkOf = ({ fields }: TherapyTypeCardEntry): string | null => {
 const Treatment = ({ card }: { card: TherapyTypeCardEntry }) => {
   const { title, slug, subtitle, summary, image } = card.fields
   const link = linkOf(card)
+  const copy = useCopy()
   const file = isResolved(image) ? image.fields.file : null
 
   return (
@@ -47,9 +49,9 @@ const Treatment = ({ card }: { card: TherapyTypeCardEntry }) => {
           <Link
             href={link}
             className="link mt-5 inline-flex min-h-11 items-center gap-2 font-bold"
-            aria-label={`Lees meer over ${title}`}
+            aria-label={copy.readMoreAbout(title)}
           >
-            Lees meer
+            {copy.readMore}
             <LuArrowRight aria-hidden className="size-4" />
           </Link>
         )}
