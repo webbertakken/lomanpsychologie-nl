@@ -114,6 +114,35 @@ type FaqSectionSkeleton = {
 
 type FaqSectionEntry = ContentEntry<FaqSectionSkeleton>
 
+type ContactSectionSkeleton = {
+  contentTypeId: 'contactSection'
+  fields: {
+    title: EntryFieldTypes.Symbol
+    slug: EntryFieldTypes.Symbol
+    street: EntryFieldTypes.Symbol
+    postcode: EntryFieldTypes.Symbol
+    town: EntryFieldTypes.Symbol
+    building: EntryFieldTypes.Symbol
+    buildingUrl: EntryFieldTypes.Symbol
+    routeUrl: EntryFieldTypes.Symbol
+    directions: EntryFieldTypes.Array<EntryFieldTypes.Symbol>
+    publicTransport: EntryFieldTypes.Symbol
+    bicycle: EntryFieldTypes.Symbol
+    car: EntryFieldTypes.Symbol
+    email: EntryFieldTypes.Symbol
+    emailNote: EntryFieldTypes.Symbol
+    phone: EntryFieldTypes.Symbol
+    phoneNote: EntryFieldTypes.Text
+    officeHours: EntryFieldTypes.EntryLink<OfficeHoursSkeleton>
+    crisis: EntryFieldTypes.Text
+    cover: EntryFieldTypes.Text
+    cancelling: EntryFieldTypes.Text
+    registration: EntryFieldTypes.Array<EntryFieldTypes.Symbol>
+  }
+}
+
+type ContactSectionEntry = ContentEntry<ContactSectionSkeleton>
+
 type SectionSkeleton =
   | BasicSectionSkeleton
   | OfficeHoursSkeleton
@@ -121,6 +150,7 @@ type SectionSkeleton =
   | TypesOfTherapySkeleton
   | TherapyTypeDetailsSkeleton
   | FaqSectionSkeleton
+  | ContactSectionSkeleton
 
 type SectionEntry =
   | BasicSectionEntry
@@ -129,3 +159,4 @@ type SectionEntry =
   | TypesOfTherapyEntry
   | TherapyTypeDetailsEntry
   | FaqSectionEntry
+  | ContactSectionEntry
