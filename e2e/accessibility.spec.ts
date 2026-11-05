@@ -106,15 +106,55 @@ test.describe('treatments submenu', () => {
 })
 
 test.describe('home', () => {
-  test('offers phone and e-mail in the first viewport', async ({ page }) => {
+  test('offers the phone number and the contact page in the first viewport', async ({ page }) => {
     await page.goto('/')
-    const card = page.getByRole('complementary', { name: 'Afspraak maken' })
+    const header = page.getByRole('banner')
 
-    await expect(card.getByRole('link', { name: '06-21591133' })).toHaveAttribute(
+    await expect(header.getByRole('link', { name: '06-21591133' })).toHaveAttribute(
       'href',
       'tel:0621591133',
     )
-    await expect(card.getByRole('link', { name: 'info@lomanpsychologie.nl' })).toBeInViewport()
+    await expect(header.getByRole('link', { name: '06-21591133' })).toBeInViewport()
+    await expect(header.getByRole('link', { name: 'Contact', exact: true })).toBeInViewport()
+  })
+
+  test('offers the contact page in the first viewport on a small laptop', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 700 })
+    await page.goto('/')
+
+    await expect(
+      page.getByRole('banner').getByRole('link', { name: 'Contact', exact: true }),
+    ).toBeInViewport()
+  })
+
+  for (const width of [1024, 1280, 1680]) {
+    test(`lays the appointment card over only the portrait's lower corner at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto('/')
+      const card = await page.getByRole('complementary', { name: 'Afspraak maken' }).boundingBox()
+      const portrait = await page.getByRole('img', { name: /Portret van/ }).boundingBox()
+      if (!card || !portrait) throw new Error('the card or the portrait is not on the page')
+
+      const covered = portrait.y + portrait.height - card.y
+      expect(covered).toBeGreaterThan(0)
+      expect(covered).toBeLessThan(portrait.height * 0.3)
+      expect(card.x).toBeLessThan(portrait.x)
+      expect(card.x + card.width).toBeLessThan(portrait.x + portrait.width - 24)
+    })
+  }
+})
+
+test.describe('home on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('reads her own words before the appointment card', async ({ page }) => {
+    await page.goto('/')
+    const words = await page.getByText(/persoonlijk, open-minded/).boundingBox()
+    const card = await page.getByRole('complementary', { name: 'Afspraak maken' }).boundingBox()
+
+    expect(words?.y ?? Infinity).toBeLessThan(card?.y ?? 0)
   })
 })
 
@@ -197,6 +237,17 @@ test.describe('contact page', () => {
     ).toHaveAttribute('href', 'tel:0885880588')
   })
 
+  test('says the GP stays the point of contact before offering e-mail', async ({ page }) => {
+    await page.goto('/contact')
+
+    const note = await page.getByText(/blijft uw huisarts uw aanspreekpunt/).boundingBox()
+    const email = await page
+      .getByRole('main')
+      .getByRole('link', { name: 'info@lomanpsychologie.nl' })
+      .boundingBox()
+    expect(note?.y ?? Infinity).toBeLessThan(email?.y ?? 0)
+  })
+
   test('does not repeat the contact details in the footer', async ({ page }) => {
     await page.goto('/contact')
 
@@ -255,6 +306,25 @@ test.describe('theme toggle', () => {
       await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor),
     ).toBe('rgb(255, 255, 255)')
   })
+})
+
+test.describe('header', () => {
+  for (const width of [1280, 1440]) {
+    test(`keeps the phone number on one line in every theme at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/')
+      const header = page.getByRole('banner')
+      const phone = header.getByRole('link', { name: '06-21591133' })
+      const lineHeight = await phone.evaluate((link) =>
+        parseFloat(getComputedStyle(link).lineHeight),
+      )
+
+      for (let press = 0; press < 3; press++) {
+        expect((await phone.boundingBox())?.height ?? Infinity).toBeLessThan(lineHeight * 1.5)
+        await header.getByRole('button', { name: /Weergave|Appearance/ }).click()
+      }
+    })
+  }
 })
 
 test.describe('theme toggle on a phone', () => {
