@@ -116,6 +116,22 @@ test.describe('home', () => {
     )
     await expect(card.getByRole('link', { name: 'info@lomanpsychologie.nl' })).toBeInViewport()
   })
+
+  for (const width of [1024, 1280, 1680]) {
+    test(`keeps the appointment card clear of the portrait at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto('/')
+      const card = await page.getByRole('complementary', { name: 'Afspraak maken' }).boundingBox()
+      const portrait = await page.getByRole('img', { name: /Portret van/ }).boundingBox()
+      if (!card || !portrait) throw new Error('the card or the portrait is not on the page')
+
+      const overlapsHorizontally =
+        card.x < portrait.x + portrait.width && portrait.x < card.x + card.width
+      const overlapsVertically =
+        card.y < portrait.y + portrait.height && portrait.y < card.y + card.height
+      expect(overlapsHorizontally && overlapsVertically).toBe(false)
+    })
+  }
 })
 
 test.describe('faq', () => {
@@ -195,6 +211,17 @@ test.describe('contact page', () => {
         .getByRole('complementary', { name: 'Bij crisis' })
         .getByRole('link', { name: '088-5880588' }),
     ).toHaveAttribute('href', 'tel:0885880588')
+  })
+
+  test('says the GP stays the point of contact before offering e-mail', async ({ page }) => {
+    await page.goto('/contact')
+
+    const note = await page.getByText(/blijft uw huisarts uw aanspreekpunt/).boundingBox()
+    const email = await page
+      .getByRole('main')
+      .getByRole('link', { name: 'info@lomanpsychologie.nl' })
+      .boundingBox()
+    expect(note?.y ?? Infinity).toBeLessThan(email?.y ?? 0)
   })
 
   test('does not repeat the contact details in the footer', async ({ page }) => {

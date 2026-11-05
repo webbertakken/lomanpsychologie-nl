@@ -171,7 +171,7 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
           {renderContent(shortDescription)}
         </div>
 
-        <div className="col-span-2 lg:relative lg:z-10 lg:col-span-6 lg:col-start-6 lg:row-start-3 lg:-mt-28">
+        <div className="col-span-2 lg:col-span-7 lg:col-start-1 lg:row-start-3">
           <AppointmentCard anchors={anchorsOf(pageSections)} />
         </div>
       </div>

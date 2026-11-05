@@ -90,7 +90,7 @@ const english: Copy = {
   appointmentTitle: 'Making an appointment',
   appointmentLead: 'Referred by your GP? Get in touch to arrange a first appointment.',
   appointmentWaitingFirst: 'Please check the current waiting time first.',
-  registrationStop: 'Not accepting new referrals',
+  registrationStop: 'Registration stop',
   waitingTime: 'Waiting time',
   currentWaitingTime: 'Current waiting time',
   email: 'E-mail',

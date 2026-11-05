@@ -87,6 +87,7 @@ const contentType = {
     field('publicTransport', 'By public transport', 'Symbol', { localized: true }),
     field('bicycle', 'By bicycle', 'Symbol', { localized: true }),
     field('car', 'By car', 'Symbol', { localized: true }),
+    field('referral', 'Referral and the GP', 'Text', { localized: true }),
     field('email', 'E-mail', 'Symbol', { required: true }),
     field('emailNote', 'E-mail note', 'Symbol', { localized: true }),
     field('phone', 'Phone', 'Symbol', { required: true }),
@@ -132,6 +133,10 @@ const entry = {
   ),
   bicycle: both('Er is een fietsenstalling.', 'There is a bicycle shed.'),
   car: both('Er is ruime parkeergelegenheid.', 'There is plenty of parking.'),
+  referral: both(
+    'Tot uw behandeling is gestart, blijft uw huisarts uw aanspreekpunt. Nemen uw klachten toe of heeft u dringend hulp nodig, neem dan contact op met uw huisarts.',
+    'Until your treatment has started, your GP remains your point of contact. If your symptoms get worse or you need help urgently, please contact your GP.',
+  ),
   email: one('info@lomanpsychologie.nl'),
   emailNote: both(
     'Het snelst, binnen en buiten de openingstijden.',
