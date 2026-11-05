@@ -12,12 +12,15 @@ import {
   type PagesByLanguage,
 } from './languages'
 import { buildMenu, sortByMenuOrder } from './navigation'
+import { insurersPathIn } from './sectionIndex'
 
 export interface SiteChrome {
   headerMenu: MenuProps
   footerMenu: MenuProps
   banner: BannerNotificationEntry | null
   registrationStop: RegistrationStopEntry | null
+  /** Where the contracted insurers are listed, linked from every page index. */
+  insurersPath: string | null
   contactPath: string
   /** This page's path in each language, for the language switch. */
   alternates: Alternates
@@ -91,6 +94,7 @@ export const getSiteChrome = async (
     footerMenu: buildMenu(sortByMenuOrder(inFooter, footerOrder), [], activePath),
     banner,
     registrationStop,
+    insurersPath: insurersPathIn(pages, language),
     contactPath: contactPathIn(pages, language),
     alternates,
   }

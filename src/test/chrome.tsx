@@ -14,6 +14,7 @@ const chromeWith = (overrides: Partial<SiteChrome>): SiteChrome => ({
   footerMenu: [],
   banner: null,
   registrationStop: null,
+  insurersPath: null,
   contactPath: '/contact',
   alternates: { nl: '/', en: '/' },
   ...overrides,

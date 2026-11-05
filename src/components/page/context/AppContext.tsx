@@ -6,6 +6,7 @@ export const AppContext = createContext<SiteChrome>({
   footerMenu: [],
   banner: null,
   registrationStop: null,
+  insurersPath: null,
   contactPath: '/contact',
   alternates: { nl: '/', en: '/' },
 })

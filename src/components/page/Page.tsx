@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 import { isResolved } from '../../core/links'
 import { summarise } from '../../core/richText'
+import { anchorsOf, minimumSectionsForIndex } from '../../core/sectionIndex'
 import type { SiteChrome } from '../../core/site'
 import type { PageEntry } from '../../types/page'
 import type { SectionEntry } from '../../types/section'
@@ -9,6 +10,7 @@ import { AppContext } from './context/AppContext'
 import { PageTitleContext } from './context/PageTitleContext'
 import Layout from './layout/Layout'
 import PageHeader from './PageHeader'
+import SectionIndex from './SectionIndex'
 
 export interface PageProps {
   page: PageEntry
@@ -25,6 +27,7 @@ const Page = ({ page, chrome }: PageProps): JSX.Element => {
   const { title, subtitle, isHomePage } = page.fields
   const sections = (page.fields.sections ?? []).filter(isResolved) as SectionEntry[]
   const hasOwnHeading = sections.length > 0 && introducesPage(sections[0])
+  const anchors = anchorsOf(sections)
 
   return (
     <AppContext.Provider value={chrome}>
@@ -34,6 +37,11 @@ const Page = ({ page, chrome }: PageProps): JSX.Element => {
         isContactPage={sections.some(({ sys }) => sys.contentType.sys.id === 'contactSection')}
       >
         {!hasOwnHeading && <PageHeader title={title} lead={subtitle} />}
+        {!hasOwnHeading && anchors.length >= minimumSectionsForIndex && (
+          <div className="sheet pt-8">
+            <SectionIndex anchors={anchors} asField />
+          </div>
+        )}
         <PageTitleContext.Provider value={title}>
           {sections.map((section, index) => (
             <Section

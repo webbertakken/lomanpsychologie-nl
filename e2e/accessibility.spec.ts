@@ -128,7 +128,7 @@ test.describe('home', () => {
   })
 
   for (const width of [1024, 1280, 1680]) {
-    test(`lays the appointment card over only the portrait's lower corner at ${width}px`, async ({
+    test(`sets the appointment card under the portrait, clear of it, at ${width}px`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 })
@@ -137,11 +137,11 @@ test.describe('home', () => {
       const portrait = await page.getByRole('img', { name: /Portret van/ }).boundingBox()
       if (!card || !portrait) throw new Error('the card or the portrait is not on the page')
 
-      const covered = portrait.y + portrait.height - card.y
-      expect(covered).toBeGreaterThan(0)
-      expect(covered).toBeLessThan(portrait.height * 0.3)
-      expect(card.x).toBeLessThan(portrait.x)
-      expect(card.x + card.width).toBeLessThan(portrait.x + portrait.width - 24)
+      const gap = card.y - (portrait.y + portrait.height)
+      expect(gap).toBeGreaterThan(0)
+      expect(gap).toBeLessThan(48)
+      expect(Math.abs(card.x - portrait.x)).toBeLessThan(2)
+      expect(Math.abs(card.width - portrait.width)).toBeLessThan(2)
     })
   }
 })
@@ -155,6 +155,25 @@ test.describe('home on a phone', () => {
     const card = await page.getByRole('complementary', { name: 'Afspraak maken' }).boundingBox()
 
     expect(words?.y ?? Infinity).toBeLessThan(card?.y ?? 0)
+  })
+})
+
+test.describe('page index', () => {
+  test('lists the sections of De praktijk, then the contracted insurers', async ({ page }) => {
+    await page.goto('/de-praktijk')
+    const index = page.getByRole('navigation', { name: 'Op deze pagina' })
+
+    await expect(index.getByRole('link', { name: 'Locatie' })).toHaveAttribute('href', '#locatie')
+    await index.getByRole('link', { name: 'Gecontracteerde zorgverzekeraars' }).click()
+
+    await expect(page).toHaveURL(/\/#vergoeding$/)
+    await expect(page.locator('#vergoeding')).toBeInViewport()
+  })
+
+  test('leaves short pages without an index', async ({ page }) => {
+    await page.goto('/contact')
+
+    await expect(page.getByRole('navigation', { name: 'Op deze pagina' })).toHaveCount(0)
   })
 })
 
