@@ -7,6 +7,7 @@ import { LuMenu, LuX } from 'react-icons/lu'
 import { useCopy } from '../../../core/useLanguage'
 import { useSiteChrome } from '../context/AppContext'
 import PracticeContact from '../PracticeContact'
+import ThemeToggle from '../ThemeToggle'
 import LanguageSwitch from './LanguageSwitch'
 import Logo from './Logo'
 
@@ -29,13 +30,13 @@ const MobileNav = (): JSX.Element => {
         onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        className="button button-line -mr-2 border-transparent px-2.5 md:hidden"
+        className="button button-line -mr-2 border-transparent px-2.5 lg:hidden"
       >
         <LuMenu aria-hidden className="size-6" />
         <span>{copy.menu}</span>
       </button>
 
-      <Dialog open={isOpen} onClose={setIsOpen} className="relative z-50 md:hidden">
+      <Dialog open={isOpen} onClose={setIsOpen} className="relative z-50 lg:hidden">
         <DialogPanel
           transition
           className="fixed inset-0 overflow-y-auto bg-paper transition duration-200 ease-out data-closed:opacity-0"
@@ -91,8 +92,9 @@ const MobileNav = (): JSX.Element => {
             </ul>
           </nav>
 
-          <div className="sheet pt-2">
+          <div className="sheet flex items-center justify-between gap-4 pt-2">
             <LanguageSwitch />
+            <ThemeToggle />
           </div>
 
           <div className="sheet pt-6 pb-10">

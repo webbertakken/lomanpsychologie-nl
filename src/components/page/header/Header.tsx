@@ -3,6 +3,7 @@ import type { JSX } from 'react'
 import { practice } from '../../../core/practice'
 import { useCopy } from '../../../core/useLanguage'
 import { useSiteChrome } from '../context/AppContext'
+import ThemeToggle from '../ThemeToggle'
 import DesktopNav from './DesktopNav'
 import LanguageSwitch from './LanguageSwitch'
 import Logo from './Logo'
@@ -17,8 +18,9 @@ const Header = (): JSX.Element => {
         <Logo />
         <DesktopNav />
         <div className="flex items-center gap-3">
-          <div className="hidden md:block">
+          <div className="hidden items-center gap-1 lg:flex">
             <LanguageSwitch />
+            <ThemeToggle />
           </div>
           <a
             href={practice.phone.href}
@@ -26,7 +28,7 @@ const Header = (): JSX.Element => {
           >
             {practice.phone.label}
           </a>
-          <Link href={contactPath} className="button button-ink hidden md:inline-flex">
+          <Link href={contactPath} className="button button-ink hidden lg:inline-flex">
             {copy.contact}
           </Link>
           <MobileNav />
