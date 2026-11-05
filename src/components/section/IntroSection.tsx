@@ -77,14 +77,14 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
         </p>
       )}
 
-      <dl className="mt-5">
+      <dl className="@container mt-5">
         <div aria-hidden className="animate-rule-in h-px bg-rule-strong" />
         {cardRows(waitingTime, copy).map(({ name, href, text, icon: Icon }) => (
           <div
             key={name}
-            className="grid grid-cols-1 border-b border-rule sm:grid-cols-[6rem_1fr] sm:items-center"
+            className="grid grid-cols-1 border-b border-rule @sm:grid-cols-[6rem_1fr] @sm:items-center"
           >
-            <dt className="pt-2.5 text-sm font-bold text-label sm:pt-0">{name}</dt>
+            <dt className="pt-2.5 text-sm font-bold text-label @sm:pt-0">{name}</dt>
             <dd>
               <a
                 href={href}
@@ -142,10 +142,11 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
 
   // Name and her words beside the portrait; the appointment card lies over only
   // the portrait's lower-left corner, the page index under her words. On a phone the
-  // portrait sits next to her name, so the card still comes second.
+  // portrait sits next to her name and her words come before the card, in the
+  // DOM as on screen.
   return (
     <section id={slug} aria-labelledby={`${slug}-titel`} className="border-b">
-      <div className="sheet grid grid-cols-[1fr_6.5rem] gap-x-5 gap-y-8 pt-10 pb-12 sm:grid-cols-[1fr_9rem] md:pt-14 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-10 lg:pb-16">
+      <div className="sheet grid grid-cols-[1fr_6.5rem] gap-x-5 gap-y-8 pt-10 pb-12 sm:grid-cols-[1fr_9rem] md:pt-14 lg:grid-cols-12 lg:grid-rows-[auto_auto_1fr] lg:gap-x-10 lg:pb-16">
         <div className="self-center lg:col-span-7 lg:self-start">
           <h1 id={`${slug}-titel`} className="text-5xl md:text-7xl">
             {title}
@@ -165,7 +166,11 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
           )}
         </div>
 
-        <div className="contents lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 lg:block">
+        <div className="col-span-2 font-display text-xl leading-snug md:text-[1.65rem] lg:col-span-6 lg:col-start-1 lg:row-start-2 [&_p+p]:mt-3">
+          {renderContent(shortDescription)}
+        </div>
+
+        <div className="contents lg:col-span-5 lg:col-start-8 lg:row-span-3 lg:row-start-1 lg:block">
           <Image
             src={`https:${url}`}
             width={details.image.width}
@@ -173,21 +178,16 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
             alt={copy.portraitOf(title)}
             priority
             sizes="(min-width: 1024px) 30rem, 9rem"
-            className="aspect-[4/5] w-full border border-rule object-cover object-top lg:aspect-square"
+            className="col-start-2 row-start-1 aspect-[4/5] w-full border border-rule object-cover object-top lg:aspect-square"
           />
-          {/* Steps one column left of the portrait and up over its lower edge. */}
-          <div className="relative col-span-2 lg:-mt-24 lg:-ml-[calc((100%+2.5rem)/5)]">
+          {/* As wide as the portrait, one column to its left and up over its lower edge. */}
+          <div className="relative col-span-2 lg:-mt-16 lg:-ml-[calc((100%+2.5rem)/5)] lg:w-full">
             <AppointmentCard anchors={anchors} />
           </div>
         </div>
 
-        <div className="col-span-2 lg:col-span-6 lg:col-start-1 lg:row-start-2">
-          <div className="font-display text-xl leading-snug md:text-[1.65rem] [&_p+p]:mt-3">
-            {renderContent(shortDescription)}
-          </div>
-          <div className="mt-10">
-            <HomeIndex anchors={anchors} />
-          </div>
+        <div className="col-span-2 lg:col-span-6 lg:col-start-1 lg:row-start-3">
+          <HomeIndex anchors={anchors} />
         </div>
       </div>
     </section>

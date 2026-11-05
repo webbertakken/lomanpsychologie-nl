@@ -141,8 +141,21 @@ test.describe('home', () => {
       expect(covered).toBeGreaterThan(0)
       expect(covered).toBeLessThan(portrait.height * 0.3)
       expect(card.x).toBeLessThan(portrait.x)
+      expect(card.x + card.width).toBeLessThan(portrait.x + portrait.width - 24)
     })
   }
+})
+
+test.describe('home on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('reads her own words before the appointment card', async ({ page }) => {
+    await page.goto('/')
+    const words = await page.getByText(/persoonlijk, open-minded/).boundingBox()
+    const card = await page.getByRole('complementary', { name: 'Afspraak maken' }).boundingBox()
+
+    expect(words?.y ?? Infinity).toBeLessThan(card?.y ?? 0)
+  })
 })
 
 test.describe('faq', () => {

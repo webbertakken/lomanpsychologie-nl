@@ -25,7 +25,7 @@ OWN-WORLD: White card stock ruled in cyan dropout ink (the logo's cyan), ballpoi
 
 STORY: Visitors meet Anke in her words, see at once how to register and whether there is a wait, then read each topic as a labelled field on one form, and leave with phone, mail and crisis numbers in hand.
 
-FIRST VIEWPORT: Ruled sheet. Left columns: name and role as the h1, her quote, then the page index. Right 5 columns: a square portrait; the appointment card (aanmeldstop or guidance, Wachttijd, Mailen, Bellen) steps one column left and rises 6rem over its lower edge, never over the face. The header carries the phone number and Contact in the first viewport. Mobile: name with a small portrait beside it, card, quote, index.
+FIRST VIEWPORT: Ruled sheet. Left columns: name and role as the h1, her quote, then the page index. Right 5 columns: a square portrait; the appointment card (aanmeldstop or guidance, Wachttijd, Mailen, Bellen) is as wide as the portrait, steps one column left of it and rises 4rem over its lower edge, never over the face. The header carries the phone number and Contact in the first viewport. Mobile: name with a small portrait beside it, quote, card, index.
 
 FORM: fused grounded candidate 4 (Dutch healthcare paperwork: folder, afsprakenkaart, aanmeldformulier). seed:2859733e1420c5bc
 Raises: emission-line rail, state by line form not hue (today in office hours is a doubled rule); cutting bench, one ruling governs all spacing; timetable rack, tables set as timetables with tabular figures; papercut, one small overlap at the portrait's lower corner.

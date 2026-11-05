@@ -72,3 +72,32 @@ describe('IntroSection index', () => {
     expect(card()).not.toContainElement(index)
   })
 })
+
+describe('IntroSection reading order', () => {
+  const withWords = {
+    ...section,
+    fields: {
+      ...section.fields,
+      shortDescription: {
+        nodeType: 'document',
+        data: {},
+        content: [
+          {
+            nodeType: 'paragraph',
+            data: {},
+            content: [
+              { nodeType: 'text', value: 'persoonlijk en open-minded', marks: [], data: {} },
+            ],
+          },
+        ],
+      },
+    },
+  } as unknown as ProfileSectionEntry
+
+  it('puts her own words before the appointment card', () => {
+    render(<IntroSection section={withWords} pageSections={[]} />, { wrapper: withChrome({}) })
+
+    const words = screen.getByText('persoonlijk en open-minded')
+    expect(words.compareDocumentPosition(card()) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+})
