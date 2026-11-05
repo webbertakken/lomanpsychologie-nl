@@ -298,7 +298,7 @@ test.describe('theme toggle', () => {
     const banner = page.getByRole('banner')
     await banner.getByRole('button', { name: /Wissel naar donker/ }).click()
     await banner.getByRole('button', { name: /Wissel naar licht/ }).click()
-    await banner.getByRole('button', { name: /Wissel naar automatisch/ }).click()
+    await banner.getByRole('button', { name: /Wissel naar systeem/ }).click()
 
     await page.reload()
     await expect(page.locator('html')).not.toHaveAttribute('data-theme')
@@ -306,6 +306,25 @@ test.describe('theme toggle', () => {
       await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor),
     ).toBe('rgb(255, 255, 255)')
   })
+})
+
+test.describe('header', () => {
+  for (const width of [1280, 1440]) {
+    test(`keeps the phone number on one line in every theme at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/')
+      const header = page.getByRole('banner')
+      const phone = header.getByRole('link', { name: '06-21591133' })
+      const lineHeight = await phone.evaluate((link) =>
+        parseFloat(getComputedStyle(link).lineHeight),
+      )
+
+      for (let press = 0; press < 3; press++) {
+        expect((await phone.boundingBox())?.height ?? Infinity).toBeLessThan(lineHeight * 1.5)
+        await header.getByRole('button', { name: /Weergave|Appearance/ }).click()
+      }
+    })
+  }
 })
 
 test.describe('theme toggle on a phone', () => {

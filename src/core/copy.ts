@@ -44,7 +44,7 @@ const dutch = {
   logoAlt: (name: string) => `${name}, naar de homepage`,
   closed: 'Gesloten',
   appearance: 'Weergave',
-  themeSystem: 'Automatisch',
+  themeSystem: 'Systeem',
   themeLight: 'Licht',
   themeDark: 'Donker',
   themeToggle: (current: string, next: string) =>
@@ -110,7 +110,7 @@ const english: Copy = {
   logoAlt: (name) => `${name}, go to the home page`,
   closed: 'Closed',
   appearance: 'Appearance',
-  themeSystem: 'Automatic',
+  themeSystem: 'System',
   themeLight: 'Light',
   themeDark: 'Dark',
   themeToggle: (current, next) =>

@@ -18,7 +18,7 @@ const Header = (): JSX.Element => {
         <Logo />
         <DesktopNav />
         <div className="flex items-center gap-3">
-          <div className="hidden items-center gap-4 lg:flex">
+          <div className="hidden items-center gap-1 lg:flex">
             <LanguageSwitch />
             <ThemeToggle />
           </div>
