@@ -8,6 +8,8 @@ import { practice } from '../../core/practice'
 import { useCopy } from '../../core/useLanguage'
 import type { ProfileSectionEntry, SectionEntry } from '../../types/section'
 import { renderContent } from '../content/renderContent'
+import { useSiteChrome } from '../page/context/AppContext'
+import RegistrationStop from '../page/RegistrationStop'
 
 interface Props {
   section: ProfileSectionEntry
@@ -54,6 +56,7 @@ const cardRows = (waitingTime: Anchor | undefined, copy: Copy): CardRow[] => [
 const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
   const waitingTime = waitingTimeOf(anchors)
   const copy = useCopy()
+  const isStopped = Boolean(useSiteChrome().registrationStop?.fields.isEnabled)
 
   return (
     <aside
@@ -63,10 +66,16 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
       <h2 id="afspraak-titel" className="text-2xl md:text-3xl">
         {copy.appointmentTitle}
       </h2>
-      <p className="mt-2 text-ink-soft">
-        {copy.appointmentLead}
-        {waitingTime && ` ${copy.appointmentWaitingFirst}`}
-      </p>
+      {isStopped ? (
+        <div className="mt-4">
+          <RegistrationStop />
+        </div>
+      ) : (
+        <p className="mt-2 text-ink-soft">
+          {copy.appointmentLead}
+          {waitingTime && ` ${copy.appointmentWaitingFirst}`}
+        </p>
+      )}
 
       <dl className="mt-5">
         <div aria-hidden className="animate-rule-in h-px bg-rule-strong" />

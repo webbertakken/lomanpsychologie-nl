@@ -1,6 +1,7 @@
 import type { BannerNotificationEntry, BannerNotificationSkeleton } from '../types/banner'
 import type { MenuOptions, MenuProps, MenuSortOrderSkeleton } from '../types/menu'
 import type { PageEntry, PageSkeleton } from '../types/page'
+import type { RegistrationStopEntry, RegistrationStopSkeleton } from '../types/registrationStop'
 import { getContentfulClient } from './contentful'
 import {
   alternatesOf,
@@ -16,6 +17,7 @@ export interface SiteChrome {
   headerMenu: MenuProps
   footerMenu: MenuProps
   banner: BannerNotificationEntry | null
+  registrationStop: RegistrationStopEntry | null
   contactPath: string
   /** This page's path in each language, for the language switch. */
   alternates: Alternates
@@ -53,22 +55,31 @@ const getBanner = async (language: Language): Promise<BannerNotificationEntry | 
   return items[0] ?? null
 }
 
+const getRegistrationStop = async (language: Language): Promise<RegistrationStopEntry | null> => {
+  const { items } = await getContentfulClient().getEntries<RegistrationStopSkeleton>({
+    content_type: 'registrationStop',
+    locale: contentfulLocale[language],
+  })
+  return items[0] ?? null
+}
+
 const contactPathIn = (pages: PagesByLanguage, language: Language): string => {
   const contact = pages.nl.find(({ fields }) => fields.slug === contactSlug)
   return contact ? alternatesOf(contact.sys.id, pages)[language] : `/${contactSlug}`
 }
 
-/** Header, footer and banner: everything every page shows around its content. */
+/** Header, footer, banner and registration stop: everything every page shows around its content. */
 export const getSiteChrome = async (
   pages: PagesByLanguage,
   language: Language,
   activePath: string,
   alternates: Alternates = { nl: '/', en: '/' },
 ): Promise<SiteChrome> => {
-  const [headerOrder, footerOrder, banner] = await Promise.all([
+  const [headerOrder, footerOrder, banner, registrationStop] = await Promise.all([
     getMenuSortOrder('header', language),
     getMenuSortOrder('footer', language),
     getBanner(language),
+    getRegistrationStop(language),
   ])
 
   const inLanguage = pages[language]
@@ -79,6 +90,7 @@ export const getSiteChrome = async (
     headerMenu: buildMenu(sortByMenuOrder(inHeader, headerOrder), inLanguage, activePath),
     footerMenu: buildMenu(sortByMenuOrder(inFooter, footerOrder), [], activePath),
     banner,
+    registrationStop,
     contactPath: contactPathIn(pages, language),
     alternates,
   }

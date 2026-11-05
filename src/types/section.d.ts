@@ -133,6 +133,7 @@ type ContactSectionSkeleton = {
     emailNote: EntryFieldTypes.Symbol
     phone: EntryFieldTypes.Symbol
     phoneNote: EntryFieldTypes.Text
+    referral: EntryFieldTypes.Text
     officeHours: EntryFieldTypes.EntryLink<OfficeHoursSkeleton>
     crisis: EntryFieldTypes.Text
     cover: EntryFieldTypes.Text

@@ -6,6 +6,7 @@ import { practice } from '../../core/practice'
 import { useCopy } from '../../core/useLanguage'
 import type { ContactSectionEntry } from '../../types/section'
 import PlainText from '../content/PlainText'
+import RegistrationStop from '../page/RegistrationStop'
 import OfficeHoursTable from './OfficeHoursTable'
 
 const Label = ({ children, id }: { children: ReactNode; id?: string }) => (
@@ -46,7 +47,7 @@ const ContactSection = ({ section }: { section: ContactSectionEntry }): JSX.Elem
   const { slug, street, postcode, town, building, routeUrl, directions, email, phone } =
     section.fields
   const { publicTransport, bicycle, car, emailNote, phoneNote, officeHours } = section.fields
-  const { crisis, cover, cancelling, registration } = section.fields
+  const { referral, crisis, cover, cancelling, registration } = section.fields
 
   const travel: Array<[IconType, string | undefined]> = [
     [LuTrainFront, publicTransport],
@@ -112,6 +113,10 @@ const ContactSection = ({ section }: { section: ContactSectionEntry }): JSX.Elem
         <div className="grid content-start gap-10 lg:col-span-5">
           <div>
             <Label>{copy.reachPractice}</Label>
+            <div className="mt-3 grid gap-4 empty:hidden">
+              <RegistrationStop />
+              <PlainText text={referral} className="text-ink-soft" />
+            </div>
             {email && (
               <Channel href={`mailto:${email}`} icon={LuMail} value={email} note={emailNote} />
             )}

@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { registrationStopOf, withChrome } from '../../test/chrome'
 import type { ContactSectionEntry } from '../../types/section'
 import ContactSection from './ContactSection'
 
@@ -72,5 +73,32 @@ describe('ContactSection', () => {
 
     expect(screen.getByRole('rowheader', { name: /Maandag/ })).toBeInTheDocument()
     expect(screen.getByText('08:00 – 18:00')).toBeInTheDocument()
+  })
+})
+
+describe('ContactSection before the e-mail address and phone number', () => {
+  const referral =
+    'Tot uw behandeling is gestart, blijft uw huisarts uw aanspreekpunt. Nemen uw klachten toe, neem dan contact op met uw huisarts.'
+  const withReferral = {
+    ...section,
+    fields: { ...section.fields, referral },
+  } as unknown as ContactSectionEntry
+
+  it('says the GP stays the point of contact until treatment starts', () => {
+    render(<ContactSection section={withReferral} />)
+
+    const note = screen.getByText(/blijft uw huisarts uw aanspreekpunt/)
+    const email = screen.getByRole('link', { name: 'info@lomanpsychologie.nl' })
+    expect(note.compareDocumentPosition(email) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('shows a registration stop above the ways to get in touch', () => {
+    render(<ContactSection section={withReferral} />, {
+      wrapper: withChrome({ registrationStop: registrationStopOf(true, 'Tot januari.') }),
+    })
+
+    const stop = screen.getByText('Aanmeldstop')
+    const email = screen.getByRole('link', { name: 'info@lomanpsychologie.nl' })
+    expect(stop.compareDocumentPosition(email) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 })
