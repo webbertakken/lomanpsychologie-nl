@@ -127,11 +127,11 @@ Literata (optical sizes) sets headings as if typed onto the form; Atkinson Hyper
 
 ## Layout
 
-One centred sheet, `max-width: 76rem`, gutters 1.25rem (mobile) and 2.5rem (from 48rem). Content pages are a column of fields: a 4/12 label column with the section title, sticky on desktop, and an 8/12 answer column. Fields are separated by a single `rule` hairline; a page header closes with a `rule-strong` line. The home hero is a folder spread on a 12-column grid: name and the appointment card in 7 columns on the left, the portrait in 5 columns on the right, spanning exactly the name and the card, so both panels share a top and a bottom edge. Her own words follow under the card, then "Op deze pagina" as a ruled index across the sheet. On a phone the portrait sits small beside her name and the card comes second.
+One centred sheet, `max-width: 76rem`, gutters 1.25rem (mobile) and 2.5rem (from 48rem). Content pages are a column of fields: a 4/12 label column with the section title, sticky on desktop, and an 8/12 answer column. Fields are separated by a single `rule` hairline; a page header closes with a `rule-strong` line. The home hero is a 12-column grid: name, her own words and the "Op deze pagina" index in the left columns, a square portrait in the right 5 columns. The appointment card hangs from the portrait: it steps one column left and rises 6rem over the portrait's lower edge, covering only the blouse, never the face. On a phone the portrait sits small beside her name and the card comes second.
 
 ## Elevation & Depth
 
-Flat paper. Nothing overlaps: panels sit side by side and share their edges, as on an opened folder. No shadows, no blur, no glass.
+Flat paper. Depth comes only from one small overlap: the appointment card lies over the portrait's lower-left corner, like a card clipped to a photo. No shadows, no blur, no glass.
 
 ## Shapes
 

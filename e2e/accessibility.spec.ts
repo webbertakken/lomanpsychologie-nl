@@ -106,30 +106,41 @@ test.describe('treatments submenu', () => {
 })
 
 test.describe('home', () => {
-  test('offers phone and e-mail in the first viewport', async ({ page }) => {
+  test('offers the phone number and the contact page in the first viewport', async ({ page }) => {
     await page.goto('/')
-    const card = page.getByRole('complementary', { name: 'Afspraak maken' })
+    const header = page.getByRole('banner')
 
-    await expect(card.getByRole('link', { name: '06-21591133' })).toHaveAttribute(
+    await expect(header.getByRole('link', { name: '06-21591133' })).toHaveAttribute(
       'href',
       'tel:0621591133',
     )
-    await expect(card.getByRole('link', { name: 'info@lomanpsychologie.nl' })).toBeInViewport()
+    await expect(header.getByRole('link', { name: '06-21591133' })).toBeInViewport()
+    await expect(header.getByRole('link', { name: 'Contact', exact: true })).toBeInViewport()
+  })
+
+  test('offers the contact page in the first viewport on a small laptop', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 700 })
+    await page.goto('/')
+
+    await expect(
+      page.getByRole('banner').getByRole('link', { name: 'Contact', exact: true }),
+    ).toBeInViewport()
   })
 
   for (const width of [1024, 1280, 1680]) {
-    test(`keeps the appointment card clear of the portrait at ${width}px`, async ({ page }) => {
+    test(`lays the appointment card over only the portrait's lower corner at ${width}px`, async ({
+      page,
+    }) => {
       await page.setViewportSize({ width, height: 900 })
       await page.goto('/')
       const card = await page.getByRole('complementary', { name: 'Afspraak maken' }).boundingBox()
       const portrait = await page.getByRole('img', { name: /Portret van/ }).boundingBox()
       if (!card || !portrait) throw new Error('the card or the portrait is not on the page')
 
-      const overlapsHorizontally =
-        card.x < portrait.x + portrait.width && portrait.x < card.x + card.width
-      const overlapsVertically =
-        card.y < portrait.y + portrait.height && portrait.y < card.y + card.height
-      expect(overlapsHorizontally && overlapsVertically).toBe(false)
+      const covered = portrait.y + portrait.height - card.y
+      expect(covered).toBeGreaterThan(0)
+      expect(covered).toBeLessThan(portrait.height * 0.3)
+      expect(card.x).toBeLessThan(portrait.x)
     })
   }
 })
