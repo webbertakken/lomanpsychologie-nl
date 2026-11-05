@@ -21,13 +21,13 @@ Memorable moment: the appointment card in the first viewport, a filled-in practi
 
 THESIS: The site is the practice's own paperwork made kind: folder, appointment card and form, filled in clearly. It refuses the therapist template of a split hero over a row of service cards and the moody photo hero.
 
-OWN-WORLD: White card stock ruled in cyan dropout ink (the logo's cyan), ballpoint blue-black ink for text, rust from the logo's subline as the only stamp colour for status. Literata sets headings like a typed fill-in; Atkinson Hyperlegible Next sets labels and prose. Depth only by overlap, never shadows. Dark scheme is the carbon copy: blue-black sheet, pale cyan ruling.
+OWN-WORLD: White card stock ruled in cyan dropout ink (the logo's cyan), ballpoint blue-black ink for text, rust from the logo's subline as the only stamp colour for status. Literata sets headings like a typed fill-in; Atkinson Hyperlegible Next sets labels and prose. Flat: panels sit side by side and share edges, never overlap, never shadows. Dark scheme is the carbon copy: blue-black sheet, pale cyan ruling.
 
 STORY: Visitors meet Anke in her words, see at once how to register and whether there is a wait, then read each topic as a labelled field on one form, and leave with phone, mail and crisis numbers in hand.
 
-FIRST VIEWPORT: Ruled sheet. Left 7 columns: name and role as the h1, her quote, the location. Right 5 columns: portrait plate with the appointment card overlapping its lower edge, holding Bellen, Mailen, Aanmeldformulier and Wachttijd. Mobile stacks quote, card, portrait.
+FIRST VIEWPORT: Ruled sheet, a folder spread. Left 7 columns: name and role as the h1, then the appointment card (aanmeldstop or guidance, Wachttijd, Mailen, Bellen). Right 5 columns: the portrait, spanning exactly the name and the card. Her quote follows under the card, then the page index. Mobile: name with a small portrait beside it, card, quote.
 
 FORM: fused grounded candidate 4 (Dutch healthcare paperwork: folder, afsprakenkaart, aanmeldformulier). seed:2859733e1420c5bc
-Raises: emission-line rail, state by line form not hue (today in office hours is a doubled rule); cutting bench, one ruling governs all spacing; timetable rack, tables set as timetables with tabular figures; papercut, depth by overlap only.
+Raises: emission-line rail, state by line form not hue (today in office hours is a doubled rule); cutting bench, one ruling governs all spacing; timetable rack, tables set as timetables with tabular figures; folder spread, panels share edges instead of overlapping.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

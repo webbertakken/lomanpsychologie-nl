@@ -52,7 +52,7 @@ const cardRows = (waitingTime: Anchor | undefined, copy: Copy): CardRow[] => [
   { name: copy.phone, href: practice.phone.href, text: practice.phone.label, icon: LuPhone },
 ]
 
-/** The appointment card: how to register, filled in like the practice's own card. */
+/** The appointment card: whether and how to register, filled in like the practice's own card. */
 const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
   const waitingTime = waitingTimeOf(anchors)
   const copy = useCopy()
@@ -61,13 +61,13 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
   return (
     <aside
       aria-labelledby="afspraak-titel"
-      className="animate-settle relative border border-rule-strong bg-paper p-6 md:p-8"
+      className="animate-settle border border-rule-strong bg-paper p-6 md:p-8"
     >
       <h2 id="afspraak-titel" className="text-2xl md:text-3xl">
         {copy.appointmentTitle}
       </h2>
       {isStopped ? (
-        <div className="mt-4">
+        <div className="mt-3">
           <RegistrationStop />
         </div>
       ) : (
@@ -97,31 +97,42 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
           </div>
         ))}
       </dl>
-
-      {anchors.length > 0 && (
-        <nav aria-labelledby="op-deze-pagina" className="mt-6">
-          <h3 id="op-deze-pagina" className="font-sans text-sm font-bold text-label">
-            {copy.onThisPage}
-          </h3>
-          <ul className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
-            {anchors.map(({ slug, title }) => (
-              <li key={slug}>
-                <a
-                  href={`#${slug}`}
-                  className="group flex min-h-11 items-center gap-2 no-underline hover:underline hover:decoration-rule-strong"
-                >
-                  <LuArrowRight
-                    aria-hidden
-                    className="size-4 shrink-0 text-label transition-transform duration-200 group-hover:translate-x-0.5"
-                  />
-                  {title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
     </aside>
+  )
+}
+
+/** The home page's own index: every section below, one tap away. */
+const HomeIndex = ({ anchors }: { anchors: Anchor[] }) => {
+  const copy = useCopy()
+  if (anchors.length === 0) return null
+
+  return (
+    <nav aria-labelledby="op-deze-pagina" className="sheet pb-10 lg:pb-14">
+      <div className="grid gap-x-10 border-t-2 border-rule-strong pt-4 lg:grid-cols-12">
+        <h2
+          id="op-deze-pagina"
+          className="font-sans text-sm font-bold text-label lg:col-span-3 lg:pt-3"
+        >
+          {copy.onThisPage}
+        </h2>
+        <ul className="mt-1 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:col-span-9 lg:mt-0 lg:grid-cols-3">
+          {anchors.map(({ slug, title }) => (
+            <li key={slug}>
+              <a
+                href={`#${slug}`}
+                className="group flex min-h-11 items-center gap-2 no-underline hover:underline hover:decoration-rule-strong"
+              >
+                <LuArrowRight
+                  aria-hidden
+                  className="size-4 shrink-0 text-label transition-transform duration-200 group-hover:translate-x-0.5"
+                />
+                {title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
   )
 }
 
@@ -132,11 +143,15 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
   if (!isResolved(photo)) return null
 
   const { url, details } = photo.fields.file
+  const anchors = anchorsOf(pageSections)
 
+  // A folder spread: the portrait spans exactly the name and the card beside it,
+  // her words follow underneath. On a phone the portrait sits next to her name,
+  // so the card still comes second.
   return (
     <section id={slug} aria-labelledby={`${slug}-titel`} className="border-b">
-      <div className="sheet grid grid-cols-[1fr_6.5rem] gap-x-5 gap-y-8 pt-10 pb-14 sm:grid-cols-[1fr_9rem] md:pt-14 lg:grid-cols-12 lg:gap-x-10 lg:pt-14 lg:pb-20">
-        <div className="self-center lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:self-start">
+      <div className="sheet grid grid-cols-[1fr_6.5rem] gap-x-5 gap-y-8 pt-10 pb-12 sm:grid-cols-[1fr_9rem] md:pt-14 lg:grid-cols-12 lg:gap-x-10 lg:pb-16">
+        <div className="self-center lg:col-span-7 lg:self-start">
           <h1 id={`${slug}-titel`} className="text-5xl md:text-7xl">
             {title}
           </h1>
@@ -155,7 +170,7 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
           )}
         </div>
 
-        <div className="col-start-2 row-start-1 lg:col-span-5 lg:col-start-8 lg:row-span-3 lg:row-start-1">
+        <div className="lg:relative lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1">
           <Image
             src={`https:${url}`}
             width={details.image.width}
@@ -163,18 +178,19 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
             alt={copy.portraitOf(title)}
             priority
             sizes="(min-width: 1024px) 30rem, 9rem"
-            className="aspect-[4/5] w-full border border-rule object-cover object-top"
+            className="aspect-[4/5] w-full border border-rule object-cover object-top lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
           />
         </div>
 
-        <div className="col-span-2 font-display text-xl leading-snug md:text-[1.65rem] lg:col-span-5 lg:col-start-1 lg:row-start-2 [&_p+p]:mt-3">
-          {renderContent(shortDescription)}
+        <div className="col-span-2 lg:col-span-7 lg:col-start-1 lg:row-start-2">
+          <AppointmentCard anchors={anchors} />
         </div>
 
-        <div className="col-span-2 lg:col-span-7 lg:col-start-1 lg:row-start-3">
-          <AppointmentCard anchors={anchorsOf(pageSections)} />
+        <div className="col-span-2 font-display text-xl leading-snug md:text-[1.65rem] lg:col-span-7 lg:col-start-1 lg:row-start-3 lg:mt-2 [&_p+p]:mt-3">
+          {renderContent(shortDescription)}
         </div>
       </div>
+      <HomeIndex anchors={anchors} />
     </section>
   )
 }

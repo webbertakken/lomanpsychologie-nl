@@ -10,9 +10,9 @@ const RegistrationStop = (): JSX.Element | null => {
   if (!registrationStop?.fields.isEnabled) return null
 
   return (
-    <div className="border-l-2 border-stamp pl-4">
+    <div>
       <p className="stamp font-sans">{copy.registrationStop}</p>
-      <PlainText text={registrationStop.fields.message} className="mt-2" />
+      <PlainText text={registrationStop.fields.message} className="mt-1.5" />
     </div>
   )
 }

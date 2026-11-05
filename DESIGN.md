@@ -97,7 +97,7 @@ Readers are often unwell, on a phone, in the evening. Calm is a service: status 
 
 ### Tertiary
 
-- **Stamp rust** (`stamp`): status notices only (the banner's "Let op"). Never decoration.
+- **Stamp rust** (`stamp`): status notices only (the banner's "Let op", the "Aanmeldstop"). Never decoration.
 
 ### Neutral
 
@@ -127,11 +127,11 @@ Literata (optical sizes) sets headings as if typed onto the form; Atkinson Hyper
 
 ## Layout
 
-One centred sheet, `max-width: 76rem`, gutters 1.25rem (mobile) and 2.5rem (from 48rem). Content pages are a column of fields: a 4/12 label column with the section title, sticky on desktop, and an 8/12 answer column. Fields are separated by a single `rule` hairline; a page header closes with a `rule-strong` line. The home hero is a 12-column grid: name and quote left, portrait right, the appointment card overlapping the portrait's lower edge.
+One centred sheet, `max-width: 76rem`, gutters 1.25rem (mobile) and 2.5rem (from 48rem). Content pages are a column of fields: a 4/12 label column with the section title, sticky on desktop, and an 8/12 answer column. Fields are separated by a single `rule` hairline; a page header closes with a `rule-strong` line. The home hero is a folder spread on a 12-column grid: name and the appointment card in 7 columns on the left, the portrait in 5 columns on the right, spanning exactly the name and the card, so both panels share a top and a bottom edge. Her own words follow under the card, then "Op deze pagina" as a ruled index across the sheet. On a phone the portrait sits small beside her name and the card comes second.
 
 ## Elevation & Depth
 
-Flat paper. Depth comes only from overlap: the appointment card lies over the portrait. No shadows, no blur, no glass.
+Flat paper. Nothing overlaps: panels sit side by side and share their edges, as on an opened folder. No shadows, no blur, no glass.
 
 ## Shapes
 
@@ -146,7 +146,7 @@ Square corners with a 2px softening on buttons, stamps and focus rings. Images s
 
 ### Cards / Containers
 
-- **Appointment card**: the hero's signature. A `rule-strong` frame, a title, one line of guidance, then a definition list of ruled rows (Wachttijd, Mailen, Bellen) with label-cyan names on the left and tappable values on the right, then "Op deze pagina" anchors.
+- **Appointment card**: the hero's signature. A `rule-strong` frame, a title, one line of guidance, then a definition list of ruled rows (Wachttijd, Mailen, Bellen) with label-cyan names on the left and tappable values on the right. While the practice has an aanmeldstop, the stamp and the practice's own note take the place of the guidance line.
 
 ### Navigation
 
