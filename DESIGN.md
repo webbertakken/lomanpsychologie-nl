@@ -127,11 +127,11 @@ Literata (optical sizes) sets headings as if typed onto the form; Atkinson Hyper
 
 ## Layout
 
-One centred sheet, `max-width: 76rem`, gutters 1.25rem (mobile) and 2.5rem (from 48rem). Content pages are a column of fields: a 4/12 label column with the section title, sticky on desktop, and an 8/12 answer column. Fields are separated by a single `rule` hairline; a page header closes with a `rule-strong` line. The home hero is a 12-column grid: name, her own words and the "Op deze pagina" index in the left columns, a square portrait in the right 5 columns. The appointment card hangs from the portrait: it is as wide as the portrait, steps one column left of it and rises 4rem over its lower edge, covering only the blouse, never the face. Below 24rem of card width its rows stack label over value. On a phone the portrait sits small beside her name, then her words, the card and the index.
+One centred sheet, `max-width: 76rem`, gutters 1.25rem (mobile) and 2.5rem (from 48rem). Content pages are a column of fields: a 4/12 label column with the section title, sticky on desktop, and an 8/12 answer column. Fields are separated by a single `rule` hairline; a page header closes with a `rule-strong` line. The home hero is a 12-column grid: name, her own words and the "Op deze pagina" index in the left columns; on the right a square portrait with the appointment card directly under it, the same width and clear of the photo. On a phone the portrait sits small beside her name, then her words, the card and the index. Content pages with three or more sections open with "Op deze pagina" as their first field: the name in the label column, the section links beside it, ending with a link to the contracted insurers (an up-right arrow, as it leaves the page) unless the page lists them itself.
 
 ## Elevation & Depth
 
-Flat paper. Depth comes only from one small overlap: the appointment card lies over the portrait's lower-left corner, like a card clipped to a photo. No shadows, no blur, no glass.
+Flat paper. Nothing overlaps: the appointment card sits under the portrait, the two sharing their edges. No shadows, no blur, no glass.
 
 ## Shapes
 

@@ -5,27 +5,18 @@ import { LuArrowRight, LuClock, LuLinkedin, LuMail, LuPhone } from 'react-icons/
 import type { Copy } from '../../core/copy'
 import { isResolved } from '../../core/links'
 import { practice } from '../../core/practice'
+import { type Anchor, anchorsOf } from '../../core/sectionIndex'
 import { useCopy } from '../../core/useLanguage'
 import type { ProfileSectionEntry, SectionEntry } from '../../types/section'
 import { renderContent } from '../content/renderContent'
 import { useSiteChrome } from '../page/context/AppContext'
 import RegistrationStop from '../page/RegistrationStop'
+import SectionIndex from '../page/SectionIndex'
 
 interface Props {
   section: ProfileSectionEntry
   pageSections: SectionEntry[]
 }
-
-interface Anchor {
-  slug: string
-  title: string
-}
-
-const anchorsOf = (sections: SectionEntry[]): Anchor[] =>
-  sections
-    .filter(({ sys }) => ['section', 'officeHoursSection'].includes(sys.contentType.sys.id))
-    .map(({ fields }) => ({ slug: fields.slug as string, title: fields.title as string }))
-    .filter(({ slug, title }) => slug && title)
 
 const waitingTimeOf = (anchors: Anchor[]): Anchor | undefined =>
   anchors.find(({ title }) => /wacht|toegangstijd|waiting|access time/i.test(title))
@@ -101,36 +92,6 @@ const AppointmentCard = ({ anchors }: { anchors: Anchor[] }) => {
   )
 }
 
-/** The home page's own index: every section below, one tap away. */
-const HomeIndex = ({ anchors }: { anchors: Anchor[] }) => {
-  const copy = useCopy()
-  if (anchors.length === 0) return null
-
-  return (
-    <nav aria-labelledby="op-deze-pagina">
-      <h2 id="op-deze-pagina" className="font-sans text-sm font-bold text-label">
-        {copy.onThisPage}
-      </h2>
-      <ul className="mt-1 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
-        {anchors.map(({ slug, title }) => (
-          <li key={slug}>
-            <a
-              href={`#${slug}`}
-              className="group flex min-h-11 items-center gap-2 no-underline hover:underline hover:decoration-rule-strong"
-            >
-              <LuArrowRight
-                aria-hidden
-                className="size-4 shrink-0 text-label transition-transform duration-200 group-hover:translate-x-0.5"
-              />
-              {title}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  )
-}
-
 const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
   const { title, slug, photo, vocation, location, shortDescription, linkedInHandle } =
     section.fields
@@ -140,8 +101,8 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
   const { url, details } = photo.fields.file
   const anchors = anchorsOf(pageSections)
 
-  // Name and her words beside the portrait; the appointment card lies over only
-  // the portrait's lower-left corner, the page index under her words. On a phone the
+  // Name, her words and the page index on the left; the portrait on the right
+  // with the appointment card under it, clear of the photo. On a phone the
   // portrait sits next to her name and her words come before the card, in the
   // DOM as on screen.
   return (
@@ -180,14 +141,13 @@ const IntroSection = ({ section, pageSections }: Props): JSX.Element | null => {
             sizes="(min-width: 1024px) 30rem, 9rem"
             className="col-start-2 row-start-1 aspect-[4/5] w-full border border-rule object-cover object-top lg:aspect-square"
           />
-          {/* As wide as the portrait, one column to its left and up over its lower edge. */}
-          <div className="relative col-span-2 lg:-mt-16 lg:-ml-[calc((100%+2.5rem)/5)] lg:w-full">
+          <div className="col-span-2 lg:mt-8">
             <AppointmentCard anchors={anchors} />
           </div>
         </div>
 
         <div className="col-span-2 lg:col-span-6 lg:col-start-1 lg:row-start-3">
-          <HomeIndex anchors={anchors} />
+          <SectionIndex anchors={anchors} />
         </div>
       </div>
     </section>
