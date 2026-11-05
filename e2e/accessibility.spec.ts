@@ -247,7 +247,7 @@ test.describe('theme toggle', () => {
     const banner = page.getByRole('banner')
     await banner.getByRole('button', { name: /Wissel naar donker/ }).click()
     await banner.getByRole('button', { name: /Wissel naar licht/ }).click()
-    await banner.getByRole('button', { name: /Wissel naar systeem/ }).click()
+    await banner.getByRole('button', { name: /Wissel naar automatisch/ }).click()
 
     await page.reload()
     await expect(page.locator('html')).not.toHaveAttribute('data-theme')

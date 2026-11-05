@@ -48,7 +48,10 @@ const choose = (choice: ThemeChoice) => {
 
 const icons: Record<ThemeChoice, IconType> = { system: LuMonitor, light: LuSun, dark: LuMoon }
 
-/** One button that cycles system, light and dark; its icon shows the current choice. */
+/**
+ * One button that cycles automatic, light and dark. Like the language link it
+ * names, in words and an icon, what a press switches to.
+ */
 const ThemeToggle = (): JSX.Element => {
   const copy = useCopy()
   // The server cannot know the stored choice, so it renders "system" and the browser corrects it.
@@ -60,7 +63,7 @@ const ThemeToggle = (): JSX.Element => {
     light: copy.themeLight,
     dark: copy.themeDark,
   }
-  const Icon = icons[current]
+  const Icon = icons[next]
   const label = copy.themeToggle(names[current], names[next])
 
   return (
@@ -69,9 +72,10 @@ const ThemeToggle = (): JSX.Element => {
       onClick={() => choose(next)}
       aria-label={label}
       title={label}
-      className="inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-[2px] text-ink-soft transition-colors duration-150 hover:bg-paper-deep hover:text-ink"
+      className="inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-1.5 px-1 font-bold text-ink-soft hover:text-ink hover:underline hover:decoration-rule-strong"
     >
-      <Icon aria-hidden className="size-5" />
+      <Icon aria-hidden className="size-4.5 shrink-0 text-label" />
+      {names[next]}
     </button>
   )
 }
