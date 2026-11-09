@@ -381,6 +381,41 @@ test.describe('header menu', () => {
   }
 })
 
+test.describe('phone menu', () => {
+  for (const [width, height] of [
+    [768, 1024],
+    [820, 1180],
+  ]) {
+    test(`keeps the contact and crisis details at the bottom at ${width}x${height}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height })
+      await page.goto('/')
+      await page.getByRole('button', { name: 'Menu' }).click()
+      const crisis = await page
+        .getByRole('dialog')
+        .getByText('Buiten kantoortijden en bij crisis')
+        .locator('..')
+        .boundingBox()
+
+      expect(height - ((crisis?.y ?? 0) + (crisis?.height ?? 0))).toBeLessThan(64)
+    })
+  }
+
+  test('lets a short screen scroll to the details without overlap', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 560 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Menu' }).click()
+    const dialog = page.getByRole('dialog')
+    const toggle = await dialog.getByRole('button', { name: /Weergave/ }).boundingBox()
+    const contact = await dialog.getByText('Contact met de praktijk').boundingBox()
+
+    expect(contact?.y ?? 0).toBeGreaterThan((toggle?.y ?? 0) + (toggle?.height ?? 0))
+    await dialog.getByText('Buiten kantoortijden en bij crisis').scrollIntoViewIfNeeded()
+    await expect(dialog.getByText('Buiten kantoortijden en bij crisis')).toBeInViewport()
+  })
+})
+
 test.describe('theme toggle on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
