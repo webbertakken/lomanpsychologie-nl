@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { MenuSortOrderEntry } from '../types/menu'
 import type { PageEntry } from '../types/page'
-import { activePathFor, buildMenu, pagePath, sortByMenuOrder } from './navigation'
+import { activePathFor, buildMenu, headerPagesOf, pagePath, sortByMenuOrder } from './navigation'
 
 const page = (id: string, fields: Record<string, unknown> = {}): PageEntry =>
   ({
@@ -89,5 +89,21 @@ describe('buildMenu', () => {
 
     expect(menu.map((item) => item.isActive)).toEqual([false, true])
     expect(menu[1].subPages.find((item) => item.isActive)?.path).toBe('/behandelingen/emdr')
+  })
+})
+
+describe('headerPagesOf', () => {
+  it('lists the pages marked for the header, leaving the way home to the logo', () => {
+    const pages = [
+      page('home', { isHomePage: true, shouldBeShownInHeader: true }),
+      page('tarieven', { shouldBeShownInHeader: true }),
+      page('privacybeleid', { shouldBeShownInHeader: false }),
+      page('veelgestelde-vragen', { shouldBeShownInHeader: true }),
+    ]
+
+    expect(headerPagesOf(pages).map(({ sys }) => sys.id)).toEqual([
+      'tarieven',
+      'veelgestelde-vragen',
+    ])
   })
 })

@@ -11,7 +11,7 @@ import {
   languages,
   type PagesByLanguage,
 } from './languages'
-import { buildMenu, sortByMenuOrder } from './navigation'
+import { buildMenu, headerPagesOf, sortByMenuOrder } from './navigation'
 import { insurersPathIn } from './sectionIndex'
 
 export interface SiteChrome {
@@ -86,7 +86,7 @@ export const getSiteChrome = async (
   ])
 
   const inLanguage = pages[language]
-  const inHeader = inLanguage.filter(({ fields }) => fields.shouldBeShownInHeader)
+  const inHeader = headerPagesOf(inLanguage)
   const inFooter = inLanguage.filter(({ fields }) => fields.shouldBeShownInFooter)
 
   return {

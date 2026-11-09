@@ -71,3 +71,7 @@ export const buildMenu = (
 
       return { title, path, isActive, subPages, subtitle, icon }
     })
+
+/** The pages the header menu lists. The logo leads home, so the menu leaves the home page out. */
+export const headerPagesOf = (pages: PageEntry[]): PageEntry[] =>
+  pages.filter(({ fields }) => fields.shouldBeShownInHeader && !fields.isHomePage)

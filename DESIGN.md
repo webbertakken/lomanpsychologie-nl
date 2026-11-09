@@ -150,7 +150,7 @@ Square corners with a 2px softening on buttons, stamps and focus rings. Images s
 
 ### Navigation
 
-- Desktop: text links with a 2px bottom line; `rule-strong` marks the current page. Sub pages open in a keyboard-operable popover.
+- Desktop: text links with a 2px bottom line; `rule-strong` marks the current page. Sub pages open in a keyboard-operable popover. The logo leads home, so the menu holds no "Home"; it has room for four items (Behandelingen, Tarieven, De praktijk, Vragen) beside the language switch, theme toggle, phone number and Contact.
 - Mobile: a full-screen dialog sheet with large Literata links, sub pages in two columns, and the practice's contact and crisis details below.
 
 ### Tables
