@@ -151,7 +151,7 @@ test.describe('home on a phone', () => {
 
   test('reads her own words before the appointment card', async ({ page }) => {
     await page.goto('/')
-    const words = await page.getByText(/persoonlijk, open-minded/).boundingBox()
+    const words = await page.getByText(/persoonlijk, open-minded/i).boundingBox()
     const card = await page.getByRole('complementary', { name: 'Afspraak maken' }).boundingBox()
 
     expect(words?.y ?? Infinity).toBeLessThan(card?.y ?? 0)
@@ -342,6 +342,41 @@ test.describe('header', () => {
         expect((await phone.boundingBox())?.height ?? Infinity).toBeLessThan(lineHeight * 1.5)
         await header.getByRole('button', { name: /Weergave|Appearance/ }).click()
       }
+    })
+  }
+})
+
+test.describe('header menu', () => {
+  test('offers the questions page and leaves the way home to the logo', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/tarieven')
+    const menu = page.getByRole('navigation', { name: 'Hoofdmenu' })
+
+    await expect(menu.getByRole('link', { name: 'Home' })).toHaveCount(0)
+    await expect(
+      page.getByRole('banner').getByRole('link', { name: /naar de homepage/ }),
+    ).toHaveAttribute('href', '/')
+    await menu.getByRole('link', { name: 'Vragen' }).click()
+    await expect(page).toHaveURL(/\/veelgestelde-vragen$/)
+  })
+
+  test('offers the questions page in the phone menu', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Menu' }).click()
+
+    await page.getByRole('dialog').getByRole('link', { name: 'Vragen' }).click()
+    await expect(page).toHaveURL(/\/veelgestelde-vragen$/)
+  })
+
+  for (const width of [1024, 1280]) {
+    test(`keeps the whole header on screen at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/')
+
+      await expect(
+        page.getByRole('banner').getByRole('link', { name: 'Contact', exact: true }),
+      ).toBeInViewport({ ratio: 1 })
     })
   }
 })
