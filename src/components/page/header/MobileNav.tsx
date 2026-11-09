@@ -39,7 +39,7 @@ const MobileNav = (): JSX.Element => {
       <Dialog open={isOpen} onClose={setIsOpen} className="relative z-50 lg:hidden">
         <DialogPanel
           transition
-          className="fixed inset-0 overflow-y-auto bg-paper transition duration-200 ease-out data-closed:opacity-0"
+          className="fixed inset-0 flex flex-col overflow-y-auto bg-paper transition duration-200 ease-out data-closed:opacity-0"
         >
           <DialogTitle className="sr-only">{copy.menu}</DialogTitle>
           <div className="sheet flex h-18 items-center justify-between border-b">
@@ -97,7 +97,8 @@ const MobileNav = (): JSX.Element => {
             <ThemeToggle />
           </div>
 
-          <div className="sheet pt-6 pb-10">
+          {/* Sits at the bottom when the menu is shorter than the screen. */}
+          <div className="sheet mt-auto pt-6 pb-10">
             <PracticeContact />
           </div>
         </DialogPanel>
