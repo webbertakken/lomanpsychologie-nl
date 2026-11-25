@@ -1,5 +1,10 @@
 import type { BannerNotificationEntry, BannerNotificationSkeleton } from '../types/banner'
-import type { MenuOptions, MenuProps, MenuSortOrderSkeleton } from '../types/menu'
+import type {
+  MenuOptions,
+  MenuProps,
+  MenuSortOrderEntry,
+  MenuSortOrderSkeleton,
+} from '../types/menu'
 import type { PageEntry, PageSkeleton } from '../types/page'
 import type { RegistrationStopEntry, RegistrationStopSkeleton } from '../types/registrationStop'
 import { getContentfulClient } from './contentful'
@@ -28,43 +33,72 @@ export interface SiteChrome {
 
 const contactSlug = 'contact'
 
-export const getPages = async (language: Language): Promise<PageEntry[]> => {
-  const { items } = await getContentfulClient().getEntries<PageSkeleton>({
-    content_type: 'page',
-    include: 3,
-    locale: contentfulLocale[language],
+/**
+ * How long a fetched answer serves later requests. A build renders every page
+ * within seconds, and a regeneration burst comes in together; both then ask
+ * Contentful once instead of once per page.
+ */
+const answerLifetimeMs = 10_000
+
+const remembered = new Map<string, { expiresAt: number; answer: Promise<unknown> }>()
+
+const rememberBriefly = <Answer>(key: string, ask: () => Promise<Answer>): Promise<Answer> => {
+  const now = Date.now()
+  const cached = remembered.get(key)
+  if (cached && cached.expiresAt > now) return cached.answer as Promise<Answer>
+
+  const answer = ask()
+  remembered.set(key, { expiresAt: now + answerLifetimeMs, answer })
+  answer.catch(() => {
+    if (remembered.get(key)?.answer === answer) remembered.delete(key)
   })
-  return items
+  return answer
 }
+
+export const getPages = (language: Language): Promise<PageEntry[]> =>
+  rememberBriefly(`pages:${language}`, async () => {
+    const { items } = await getContentfulClient().getEntries<PageSkeleton>({
+      content_type: 'page',
+      include: 3,
+      locale: contentfulLocale[language],
+    })
+    console.info(`[contentful] fetched ${items.length} ${language} pages`)
+    return items
+  })
 
 export const getPagesByLanguage = async (): Promise<PagesByLanguage> => {
   const [nl, en] = await Promise.all(languages.map(getPages))
   return { nl, en }
 }
 
-const getMenuSortOrder = async (menu: MenuOptions, language: Language) => {
-  const { items } = await getContentfulClient().getEntries<MenuSortOrderSkeleton>({
-    content_type: 'menuSortOrder',
-    locale: contentfulLocale[language],
-  })
-  return items.find((order) => order.fields.menu === menu)
+const chromeContentTypes = ['menuSortOrder', 'bannerNotification', 'registrationStop'] as const
+
+type ChromeSkeleton = MenuSortOrderSkeleton | BannerNotificationSkeleton | RegistrationStopSkeleton
+
+interface ChromeEntries {
+  menuSortOrders: MenuSortOrderEntry[]
+  banner: BannerNotificationEntry | null
+  registrationStop: RegistrationStopEntry | null
 }
 
-const getBanner = async (language: Language): Promise<BannerNotificationEntry | null> => {
-  const { items } = await getContentfulClient().getEntries<BannerNotificationSkeleton>({
-    content_type: 'bannerNotification',
-    locale: contentfulLocale[language],
-  })
-  return items[0] ?? null
-}
+/** Menu orders, banner and registration stop, in one request. */
+const getChromeEntries = (language: Language): Promise<ChromeEntries> =>
+  rememberBriefly(`chrome:${language}`, async () => {
+    const { items } = await getContentfulClient().getEntries<ChromeSkeleton>({
+      'sys.contentType.sys.id[in]': [...chromeContentTypes],
+      locale: contentfulLocale[language],
+    })
+    console.info(`[contentful] fetched ${items.length} ${language} chrome entries`)
+    const ofType = (id: (typeof chromeContentTypes)[number]) =>
+      items.filter(({ sys }) => sys.contentType.sys.id === id)
 
-const getRegistrationStop = async (language: Language): Promise<RegistrationStopEntry | null> => {
-  const { items } = await getContentfulClient().getEntries<RegistrationStopSkeleton>({
-    content_type: 'registrationStop',
-    locale: contentfulLocale[language],
+    return {
+      menuSortOrders: ofType('menuSortOrder') as MenuSortOrderEntry[],
+      banner: (ofType('bannerNotification')[0] as BannerNotificationEntry | undefined) ?? null,
+      registrationStop:
+        (ofType('registrationStop')[0] as RegistrationStopEntry | undefined) ?? null,
+    }
   })
-  return items[0] ?? null
-}
 
 const contactPathIn = (pages: PagesByLanguage, language: Language): string => {
   const contact = pages.nl.find(({ fields }) => fields.slug === contactSlug)
@@ -78,12 +112,10 @@ export const getSiteChrome = async (
   activePath: string,
   alternates: Alternates = { nl: '/', en: '/' },
 ): Promise<SiteChrome> => {
-  const [headerOrder, footerOrder, banner, registrationStop] = await Promise.all([
-    getMenuSortOrder('header', language),
-    getMenuSortOrder('footer', language),
-    getBanner(language),
-    getRegistrationStop(language),
-  ])
+  const { menuSortOrders, banner, registrationStop } = await getChromeEntries(language)
+  const orderOf = (menu: MenuOptions) => menuSortOrders.find(({ fields }) => fields.menu === menu)
+  const headerOrder = orderOf('header')
+  const footerOrder = orderOf('footer')
 
   const inLanguage = pages[language]
   const inHeader = headerPagesOf(inLanguage)

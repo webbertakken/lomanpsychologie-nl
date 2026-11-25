@@ -33,7 +33,7 @@ export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({ 
 
   const section = items[0]
   return section
-    ? { props: { section }, revalidate: 3 }
+    ? { props: { section }, revalidate: 60 }
     : { redirect: { destination: '/', permanent: false } }
 }
 
