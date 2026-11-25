@@ -3,7 +3,7 @@ import Page, { type PageProps } from '../components/page/Page'
 import { asLanguage, languages, resolveRoute, withLanguage } from '../core/languages'
 import { isResolved } from '../core/links'
 import { activePathFor, pagePath } from '../core/navigation'
-import { getPages, getPagesByLanguage, getSiteChrome } from '../core/site'
+import { getPagesByLanguage, getSiteChrome } from '../core/site'
 import { replacePathsRecursively } from '../core/utils'
 import type { PageEntry } from '../types/page'
 
@@ -21,19 +21,19 @@ const replaceReferencesWithSlugs = (rawPage: PageEntry): PageEntry =>
     return { sys: value.sys, fields: { slug, parentPage } }
   }) as PageEntry
 
+/** How often a visited page asks Contentful for fresh content, at most. */
+const refreshAfterSeconds = 60
+
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = (
-    await Promise.all(
-      languages.map(async (locale) =>
-        (await getPages(locale)).flatMap((page) => {
-          const { parentPage } = page.fields
-          if (parentPage && !isResolved(parentPage)) return []
-          const path = pagePath(page)
-          return [{ params: { slug: path === '/' ? null : path.slice(1).split('/') }, locale }]
-        }),
-      ),
-    )
-  ).flat()
+  const pages = await getPagesByLanguage()
+  const paths = languages.flatMap((locale) =>
+    pages[locale].flatMap((page) => {
+      const { parentPage } = page.fields
+      if (parentPage && !isResolved(parentPage)) return []
+      const path = pagePath(page)
+      return [{ params: { slug: path === '/' ? null : path.slice(1).split('/') }, locale }]
+    }),
+  )
 
   return { paths, fallback: 'blocking' }
 }
@@ -46,13 +46,15 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ params, locale
 
   if (route.kind === 'notFound') {
     console.info(`[pages] no ${language} page for ${activePath}, answering 404`)
-    return { notFound: true, revalidate: 60 }
+    // Kept until the next deploy: bots ask for countless made-up addresses, and
+    // rechecking each one would cost Contentful calls on every visit.
+    return { notFound: true }
   }
 
   if (route.kind === 'redirect') {
     const destination = withLanguage(route.language, route.path)
     console.info(`[pages] ${language} ${activePath} lives at ${destination}, redirecting`)
-    return { redirect: { destination, permanent: false }, revalidate: 60 }
+    return { redirect: { destination, permanent: false } }
   }
 
   return {
@@ -60,7 +62,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ params, locale
       page: replaceReferencesWithSlugs(route.page),
       chrome: await getSiteChrome(pages, language, activePath, route.alternates),
     },
-    revalidate: 3, // hit the CMS at most once every 3 seconds
+    revalidate: refreshAfterSeconds,
   }
 }
 

@@ -8,9 +8,10 @@ import { asLanguage } from '../core/languages'
 import { getPagesByLanguage, getSiteChrome, type SiteChrome } from '../core/site'
 import { useCopy } from '../core/useLanguage'
 
+// Built once per deploy: bots hit it with countless made-up addresses, and a
+// refresh on a visit would cost Contentful calls for each of them.
 export const getStaticProps: GetStaticProps<{ chrome: SiteChrome }> = async ({ locale }) => ({
   props: { chrome: await getSiteChrome(await getPagesByLanguage(), asLanguage(locale), '') },
-  revalidate: 60,
 })
 
 const NotFound = ({ chrome }: { chrome: SiteChrome }): JSX.Element => {

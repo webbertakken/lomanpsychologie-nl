@@ -11,7 +11,7 @@ export const getStaticProps: GetStaticProps = async () => {
     content_type: 'section',
   })
 
-  return { props: { sections }, revalidate: 3 }
+  return { props: { sections }, revalidate: 60 }
 }
 
 interface Props {
